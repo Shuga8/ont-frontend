@@ -4,6 +4,13 @@
   box-sizing: border-box;
 }
 
+.spinner {
+  animation-name: spin;
+  animation-duration: 500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
 .survey-widgets-container::-webkit-scrollbar {
   height: 3px;
 }
@@ -52,7 +59,8 @@
   font-size: 13px;
   margin: 12px 0px;
 }
-.surveys-container .questions-container input[type=text] {
+.surveys-container .questions-container input[type=text],
+.surveys-container .questions-container input[type=number] {
   outline: none;
   border: none;
   color: #000;
@@ -60,11 +68,12 @@
   border-bottom: 1px solid #777;
   font-weight: 300;
 }
-.surveys-container .questions-container input[type=text]::-moz-placeholder {
+.surveys-container .questions-container input[type=text]::-moz-placeholder, .surveys-container .questions-container input[type=number]::-moz-placeholder {
   color: #9c9c9c;
   font-weight: 300;
 }
-.surveys-container .questions-container input[type=text]::placeholder {
+.surveys-container .questions-container input[type=text]::placeholder,
+.surveys-container .questions-container input[type=number]::placeholder {
   color: #9c9c9c;
   font-weight: 300;
 }
@@ -76,6 +85,14 @@
 
 @media (max-width: 500px) {
   .surveys-container {
-    width: 80%;
+    width: 100%;
+  }
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }/*# sourceMappingURL=App.css.map */
