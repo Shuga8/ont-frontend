@@ -93,130 +93,130 @@ const List = [
     ],
     isCompleted: false,
   },
-  {
-    title: "Access to healthcare and recent mobility",
-    questions: [
-      {
-        question:
-          "What is the name of the preferred location to seek care in an emergency?",
-        type: "open",
-        answers: [],
-      },
-      {
-        question: "If female, where did you give birth to your youngest child?",
-        type: "single_choice",
-        options: [
-          "Primary Healthcare centre",
-          "General Hospital/Tertiary health facility/Private Health facility",
-          "Traditional Birth Attendant/Mission homes",
-          "Others...please specify",
-        ],
-        answers: [],
-      },
-      {
-        question:
-          "If you want to seek health care but cannot, what is the reason? More than one reason can be selected?",
-        type: "multiple_choice",
-        options: [
-          "Hospital fees/expenses",
-          "Security challenges",
-          "Cost to travel",
-          "Time to travel",
-          "Clinic opening hours",
-          "Clinic too crowded",
-          "Clinic not functioning",
-          "Healthworker attitude",
-          "No supplies",
-          "other",
-        ],
-        answers: [],
-      },
-    ],
-    isCompleted: false,
-  },
-  {
-    title: "Nutritional status of child and breastfeeding knowledge ",
-    questions: [
-      {
-        question:
-          "Has the child been screened for their nutrition status? For example, have they been weighed and measured at a health facility or by a community health worker.",
-        type: "single_choice",
-        options: ["yes", "no"],
-        answers: [],
-      },
-      {
-        question: "If female, where did you give birth to your youngest child?",
-        type: "single_choice",
-        options: [
-          "Primary Healthcare centre",
-          "General Hospital/Tertiary health facility/Private Health facility",
-          "Traditional Birth Attendant/Mission homes",
-          "Others...please specify",
-        ],
-        answers: [],
-      },
-      {
-        question:
-          "If you want to seek health care but cannot, what is the reason? More than one reason can be selected?",
-        type: "multiple_choice",
-        options: [
-          "Hospital fees/expenses",
-          "Security challenges",
-          "Cost to travel",
-          "Time to travel",
-          "Clinic opening hours",
-          "Clinic too crowded",
-          "Clinic not functioning",
-          "Healthworker attitude",
-          "No supplies",
-          "other",
-        ],
-        answers: [],
-      },
-    ],
-    isCompleted: false,
-  },
-  {
-    title: "Access to healthcare and recent mobility",
-    questions: [
-      {
-        question:
-          "What is the name of the preferred location to seek care in an emergency?",
-        type: "open",
-        answers: [],
-      },
-      {
-        question: "If female, where did you give birth to your youngest child?",
-        type: "single_choice",
-        options: [
-          "Primary Healthcare centre",
-          "General Hospital/Tertiary health facility/Private Health facility",
-          "Traditional Birth Attendant/Mission homes",
-          "Others...please specify",
-        ],
-        answers: [],
-      },
-      {
-        question:
-          "If you want to seek health care but cannot, what is the reason? More than one reason can be selected?",
-        type: "multiple_choice",
-        options: [
-          "Hospital fees/expenses",
-          "Security challenges",
-          "Cost to travel",
-          "Time to travel",
-          "Clinic opening hours",
-          "Clinic too crowded",
-          "Clinic not functioning",
-          "Healthworker attitude",
-          "No supplies",
-          "other",
-        ],
-        answers: [],
-      },
-    ],
-    isCompleted: false,
-  },
+  // {
+  //   title: "Access to healthcare and recent mobility",
+  //   questions: [
+  //     {
+  //       question:
+  //         "What is the name of the preferred location to seek care in an emergency?",
+  //       type: "open",
+  //       answers: [],
+  //     },
+  //     {
+  //       question: "If female, where did you give birth to your youngest child?",
+  //       type: "single_choice",
+  //       options: [
+  //         "Primary Healthcare centre",
+  //         "General Hospital/Tertiary health facility/Private Health facility",
+  //         "Traditional Birth Attendant/Mission homes",
+  //         "Others...please specify",
+  //       ],
+  //       answers: [],
+  //     },
+  //     {
+  //       question:
+  //         "If you want to seek health care but cannot, what is the reason? More than one reason can be selected?",
+  //       type: "multiple_choice",
+  //       options: [
+  //         "Hospital fees/expenses",
+  //         "Security challenges",
+  //         "Cost to travel",
+  //         "Time to travel",
+  //         "Clinic opening hours",
+  //         "Clinic too crowded",
+  //         "Clinic not functioning",
+  //         "Healthworker attitude",
+  //         "No supplies",
+  //         "other",
+  //       ],
+  //       answers: [],
+  //     },
+  //   ],
+  //   isCompleted: false,
+  // },
+  // {
+  //   title: "Nutritional status of child and breastfeeding knowledge ",
+  //   questions: [
+  //     {
+  //       question:
+  //         "Has the child been screened for their nutrition status? For example, have they been weighed and measured at a health facility or by a community health worker.",
+  //       type: "single_choice",
+  //       options: ["yes", "no"],
+  //       answers: [],
+  //     },
+  //     {
+  //       question: "If female, where did you give birth to your youngest child?",
+  //       type: "single_choice",
+  //       options: [
+  //         "Primary Healthcare centre",
+  //         "General Hospital/Tertiary health facility/Private Health facility",
+  //         "Traditional Birth Attendant/Mission homes",
+  //         "Others...please specify",
+  //       ],
+  //       answers: [],
+  //     },
+  //     {
+  //       question:
+  //         "If you want to seek health care but cannot, what is the reason? More than one reason can be selected?",
+  //       type: "multiple_choice",
+  //       options: [
+  //         "Hospital fees/expenses",
+  //         "Security challenges",
+  //         "Cost to travel",
+  //         "Time to travel",
+  //         "Clinic opening hours",
+  //         "Clinic too crowded",
+  //         "Clinic not functioning",
+  //         "Healthworker attitude",
+  //         "No supplies",
+  //         "other",
+  //       ],
+  //       answers: [],
+  //     },
+  //   ],
+  //   isCompleted: false,
+  // },
+  // {
+  //   title: "Access to healthcare and recent mobility",
+  //   questions: [
+  //     {
+  //       question:
+  //         "What is the name of the preferred location to seek care in an emergency?",
+  //       type: "open",
+  //       answers: [],
+  //     },
+  //     {
+  //       question: "If female, where did you give birth to your youngest child?",
+  //       type: "single_choice",
+  //       options: [
+  //         "Primary Healthcare centre",
+  //         "General Hospital/Tertiary health facility/Private Health facility",
+  //         "Traditional Birth Attendant/Mission homes",
+  //         "Others...please specify",
+  //       ],
+  //       answers: [],
+  //     },
+  //     {
+  //       question:
+  //         "If you want to seek health care but cannot, what is the reason? More than one reason can be selected?",
+  //       type: "multiple_choice",
+  //       options: [
+  //         "Hospital fees/expenses",
+  //         "Security challenges",
+  //         "Cost to travel",
+  //         "Time to travel",
+  //         "Clinic opening hours",
+  //         "Clinic too crowded",
+  //         "Clinic not functioning",
+  //         "Healthworker attitude",
+  //         "No supplies",
+  //         "other",
+  //       ],
+  //       answers: [],
+  //     },
+  //   ],
+  //   isCompleted: false,
+  // },
 ];
 
 export default List;
