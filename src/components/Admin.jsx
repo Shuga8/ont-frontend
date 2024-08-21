@@ -1,9 +1,9 @@
 import React from "react";
-
+import { SideBar } from "./Admin/index";
 const Admin = () => {
   return (
     <>
-      <div className="text-blue-200">Admin</div>
+      <SideBar />
     </>
   );
 };

@@ -83,6 +83,16 @@
   font-weight: 400;
 }
 
+.dropdown-list .links {
+  height: 0px;
+  transition: all 0.3s ease-in-out;
+}
+.dropdown-list .links.active-dropdown-link {
+  height: -moz-fit-content;
+  height: fit-content;
+  transition: all 0.3s ease-in-out;
+}
+
 @media (max-width: 500px) {
   .surveys-container {
     width: 100%;

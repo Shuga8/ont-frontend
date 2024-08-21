@@ -88,6 +88,18 @@
   }
 }
 
+.dropdown-list {
+  .links {
+    height: 0px;
+    transition: all 0.3s ease-in-out;
+
+    &.active-dropdown-link {
+      height: fit-content;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+}
+
 @media (max-width: 500px) {
   .surveys-container {
     width: 100%;
