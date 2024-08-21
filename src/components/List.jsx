@@ -45,6 +45,7 @@ const List = [
           "Sibling",
           "Others...please specify",
         ],
+        limit: 50,
         answers: [],
       },
 
