@@ -160,7 +160,7 @@ const SideBar = () => {
 
                 <li className="text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer">
                   <Link to={"#"}>Pending Surveys</Link>
-                  <span className="bg-red-500 px-2 text-white rounded-lg">
+                  <span className="bg-yellow-500 px-2 text-white rounded-lg">
                     0
                   </span>
                 </li>

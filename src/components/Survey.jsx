@@ -2,10 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { List as surveyList } from "./index";
 
+// Extract language from the URL
+const getLanguageFromUrl = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("language") || "english";
+};
+
 const getQuestionId = (surveyList, activeIndex, qIndex) => {
   let id = 1;
   for (let i = 0; i < activeIndex; i++) {
-    id += surveyList[i].questions.length;
+    if (surveyList[i].questions) {
+      id += surveyList[i].questions[getLanguageFromUrl()].length;
+    }
   }
   return id + qIndex;
 };
@@ -16,6 +24,9 @@ const Survey = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [errors, setErrors] = useState(false);
+
+  // Get language from URL
+  const language = getLanguageFromUrl();
 
   useEffect(() => {
     const firstIncompleteIndex = surveyList.findIndex(
@@ -52,7 +63,7 @@ const Survey = () => {
 
   const validateSurvey = () => {
     const currentSurvey = surveyList[activeIndex];
-    const isValid = currentSurvey.questions.every((q, qIndex) => {
+    const isValid = currentSurvey.questions[language].every((q, qIndex) => {
       if (q.type === "open") {
         return selectedOptions[qIndex] && selectedOptions[qIndex].trim() !== "";
       } else if (q.type === "single_choice") {
@@ -75,7 +86,7 @@ const Survey = () => {
     setCategoryLoading(true);
     if (validateSurvey()) {
       const currentSurvey = surveyList[activeIndex];
-      currentSurvey.questions.forEach((q, qIndex) => {
+      currentSurvey.questions[language].forEach((q, qIndex) => {
         if (
           q.type === "single_choice" &&
           selectedOptions[qIndex] === "Others...please specify"
@@ -141,8 +152,7 @@ const Survey = () => {
               {surveyList[activeIndex].title}
             </h2>
 
-            {}
-            {surveyList[activeIndex].questions.map((q, qIndex) => (
+            {surveyList[activeIndex].questions[language].map((q, qIndex) => (
               <div key={qIndex} className="question mb-4">
                 <p className="mb-2">
                   <span className="text-xl font-medium text-gray-500">
@@ -161,7 +171,7 @@ const Survey = () => {
                         handleInputChange(qIndex, e.target.value)
                       }
                       placeholder="Your answer ..."
-                      maxLength={q.field == "number" ? "999999" : q.limit}
+                      maxLength={q.field === "number" ? "999999" : q.limit}
                     />
                   )}
                   {q.type === "single_choice" && (
@@ -259,7 +269,10 @@ const Survey = () => {
           questionsVisible ? "flex" : "hidden"
         }`}
       >
-        ONT Survey Has Been Completed Successfully!
+        <span className="material-symbols-outlined text-green-600 text-center">
+          task_alt
+        </span>
+        Survey Completed Successfully!
       </div>
     </>
   );
