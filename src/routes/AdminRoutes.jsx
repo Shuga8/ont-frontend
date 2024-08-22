@@ -1,18 +1,15 @@
 import { Routes, Route } from "react-router-dom";
 import { Admin } from "../components";
-// import AdminLogin from './AdminLogin';
-// import AdminRegister from './AdminRegister';
-// import AdminLogout from './AdminLogout';
-// import AdminEditSurvey from './AdminEditSurvey';
+import { Completed, Pending, Rejected, List } from "../components/Admin/index";
 
 function AdminRoutes() {
   return (
     <Routes>
-      {/* <Route path='/admin/login' element={<AdminLogin />} />
-      <Route path='/admin/register' element={<AdminRegister />} />
-      <Route path='/admin/logout' element={<AdminLogout />} />
-      <Route path='/admin/edit/survey/:id' element={<AdminEditSurvey />} /> */}
       <Route path="/" element={<Admin />} />
+      <Route path="/survey/completed" element={<Completed />} />
+      <Route path="/survey/pending" element={<Pending />} />
+      <Route path="/survey/rejected" element={<Rejected />} />
+      <Route path="/survey/all" element={<List />} />
     </Routes>
   );
 }

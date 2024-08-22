@@ -1,5 +1,5 @@
 import React from "react";
-import { SideBar } from "./Admin/index";
+import { Loader, SideBar } from "./Admin/index";
 import { Link } from "react-router-dom";
 import { RiListIndefinite, RiListCheck3, RiListCheck2 } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
@@ -10,6 +10,7 @@ const Admin = () => {
     <>
       <SideBar />
       <div className="elements-container mt-14">
+        <Loader />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center ">
           <span>ONT&nbsp;/&nbsp;</span>
           <Link to={"/admin/"} className="underline text-blue-500">
@@ -76,7 +77,7 @@ const Admin = () => {
             </div>
           </div>
 
-          <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-3 md:grid-rows-3 gap-4">
+          <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-3 md:grid-rows-1 gap-4">
             <div className="graph-widget col-span-1 md:col-span-2 p-2 h-96 bg-white rounded-md">
               <LineGraph />
             </div>
