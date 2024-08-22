@@ -42,7 +42,7 @@ const SideBar = () => {
                 <span className="sr-only">Open sidebar</span>
                 <RiMenu3Line color="#fff" />
               </button>
-              <a href="https://flowbite.com" className="flex ms-2 md:me-24">
+              <Link to={"/admin/"} className="flex ms-2 md:me-24">
                 <img
                   src="https://flowbite.com/docs/images/logo.svg"
                   className="h-8 me-3"
@@ -51,7 +51,7 @@ const SideBar = () => {
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                   ONT
                 </span>
-              </a>
+              </Link>
             </div>
             <div className="flex items-center">
               <div className="flex items-center ms-3">
@@ -136,7 +136,7 @@ const SideBar = () => {
 
             <div className="dropdown-list">
               <div
-                className="dropdownBtn flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded-md"
+                className="dropdownBtn flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded-md cursor-pointer"
                 onClick={() => toggleLink(0)}
               >
                 <p className="text-base text-gray-300 px-2 py-1 flex flex-row gap-x-2 place-items-center">

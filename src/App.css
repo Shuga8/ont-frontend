@@ -98,6 +98,12 @@
     width: 100%;
   }
 }
+@media (min-width: 640px) {
+  .elements-container {
+    margin-left: 16rem;
+    width: calc(100% - 16rem);
+  }
+}
 @keyframes spin {
   from {
     transform: rotate(0deg);
