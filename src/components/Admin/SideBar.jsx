@@ -153,22 +153,29 @@ const SideBar = () => {
               <div className="links w-full block overflow-hidden px-3 transition-all">
                 <li className="text-sm mb-3 mt-2 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer">
                   <Link to={"#"}>Completed Surveys</Link>
-                  <span className="bg-green-500 px-2 text-white rounded-lg">
-                    0
+                  <span className="bg-green-500 px-2 text-center text-sm text-white rounded-lg">
+                    100
                   </span>
                 </li>
 
                 <li className="text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer">
                   <Link to={"#"}>Pending Surveys</Link>
-                  <span className="bg-yellow-500 px-2 text-white rounded-lg">
-                    0
+                  <span className="bg-yellow-500 px-2 text-center text-sm text-white rounded-lg">
+                    118
+                  </span>
+                </li>
+
+                <li className="text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer">
+                  <Link to={"#"}>Rejected Surveys</Link>
+                  <span className="bg-red-500 px-2 text-center text-sm text-white rounded-lg">
+                    56
                   </span>
                 </li>
 
                 <li className="text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer">
                   <Link to={"#"}>All Surveys</Link>
-                  <span className="bg-blue-500 px-2 text-white rounded-lg">
-                    0
+                  <span className="bg-blue-500 px-2 text-center text-sm text-white rounded-lg">
+                    274
                   </span>
                 </li>
               </div>
