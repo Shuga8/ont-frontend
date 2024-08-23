@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   RiMenu3Line,
   RiArrowDownSLine,
@@ -10,6 +10,21 @@ import { Link } from "react-router-dom";
 import user_icon from "../../assets/user_icon.png";
 
 const SideBar = () => {
+  const containsSurveyPath = window.location.pathname.includes("/admin/survey");
+
+  useEffect(() => {
+    if (containsSurveyPath) {
+      const allLinks = document.querySelectorAll(".links");
+
+      allLinks.forEach((link, i) => {
+        if (link.style.height === "0px" || link.style.height === "") {
+          const contentHeight = link.scrollHeight + "px";
+          link.style.height = contentHeight;
+        }
+      });
+    }
+  }, [containsSurveyPath]);
+
   const toggleLink = (index) => {
     const allLinks = document.querySelectorAll(".links");
 
