@@ -21,12 +21,9 @@ const Pending = () => {
             Pending Surveys
           </span>
           <span>
-            ONT&nbsp;/&nbsp;
-            <Link
-              to={"/admin/survey/pending"}
-              className="underline text-blue-500"
-            >
-              Survey&nbsp;/&nbsp;Pending
+            ONT&nbsp;/&nbsp;Survey&nbsp;/
+            <Link to={"/admin/survey/pending"} className=" text-yellow-600">
+              &nbsp;Pending
             </Link>
           </span>
         </div>

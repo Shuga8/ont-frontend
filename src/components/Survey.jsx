@@ -37,6 +37,26 @@ const Survey = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const currentSurvey = surveyList[activeIndex];
+    const initialOptions = {};
+    if (currentSurvey) {
+      currentSurvey.questions[language].forEach((q, qIndex) => {
+        if (q.answers.length > 0) {
+          if (q.type === "multiple_choice") {
+            initialOptions[qIndex] = q.answers;
+          } else {
+            initialOptions[qIndex] = q.answers[0] || "";
+            if (q.answers[0] === "Others...please specify") {
+              initialOptions[`${qIndex}_other`] = q.answers[1] || "";
+            }
+          }
+        }
+      });
+      setSelectedOptions(initialOptions);
+    }
+  }, [activeIndex, language]);
+
   const handleSingleChoiceChange = (qIndex, value) => {
     setSelectedOptions((prev) => ({ ...prev, [qIndex]: value }));
   };
@@ -132,14 +152,10 @@ const Survey = () => {
             <div
               key={index}
               className={`survey-widget ${
-                activeIndex === index && !survey.isCompleted
-                  ? "active-widget"
-                  : ""
+                activeIndex === index ? "active-widget" : ""
               } 
             ${survey.isCompleted ? "cursor-not-allowed" : "cursor-pointer"}`}
-              onClick={() => {
-                if (!survey.isCompleted) setActiveIndex(index);
-              }}
+              onClick={() => setActiveIndex(index)}
             >
               {index + 1}
             </div>

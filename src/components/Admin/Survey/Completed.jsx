@@ -17,12 +17,9 @@ const Completed = () => {
             Completed Surveys
           </span>
           <span>
-            ONT&nbsp;/&nbsp;
-            <Link
-              to={"/admin/survey/completed"}
-              className="underline text-blue-500"
-            >
-              Survey&nbsp;/&nbsp;Completed
+            ONT&nbsp;/&nbsp;Survey&nbsp;/
+            <Link to={"/admin/survey/completed"} className=" text-blue-500">
+              &nbsp;Completed
             </Link>
           </span>
         </div>

@@ -8,7 +8,7 @@ const List = [
             "May I ask you a few short questions? The survey will take about 15 minutes and you may stop at any time.",
           type: "single_choice",
           options: ["yes", "no"],
-          answers: [],
+          answers: ["yes"],
         },
       ],
       pidgin: [
@@ -17,7 +17,7 @@ const List = [
             "I fit ask you some questions?, i no go take pass 15 minutes of your time",
           type: "single_choice",
           options: ["yes", "no"],
-          answers: [],
+          answers: ["yes"],
         },
       ],
     },
@@ -38,7 +38,7 @@ const List = [
           question: "Are you residing in [name LGA from listing] ? ",
           type: "single_choice",
           options: ["yes", "no"],
-          answers: [],
+          answers: ["yes"],
         },
         {
           question: "Number of total household members",
@@ -64,13 +64,13 @@ const List = [
           question: "You are a caregiver to how many children under -2?",
           type: "single_choice",
           options: ["1", "2", "3", "4", "5"],
-          answers: [],
+          answers: ["4"],
         },
         {
           question: "What is your age?",
           type: "open",
           field: "number",
-          answers: [],
+          answers: ["40"],
         },
         {
           question: "What is your gender?",
@@ -89,7 +89,7 @@ const List = [
             "postgraduate",
             "did not attend school",
           ],
-          answers: [],
+          answers: ["undergraduate"],
         },
         {
           question: "What is your employment status",
