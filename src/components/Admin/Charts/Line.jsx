@@ -38,9 +38,6 @@ class LineGraph extends Component {
           },
         },
 
-        markers: {
-          size: 0,
-        },
         grid: {
           xaxis: {
             lines: {

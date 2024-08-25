@@ -11,6 +11,19 @@ import user_icon from "../../assets/user_icon.png";
 
 const SideBar = () => {
   const containsSurveyPath = window.location.pathname.includes("/admin/survey");
+  const rejectedPath = window.location.pathname.includes(
+    "/admin/survey/rejected"
+  );
+  const completedPath = window.location.pathname.includes(
+    "/admin/survey/completed"
+  );
+  const pendingPath = window.location.pathname.includes(
+    "/admin/survey/pending"
+  );
+  const allSurveyPath = window.location.pathname.includes("/admin/survey/all");
+  const dashboardPath =
+    window.location.pathname === "/admin" ||
+    window.location.pathname === "/admin/";
 
   useEffect(() => {
     if (containsSurveyPath) {
@@ -141,7 +154,9 @@ const SideBar = () => {
             <li>
               <Link
                 to={"/admin/"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  dashboardPath ? "bg-gray-700" : ""
+                }`}
               >
                 <RiSpeedUpLine color="#fff" />
 
@@ -151,7 +166,9 @@ const SideBar = () => {
 
             <div className="dropdown-list">
               <div
-                className="dropdownBtn flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded-md cursor-pointer"
+                className={`dropdownBtn flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded-md cursor-pointer ${
+                  containsSurveyPath ? "bg-gray-700" : ""
+                }`}
                 onClick={() => toggleLink(0)}
               >
                 <p className="text-base text-gray-300 px-2 py-1 flex flex-row gap-x-2 place-items-center">
@@ -169,7 +186,9 @@ const SideBar = () => {
                 <li>
                   <Link
                     to={"/admin/survey/completed"}
-                    className="text-sm mb-3 mt-2 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer"
+                    className={`text-sm mb-3 mt-2 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
+                      completedPath ? "bg-gray-600" : ""
+                    }`}
                   >
                     <span>Completed Surveys</span>
                     <span className="bg-green-500 px-2 text-center text-sm text-white rounded-lg">
@@ -181,7 +200,9 @@ const SideBar = () => {
                 <li>
                   <Link
                     to={"/admin/survey/pending"}
-                    className="text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer"
+                    className={`text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
+                      pendingPath ? "bg-gray-600" : ""
+                    }`}
                   >
                     <span>Pending Surveys</span>
                     <span className="bg-yellow-500 px-2 text-center text-sm text-white rounded-lg">
@@ -193,7 +214,9 @@ const SideBar = () => {
                 <li>
                   <Link
                     to={"/admin/survey/rejected"}
-                    className="text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer"
+                    className={`text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
+                      rejectedPath ? "bg-gray-600" : ""
+                    }`}
                   >
                     <span>Rejected Surveys</span>
                     <span className="bg-red-500 px-2 text-center text-sm text-white rounded-lg">
@@ -205,7 +228,9 @@ const SideBar = () => {
                 <li>
                   <Link
                     to={"/admin/survey/all"}
-                    className="text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer"
+                    className={`text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
+                      allSurveyPath ? "bg-gray-600" : ""
+                    }`}
                   >
                     <span>All Surveys</span>
                     <span className="bg-blue-500 px-2 text-center text-sm text-white rounded-lg">
