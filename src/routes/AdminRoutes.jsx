@@ -6,12 +6,14 @@ import {
   Rejected,
   List,
   CompletePending,
+  Login,
 } from "../components/Admin/index";
 
 function AdminRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Admin />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/survey/completed" element={<Completed />} />
       <Route path="/survey/pending" element={<Pending />} />
       <Route path="/survey/rejected" element={<Rejected />} />
