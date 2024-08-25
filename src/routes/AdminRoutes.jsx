@@ -16,8 +16,8 @@ function AdminRoutes() {
     <Routes>
       <Route path="" element={<Admin />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/agent" element={<Agents />} />
-      <Route path="/agent/new" element={<Add />} />
+      <Route path="/agents" element={<Agents />} />
+      <Route path="/agents/new" element={<Add />} />
       <Route path="/survey/completed" element={<Completed />} />
       <Route path="/survey/pending" element={<Pending />} />
       <Route path="/survey/rejected" element={<Rejected />} />
