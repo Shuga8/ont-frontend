@@ -93,7 +93,7 @@ const Login = () => {
                       variant="contained"
                       color="primary"
                       type="submit"
-                      className="w-full text-white bg-blue-600 hover:bg-blue-700 e  font-medium rounded-lg text-sm px-5 py-4 text-center "
+                      className="w-full text-white bg-blue-600 hover:bg-blue-700  font-medium rounded-lg text-sm px-5 py-4 text-center "
                       disabled={isLoading}
                     >
                       {isLoading ? (

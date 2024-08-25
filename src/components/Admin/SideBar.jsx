@@ -7,27 +7,21 @@ import {
   RiListIndefinite,
   RiSettings5Line,
 } from "react-icons/ri";
+import { PiUsersFourDuotone } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import user_icon from "../../assets/user_icon.png";
 
 const SideBar = () => {
-  const containsSurveyPath = window.location.pathname.includes("/admin/survey");
-  const rejectedPath = window.location.pathname.includes(
-    "/admin/survey/rejected"
-  );
-  const completedPath = window.location.pathname.includes(
-    "/admin/survey/completed"
-  );
-  const pendingPath = window.location.pathname.includes(
-    "/admin/survey/pending"
-  );
-  const allSurveyPath = window.location.pathname.includes("/admin/survey/all");
-  const dashboardPath =
-    window.location.pathname === "/admin" ||
-    window.location.pathname === "/admin/";
+  const pathNameCheck = (name) => {
+    return window.location.pathname == name;
+  };
+
+  const pathNameLike = (name) => {
+    return window.location.pathname.includes(name);
+  };
 
   useEffect(() => {
-    if (containsSurveyPath) {
+    if (pathNameLike("/admin/survey")) {
       const allLinks = document.querySelectorAll(".links");
 
       allLinks.forEach((link, i) => {
@@ -37,7 +31,7 @@ const SideBar = () => {
         }
       });
     }
-  }, [containsSurveyPath]);
+  }, [pathNameLike("/admin/survey")]);
 
   const toggleLink = (index) => {
     const allLinks = document.querySelectorAll(".links");
@@ -152,7 +146,7 @@ const SideBar = () => {
               <Link
                 to={"/admin/"}
                 className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  dashboardPath ? "bg-gray-700" : ""
+                  pathNameCheck("/admin/") ? "bg-gray-700" : ""
                 }`}
               >
                 <RiSpeedUpLine color="#fff" />
@@ -161,10 +155,23 @@ const SideBar = () => {
               </Link>
             </li>
 
+            <li>
+              <Link
+                to={"/admin/agents"}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  pathNameCheck("/admin/agents") ? "bg-gray-700" : ""
+                }`}
+              >
+                <PiUsersFourDuotone color="#fff" />
+
+                <span className="ms-3">Agents</span>
+              </Link>
+            </li>
+
             <div className="dropdown-list">
               <div
                 className={`dropdownBtn flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded-md cursor-pointer ${
-                  containsSurveyPath ? "bg-gray-700" : ""
+                  pathNameLike("/admin/survey") ? "bg-gray-700" : ""
                 }`}
                 onClick={() => toggleLink(0)}
               >
@@ -184,7 +191,9 @@ const SideBar = () => {
                   <Link
                     to={"/admin/survey/completed"}
                     className={`text-sm mb-3 mt-2 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
-                      completedPath ? "bg-gray-600" : ""
+                      pathNameCheck("/admin/survey/completed")
+                        ? "bg-gray-600"
+                        : ""
                     }`}
                   >
                     <span>Completed Surveys</span>
@@ -198,7 +207,9 @@ const SideBar = () => {
                   <Link
                     to={"/admin/survey/pending"}
                     className={`text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
-                      pendingPath ? "bg-gray-600" : ""
+                      pathNameCheck("/admin/survey/pending")
+                        ? "bg-gray-600"
+                        : ""
                     }`}
                   >
                     <span>Pending Surveys</span>
@@ -212,7 +223,9 @@ const SideBar = () => {
                   <Link
                     to={"/admin/survey/rejected"}
                     className={`text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
-                      rejectedPath ? "bg-gray-600" : ""
+                      pathNameCheck("/admin/survey/rejected")
+                        ? "bg-gray-600"
+                        : ""
                     }`}
                   >
                     <span>Rejected Surveys</span>
@@ -226,7 +239,7 @@ const SideBar = () => {
                   <Link
                     to={"/admin/survey/all"}
                     className={`text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
-                      allSurveyPath ? "bg-gray-600" : ""
+                      pathNameCheck("/admin/survey/all") ? "bg-gray-600" : ""
                     }`}
                   >
                     <span>All Surveys</span>

@@ -7,13 +7,17 @@ import {
   List,
   CompletePending,
   Login,
+  Add,
+  Agents,
 } from "../components/Admin/index";
 
 function AdminRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Admin />} />
+      <Route path="" element={<Admin />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/agent" element={<Agents />} />
+      <Route path="/agent/new" element={<Add />} />
       <Route path="/survey/completed" element={<Completed />} />
       <Route path="/survey/pending" element={<Pending />} />
       <Route path="/survey/rejected" element={<Rejected />} />
