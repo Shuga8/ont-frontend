@@ -5,6 +5,7 @@ import { HiDownload } from "react-icons/hi";
 import { IoTrashOutline } from "react-icons/io5";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
+import Search from "./Search";
 
 const Completed = () => {
   return (
@@ -25,6 +26,7 @@ const Completed = () => {
         </div>
 
         <div className="container-content  px-1 py-2 md:px-6 md:py-5">
+          <Search />
           <div className="rounded-sm border border-stroke bg-white px-5 pb-6 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7 xl:pb-6">
             <div className="flex flex-col">
               <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5 bg-slate-200">
