@@ -5,15 +5,17 @@
 }
 
 .new-survey-form {
-  background: #eee;
+  background: rgba($color: #000000, $alpha: 0.7);
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
+  left: 0;
   z-index: 9;
   display: flex;
   place-items: center;
   justify-content: center;
+  transition: all 0.3s ease-in-out;
 }
 
 .preloader {
@@ -158,18 +160,6 @@
     margin-left: 16rem;
     width: calc(100% - 16rem);
     height: fit-content !important;
-
-    .new-survey-form {
-      width: calc(100% - 16rem);
-      background: #eee;
-      height: 100%;
-      position: fixed;
-      top: 0;
-      z-index: 9;
-      display: flex;
-      place-items: center;
-      justify-content: center;
-    }
 
     .preloader {
       width: calc(100% - 16rem);

@@ -1,10 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { GrCloudUpload } from "react-icons/gr";
 import { FiSearch } from "react-icons/fi";
 import { Button } from "@mui/material";
 import { MdFormatListBulletedAdd } from "react-icons/md";
+import csvThumbnail from "../../../assets/csv_thumbnail.png";
 
 const Search = () => {
+  const showNewSurveyForm = (e) => {
+    document.querySelector(".new-survey-form").classList.remove("hidden");
+  };
+  window.addEventListener("click", function (e) {
+    if (e.target == document.querySelector(".new-survey-form")) {
+      document.querySelector(".new-survey-form").classList.add("hidden");
+    }
+  });
+
+  const [csvPreview, setCsvPreview] = useState("");
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    let file;
+
+    if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+      file = e.dataTransfer.files[0];
+    } else if (e.target && e.target.files.length > 0) {
+      file = e.target.files[0];
+    }
+
+    if (file && file.type === "text/csv") {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const text = event.target.result;
+        setCsvPreview(text.split("\n").slice(0, 5).join("\n"));
+      };
+
+      reader.readAsText(file);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
   return (
     <>
       <div className="flex justify-end p-3 flex-row gap-x-2">
@@ -12,6 +50,7 @@ const Search = () => {
           variant="outlined"
           color="primary"
           className="flex flex-row gap-x-2"
+          onClick={showNewSurveyForm}
         >
           <span className="hidden md:block text-base">New Survey</span>
           <MdFormatListBulletedAdd className="text-blue-700 text-2xl" />
@@ -46,24 +85,49 @@ const Search = () => {
         </div>
       </div>
       <div className="new-survey-form hidden">
-        <form method="POST" encType="multipart/formdata">
+        <form method="POST" encType="multipart/formdata" className="min-w-96">
           <div className="flex items-center justify-center ">
             <label
               htmlFor="dropzone-file"
-              className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50   hover:bg-gray-100 "
+              className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-300"
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
             >
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <div className="mb-4">
+                  {csvPreview ? (
+                    <pre className="w-full h-20 overflow-auto text-xs text-gray-600 bg-gray-200 p-2 rounded-md">
+                      {csvPreview}
+                    </pre>
+                  ) : (
+                    <img
+                      src={csvThumbnail}
+                      className="w-20 h-20 object-contain mix-blend-multiply"
+                      alt="CSV Thumbnail"
+                    />
+                  )}
+                </div>
                 <GrCloudUpload className="w-8 h-8 mb-4 text-gray-500" />
 
                 <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                   <span className="font-semibold">Click to upload</span> or drag
                   and drop
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-gray-500 dark:text-gray-400 hidden">
                   CSV only
                 </p>
               </div>
-              <input id="dropzone-file" type="file" className="hidden" />
+              <input
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+                onChange={handleDrop}
+              />
+              <Button variant="contained" color="primary">
+                Submit
+              </Button>
+
+              <br />
             </label>
           </div>
         </form>
