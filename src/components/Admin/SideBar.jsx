@@ -6,12 +6,15 @@ import {
   RiSpeedUpLine,
   RiListIndefinite,
   RiSettings5Line,
+  RiLogoutCircleRLine,
 } from "react-icons/ri";
 import { PiUsersFourDuotone } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 import user_icon from "../../assets/user_icon.png";
 
 const SideBar = () => {
+  const navigate = useNavigate();
   const pathNameCheck = (name) => {
     return window.location.pathname == name;
   };
@@ -48,6 +51,12 @@ const SideBar = () => {
         link.style.height = "0px";
       }
     });
+  };
+
+  const logoutAction = (e) => {
+    e.preventDefault(e);
+    const url = `/admin/login`;
+    navigate(url);
   };
   return (
     <>
@@ -253,12 +262,26 @@ const SideBar = () => {
 
             <li>
               <Link
-                to={"#"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                to={"/admin/settings"}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  pathNameCheck("/admin/settings") ? "bg-gray-600" : ""
+                }`}
               >
                 <RiSettings5Line color="#fff" />
 
                 <span className="ms-3">Settings</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to={"/admin/logout"}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group `}
+                onClick={logoutAction}
+              >
+                <RiLogoutCircleRLine color="#fff" />
+
+                <span className="ms-3">Logout</span>
               </Link>
             </li>
           </ul>

@@ -9,6 +9,7 @@ import {
   Login,
   Add,
   Agents,
+  Settings,
 } from "../components/Admin/index";
 
 function AdminRoutes() {
@@ -17,6 +18,7 @@ function AdminRoutes() {
       <Route path="" element={<Admin />} />
       <Route path="/login" element={<Login />} />
       <Route path="/agents" element={<Agents />} />
+      <Route path="/settings" element={<Settings />} />
       <Route path="/agents/new" element={<Add />} />
       <Route path="/survey/completed" element={<Completed />} />
       <Route path="/survey/pending" element={<Pending />} />
