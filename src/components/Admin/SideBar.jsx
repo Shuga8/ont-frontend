@@ -12,8 +12,10 @@ import { PiUsersFourDuotone } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
 
 import user_icon from "../../assets/user_icon.png";
+import { useLogout } from "../../hooks/useLogout";
 
 const SideBar = () => {
+  const { logout } = useLogout();
   const navigate = useNavigate();
   const pathNameCheck = (name) => {
     return window.location.pathname == name;
@@ -53,10 +55,9 @@ const SideBar = () => {
     });
   };
 
-  const logoutAction = (e) => {
+  const logoutAction = async (e) => {
     e.preventDefault(e);
-    const url = `/admin/login`;
-    navigate(url);
+    await logout();
   };
   return (
     <>
@@ -200,7 +201,7 @@ const SideBar = () => {
                 <li>
                   <Link
                     to={"/admin/survey/completed"}
-                    className={`text-sm mb-3 mt-2 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
+                    className={`text-sm mb-3 mt-2 flex flex-row justify-between place-items-center text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
                       pathNameCheck("/admin/survey/completed")
                         ? "bg-gray-600"
                         : ""
@@ -216,7 +217,7 @@ const SideBar = () => {
                 <li>
                   <Link
                     to={"/admin/survey/pending"}
-                    className={`text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
+                    className={`text-sm mb-3 flex flex-row justify-between text-white place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
                       pathNameCheck("/admin/survey/pending")
                         ? "bg-gray-600"
                         : ""
@@ -232,7 +233,7 @@ const SideBar = () => {
                 <li>
                   <Link
                     to={"/admin/survey/rejected"}
-                    className={`text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
+                    className={`text-sm mb-3 flex flex-row justify-between place-items-center text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
                       pathNameCheck("/admin/survey/rejected")
                         ? "bg-gray-600"
                         : ""
@@ -248,7 +249,7 @@ const SideBar = () => {
                 <li>
                   <Link
                     to={"/admin/survey/all"}
-                    className={`text-sm mb-3 flex flex-row justify-between place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
+                    className={`text-sm mb-3 flex flex-row justify-between place-items-center text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
                       pathNameCheck("/admin/survey/all") ? "bg-gray-600" : ""
                     }`}
                   >

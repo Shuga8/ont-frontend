@@ -26,14 +26,40 @@ function AdminRoutes() {
         path="/login"
         element={!user ? <Login /> : <Navigate to="/admin/" replace />}
       />
-      <Route path="/agents" element={<Agents />} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="/agents/new" element={<Add />} />
-      <Route path="/survey/completed" element={<Completed />} />
-      <Route path="/survey/pending" element={<Pending />} />
-      <Route path="/survey/rejected" element={<Rejected />} />
-      <Route path="/survey/pending/complete" element={<CompletePending />} />
-      <Route path="/survey/all" element={<List />} />
+      <Route
+        path="/agents"
+        element={user ? <Agents /> : <Navigate to="/admin/login" replace />}
+      />
+      <Route
+        path="/settings"
+        element={user ? <Settings /> : <Navigate to="/admin/login" replace />}
+      />
+      <Route
+        path="/agents/new"
+        element={user ? <Add /> : <Navigate to="/admin/login" replace />}
+      />
+      <Route
+        path="/survey/completed"
+        element={user ? <Completed /> : <Navigate to="/admin/login" replace />}
+      />
+      <Route
+        path="/survey/pending"
+        element={user ? <Pending /> : <Navigate to="/admin/login" replace />}
+      />
+      <Route
+        path="/survey/rejected"
+        element={user ? <Rejected /> : <Navigate to="/admin/login" replace />}
+      />
+      <Route
+        path="/survey/pending/complete"
+        element={
+          user ? <CompletePending /> : <Navigate to="/admin/login" replace />
+        }
+      />
+      <Route
+        path="/survey/all"
+        element={user ? <List /> : <Navigate to="/admin/login" replace />}
+      />
       <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
