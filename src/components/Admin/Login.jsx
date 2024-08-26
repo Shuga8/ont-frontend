@@ -1,22 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { Button } from "@mui/material";
 import { ImSpinner9 } from "react-icons/im";
 import glo_logo from "../../assets/glo.png";
 import oxford_logo from "../../assets/oxford.png";
+import { useLogin } from "../../hooks/useLogin";
+import ErrorToast from "./ErrorToast";
 
 const Login = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const handleSubmit = (e) => {
+  const { login, isLoading, error, success } = useLogin();
+  const [isActive, setIsActive] = useState(false);
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    let email = document.forms["login"]["email"].value;
+    let pass = document.forms["login"]["password"].value;
+
+    await login(email, pass);
   };
+
+  useEffect(() => {
+    if (error) {
+      setIsActive(true);
+      const timer = setTimeout(() => {
+        setIsActive(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   return (
     <>
       <div className="login-container">
         <div className="wrapper">
           <section className="bg-gray-50 ">
+            <ErrorToast message={error} isActive={isActive} />
             <div className="flex w-full h-screen flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
               <Link
                 to="#"
@@ -34,6 +53,7 @@ const Login = () => {
                     className="space-y-4 md:space-y-6"
                     action=""
                     onSubmit={handleSubmit}
+                    name="login"
                   >
                     <div>
                       <label

@@ -4,6 +4,15 @@
   box-sizing: border-box;
 }
 
+#toast-danger {
+  position: fixed;
+  z-index: 11;
+  right: 10px;
+  top: 120px;
+  animation: smooth-up;
+  animation-duration: 0.9s;
+}
+
 .new-survey-form {
   background: rgba(0, 0, 0, 0.7);
   width: 100%;
@@ -198,5 +207,13 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+@keyframes smooth-up {
+  from {
+    top: 150px;
+  }
+  to {
+    top: 120px;
   }
 }/*# sourceMappingURL=App.css.map */
