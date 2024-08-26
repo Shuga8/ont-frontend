@@ -16,6 +16,16 @@
   place-items: center;
   justify-content: center;
   transition: all 0.3s ease-in-out;
+  padding: 0px 10px;
+}
+.new-survey-form > .agent-form {
+  min-width: 340px;
+  width: 500px;
+  max-width: 550px;
+  min-height: 400px;
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 1px 1px 9px #999;
 }
 
 .preloader {
