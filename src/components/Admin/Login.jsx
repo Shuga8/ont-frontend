@@ -34,7 +34,7 @@ const Login = () => {
     if (success) {
       setSuccessActive(true);
       const timer = setTimeout(() => {
-        setSuccessActive(true);
+        setSuccessActive(false);
       }, 2000);
       return () => clearTimeout(timer);
     }

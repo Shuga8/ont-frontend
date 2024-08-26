@@ -11,7 +11,7 @@ const SuccessToast = ({ message, isActive }) => {
       } items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow border-t-4 border-t-green-800`}
       role="alert"
     >
-      <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8  rounded-lg bg-green-800 text-red-200">
+      <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8  rounded-lg bg-green-800 text-green-200">
         <FaCircleCheck />
         <span className="sr-only">Success icon</span>
       </div>
