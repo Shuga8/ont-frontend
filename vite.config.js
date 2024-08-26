@@ -1,8 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  // base: "/ont-frontend/",
+  // proxy: {
+  //   "/v1": {
+  //     target: "https://ont-survey-tracker-development.up.railway.app",
+  //     changeOrigin: true,
+  //     secure: false,
+  //   },
+  // },
   plugins: [react()],
 });

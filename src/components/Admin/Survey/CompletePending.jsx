@@ -1,9 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Loader, SideBar } from "../index";
 import { Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
 const CompletePending = () => {
+  const [languages, setLanguages] = useState(null);
+
+  const getSelectedLanguages = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const response = await fetch(
+      "https://ont-survey-tracker-development.up.railway.app/v1/questions/supported-languages",
+      {
+        headers: myHeaders,
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setLanguages(data.data.languages);
+    }
+  };
+
+  useEffect(() => {
+    getSelectedLanguages();
+  }, []);
+
   const [isRejecting, setIsRejecting] = useState(false);
   const [rejectButtonLoading, setRejectButtonLoading] = useState(false);
   const [isContinuing, setIsContinuing] = useState(false);
@@ -48,7 +72,7 @@ const CompletePending = () => {
 
   const handleEnterSurveyButtonClick = () => {
     setEnterSurveyLoading(true);
-    const url = `/survey?language=${selectedLanguage}&phone=+2341234567890`;
+    const url = `/survey?language=${selectedLanguage}&phone=+2341234567890&agent=agent1`;
     navigate(url);
   };
 
@@ -260,80 +284,26 @@ const CompletePending = () => {
               </h2>
 
               <div className="languages px-4 py-6">
-                <div className="flex items-center mb-2">
-                  <input
-                    type="radio"
-                    id="english"
-                    name="lang"
-                    value="english"
-                    className="custom-radio mr-2"
-                    checked={selectedLanguage === "english"}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="english" className="text-gray-800">
-                    English
-                  </label>
-                </div>
-
-                <div className="flex items-center mb-2">
-                  <input
-                    type="radio"
-                    id="pidgin"
-                    name="lang"
-                    value="pidgin"
-                    className="custom-radio mr-2"
-                    checked={selectedLanguage === "pidgin"}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="pidgin" className="text-gray-800">
-                    Pidgin
-                  </label>
-                </div>
-
-                <div className="flex items-center mb-2">
-                  <input
-                    type="radio"
-                    id="igbo"
-                    name="lang"
-                    value="igbo"
-                    className="custom-radio mr-2"
-                    checked={selectedLanguage === "igbo"}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="igbo" className="text-gray-800">
-                    Igbo
-                  </label>
-                </div>
-
-                <div className="flex items-center mb-2">
-                  <input
-                    type="radio"
-                    id="hausa"
-                    name="lang"
-                    value="hausa"
-                    className="custom-radio mr-2"
-                    checked={selectedLanguage === "hausa"}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="hausa" className="text-gray-800">
-                    Hausa
-                  </label>
-                </div>
-
-                <div className="flex items-center mb-2">
-                  <input
-                    type="radio"
-                    id="yoruba"
-                    name="lang"
-                    value="yoruba"
-                    className="custom-radio mr-2"
-                    checked={selectedLanguage === "yoruba"}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor="yoruba" className="text-gray-800">
-                    Yoruba
-                  </label>
-                </div>
+                {languages &&
+                  languages.map((lang) => (
+                    <div className="flex items-center mb-2" key={lang}>
+                      <input
+                        type="radio"
+                        id={lang}
+                        name="lang"
+                        value={lang}
+                        className="custom-radio mr-2"
+                        checked={selectedLanguage === lang}
+                        onChange={handleChange}
+                      />
+                      <label
+                        htmlFor={lang}
+                        className="text-gray-800 capitalize"
+                      >
+                        {lang}
+                      </label>
+                    </div>
+                  ))}
               </div>
 
               <div className="screen-2-action-buttons flex flex-row gap-x-4 justify-end">
