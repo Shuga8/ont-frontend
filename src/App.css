@@ -13,6 +13,15 @@
   animation-duration: 0.9s;
 }
 
+#toast-success {
+  position: fixed;
+  z-index: 11;
+  right: 10px;
+  top: 120px;
+  animation: smooth-up;
+  animation-duration: 0.9s;
+}
+
 .new-survey-form {
   background: rgba(0, 0, 0, 0.7);
   width: 100%;

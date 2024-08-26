@@ -7,10 +7,12 @@ import glo_logo from "../../assets/glo.png";
 import oxford_logo from "../../assets/oxford.png";
 import { useLogin } from "../../hooks/useLogin";
 import ErrorToast from "../Alerts/ErrorToast";
+import SuccessToast from "../Alerts/SuccessToast";
 
 const Login = () => {
   const { login, isLoading, error, success } = useLogin();
-  const [isActive, setIsActive] = useState(false);
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [isSuccessActive, setSuccessActive] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -22,20 +24,29 @@ const Login = () => {
 
   useEffect(() => {
     if (error) {
-      setIsActive(true);
+      setErrorActive(true);
       const timer = setTimeout(() => {
-        setIsActive(false);
+        setErrorActive(false);
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
+
+    if (success) {
+      setSuccessActive(true);
+      const timer = setTimeout(() => {
+        setSuccessActive(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, success]);
 
   return (
     <>
       <div className="login-container">
         <div className="wrapper">
           <section className="bg-gray-50 ">
-            <ErrorToast message={error} isActive={isActive} />
+            <ErrorToast message={error} isActive={isErrorActive} />
+            <SuccessToast message={success} isActive={isSuccessActive} />
             <div className="flex w-full h-screen flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
               <Link
                 to="#"
