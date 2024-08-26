@@ -6,7 +6,7 @@ import { ImSpinner9 } from "react-icons/im";
 import glo_logo from "../../assets/glo.png";
 import oxford_logo from "../../assets/oxford.png";
 import { useLogin } from "../../hooks/useLogin";
-import ErrorToast from "./ErrorToast";
+import ErrorToast from "../Alerts/ErrorToast";
 
 const Login = () => {
   const { login, isLoading, error, success } = useLogin();
