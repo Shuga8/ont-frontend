@@ -25,7 +25,7 @@ const Profile = () => {
 
         <div className="container-content  px-1 py-2 md:px-6 md:py-5">
           <div className="rounded-sm border border-stroke bg-white px-5 pb-6 pt-6 shadow-default sm:px-7 xl:pb-6">
-            <div className="action-layer flex justify-end">
+            <div className="action-layer flex justify-end px-4">
               <button
                 id="more-actions-btn"
                 className=" font-semibold p-2"
@@ -36,15 +36,15 @@ const Profile = () => {
 
               <div
                 id="dropdown"
-                className="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                className="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44  "
               >
-                <ul className="py-2" aria-labelledby="more-actions-btn">
+                <ul className="py-2 px-4" aria-labelledby="more-actions-btn">
                   <li>
                     <Link
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                      to="/admin/settings"
+                      className="block px-4 py-2 text-sm   text-blue-600 hover:text-blue-900"
                     >
-                      Edit
+                      Settings
                     </Link>
                   </li>
                 </ul>

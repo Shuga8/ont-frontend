@@ -53,9 +53,9 @@ const Settings = () => {
                     name="email"
                     id="email"
                     placeholder="email address "
-                    value={"johndoe@mail.com"}
-                    required="true"
-                    disabled="true"
+                    defaultValue={"johndoe@mail.com"}
+                    required={true}
+                    disabled={true}
                   />
                 </label>
 
@@ -69,8 +69,8 @@ const Settings = () => {
                     name="firstname"
                     id="firstname"
                     placeholder="firstname"
-                    value={"John"}
-                    required="true"
+                    defaultValue={"John"}
+                    required={true}
                   />
                 </label>
 
@@ -84,8 +84,8 @@ const Settings = () => {
                     name="lastname"
                     id="lastname"
                     placeholder="lastname"
-                    value={"Doe"}
-                    required="true"
+                    defaultValue={"Doe"}
+                    required={true}
                   />
                 </label>
 
@@ -135,7 +135,8 @@ const Settings = () => {
                     name="password"
                     id="password"
                     placeholder="***********"
-                    required="true"
+                    autoComplete="current-pasword"
+                    required={true}
                   />
                 </label>
                 <label className="block">
@@ -151,7 +152,8 @@ const Settings = () => {
                     name="password_confirmation"
                     id="password_confirmation"
                     placeholder="***********"
-                    required="true"
+                    autoComplete="current-pasword"
+                    required={true}
                   />
                 </label>
 
