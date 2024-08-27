@@ -41,7 +41,7 @@ const Info = () => {
             <span className="italic font-bold text-red-500">
               UNICEF SURVEY{" "}
             </span>
-            admininistrator app.
+            administrator app.
           </h3>
           <p className="text-green-600 text-center my-4 text-sm">
             In patnership with GLO and Oxford, we aim to make the world a better
