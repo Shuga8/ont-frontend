@@ -32,6 +32,7 @@ class BarGraph extends Component {
             "A7g",
             "Ag8",
             "Ag9",
+            "Ag10",
           ],
         },
         legend: {
@@ -51,11 +52,11 @@ class BarGraph extends Component {
       series: [
         {
           name: "Completed Surveys",
-          data: [30, 40, 45, 50, 49, 60, 70, 91],
+          data: [30, 40, 45, 50, 49, 60, 70, 91, 15],
         },
         {
           name: "Rejected Surveys",
-          data: [44, 55, 41, 67, 22, 43, 65],
+          data: [44, 55, 41, 67, 22, 43, 65, 60],
         },
       ],
     };

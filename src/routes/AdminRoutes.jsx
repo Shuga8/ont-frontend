@@ -18,15 +18,12 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 function AdminRoutes() {
   const { user, dispatch } = useAuthContext();
+  if (user === null) return;
   return (
     <Routes>
       <Route
         path="/"
         element={user ? <Admin /> : <Navigate to="/admin/login" replace />}
-      />
-      <Route
-        path="/login"
-        element={!user ? <Login /> : <Navigate to="/admin/" replace />}
       />
       <Route
         path="/agents"

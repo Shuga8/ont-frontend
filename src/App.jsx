@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Survey, ErrorPage } from "./components";
+import { Survey, ErrorPage, Admin } from "./components";
 import { AdminRoutes } from "./routes";
 import "./App.css";
 import { useAuthContext } from "./hooks/useAuthContext";
@@ -12,16 +12,29 @@ function App() {
       <div className="App">
         <BrowserRouter>
           <Routes>
+            {/* Public Routes */}
+            <Route
+              path="/admin/login"
+              element={!user ? <Login /> : <Navigate to="/admin/" replace />}
+            />
+
+            {/* Protected Routes */}
+            <Route
+              path="/admin/*"
+              element={
+                user ? <AdminRoutes /> : <Navigate to="/admin/login" replace />
+              }
+            />
+
+            {/* Default Route */}
             <Route
               path="/"
-              element={user ? <Survey /> : <Navigate to={"/admin/login"} />}
+              element={
+                user ? <Survey /> : <Navigate to="/admin/login" replace />
+              }
             />
-            <Route
-              path="/survey"
-              element={!user ? <Navigate to={"/survey"} /> : <Survey />}
-            />
-            <Route path="/admin/*" element={<AdminRoutes />} />
 
+            {/* Catch-All Route */}
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>

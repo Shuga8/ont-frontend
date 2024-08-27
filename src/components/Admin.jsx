@@ -2,12 +2,15 @@ import React from "react";
 import { Loader, SideBar } from "./Admin/index";
 import { Link } from "react-router-dom";
 import { RiListIndefinite, RiListCheck3, RiListCheck2 } from "react-icons/ri";
-import { TfiMore } from "react-icons/tfi";
-import { FaUsers } from "react-icons/fa";
+import { FaListCheck } from "react-icons/fa6";
 import LineGraph from "./Admin/Charts/Line";
 import BarGraph from "./Admin/Charts/Bar";
 import Info from "./Admin/Widgets/Info";
+import { useAuthContext } from "../hooks/useAuthContext";
+
 const Admin = () => {
+  const { user } = useAuthContext();
+
   return (
     <>
       <SideBar />
@@ -44,6 +47,27 @@ const Admin = () => {
 
               <div className="flow-widget-title text-sm text-gray-400">
                 Completed Surveys
+              </div>
+            </div>
+
+            <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+              <div className="icon w-12 h-12 rounded-full  bg-purple-500 flex place-items-center justify-center mb-4 relative">
+                <FaListCheck color="#fff" />
+              </div>
+
+              <div className="flow-widget-amount text-2xl text-gray-900">
+                10
+              </div>
+
+              <Link
+                to={"/admin/survey/unfinished"}
+                className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-purple-400 text-purple-600 rounded-lg hover:bg-purple-400 hover:text-white"
+              >
+                view
+              </Link>
+
+              <div className="flow-widget-title text-sm text-gray-400">
+                Unfinished Surveys
               </div>
             </div>
 
@@ -89,7 +113,13 @@ const Admin = () => {
               </div>
             </div>
 
-            <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+            <div
+              className={`flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block col-span-1 relative  ${
+                user.user.type === "call-center"
+                  ? "md:col-span-2 xl:col-span-4"
+                  : "md:col-span-2 xl:col-span-4"
+              }`}
+            >
               <div className="icon w-12 h-12 rounded-full  bg-blue-500 flex place-items-center justify-center mb-4">
                 <RiListIndefinite color="#fff" />
               </div>
@@ -109,6 +139,8 @@ const Admin = () => {
                 All Surveys
               </div>
             </div>
+
+            {user.user.type === "call-center" ? <></> : ""}
           </div>
 
           <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-4 xl:grid-cols-3">
