@@ -28,7 +28,9 @@ const Settings = () => {
 
         <div className="container-content  px-1 py-2 md:px-6 md:py-5">
           <div className="rounded-sm border border-stroke bg-white px-5 pb-6 pt-6 shadow-default sm:px-7 xl:pb-6">
-            <h3>User Settings</h3>
+            <h3 className="text-black font-semibold text-xl mb-4">
+              User Settings
+            </h3>
             <div
               className={`user-form ${isOtherFormVIsible ? "hidden" : "block"}`}
             >

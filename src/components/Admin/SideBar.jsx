@@ -9,6 +9,7 @@ import {
   RiLogoutCircleRLine,
 } from "react-icons/ri";
 import { PiUsersFourDuotone } from "react-icons/pi";
+import { CgProfile } from "react-icons/cg";
 import { Link, useNavigate } from "react-router-dom";
 
 import user_icon from "../../assets/user_icon.png";
@@ -163,6 +164,19 @@ const SideBar = () => {
                 <RiSpeedUpLine color="#fff" />
 
                 <span className="ms-3">Dashboard</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                to={"/admin/profile"}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  pathNameCheck("/admin/profile") ? "bg-gray-700" : ""
+                }`}
+              >
+                <CgProfile color="#fff" />
+
+                <span className="ms-3">Profile</span>
               </Link>
             </li>
 

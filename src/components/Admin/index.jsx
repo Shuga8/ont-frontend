@@ -10,3 +10,4 @@ export { default as Add } from "./Agents/Add";
 export { default as Agents } from "./Agents/Agents";
 export { default as Settings } from "./Settings";
 export { default as ErrorToast } from "../Alerts/ErrorToast";
+export { default as Profile } from "./Profile";

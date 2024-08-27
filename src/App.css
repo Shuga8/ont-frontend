@@ -22,6 +22,47 @@
   animation-duration: 0.9s;
 }
 
+.elements-container {
+  position: relative;
+}
+
+.info-widget-container {
+  position: fixed;
+  width: 100%;
+  height: 100% !important;
+  z-index: 12;
+  background: rgba(170, 170, 170, 0.99);
+  display: flex;
+  justify-content: center;
+  place-items: center;
+  padding: 0px 10px;
+  overflow-y: hidden;
+}
+.info-widget-container .wrapper .info-widget {
+  max-width: 600px;
+  padding: 14px 18px;
+  border-radius: 5px;
+  background: #fff;
+}
+.info-widget-container .wrapper .info-widget.move_down {
+  animation: appear_down;
+  animation-duration: 1s;
+  animation-delay: 500ms;
+  margin: 0px 0px 0px 0px;
+  opacity: 1;
+}
+.info-widget-container .wrapper .info-widget.move_up {
+  animation: appear_up;
+  animation-duration: 1s;
+  margin: -500px 0px 0px 0px;
+  opacity: 0;
+}
+.info-widget-container .wrapper .developer {
+  position: absolute;
+  bottom: 80px;
+  right: 15px;
+}
+
 .new-survey-form {
   background: rgba(0, 0, 0, 0.7);
   width: 100%;
@@ -50,7 +91,7 @@
   background: #eee;
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   z-index: 15;
   display: flex;
@@ -69,6 +110,15 @@
 .spinner {
   animation-name: spin;
   animation-duration: 500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.shade {
+  scale: 0.5;
+  filter: grayscale(0%);
+  animation-name: shade;
+  animation-duration: 2s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 }
@@ -200,6 +250,9 @@
     animation-timing-function: linear;
     font-size: 3rem;
   }
+  .elements-container .info-widget-container {
+    width: calc(100% - 16rem);
+  }
   .elements-container > .container-content {
     height: -moz-fit-content !important;
     height: fit-content !important;
@@ -224,5 +277,35 @@
   }
   to {
     top: 120px;
+  }
+}
+@keyframes shade {
+  from {
+    filter: grayscale(0%);
+    scale: 0.5;
+  }
+  to {
+    filter: grayscale(100%);
+    scale: 1;
+  }
+}
+@keyframes appear_down {
+  from {
+    margin: -500px 0px 0px 0px;
+    opacity: 0;
+  }
+  to {
+    margin: 0px 0px 0px 0px;
+    opacity: 1;
+  }
+}
+@keyframes appear_up {
+  from {
+    margin: 0px 0px 0px 0px;
+    opacity: 1;
+  }
+  to {
+    margin: -500px 0px 0px 0px;
+    opacity: 0;
   }
 }/*# sourceMappingURL=App.css.map */

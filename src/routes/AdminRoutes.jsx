@@ -10,6 +10,7 @@ import {
   Add,
   Agents,
   Settings,
+  Profile,
 } from "../components/Admin/index";
 
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -33,6 +34,11 @@ function AdminRoutes() {
       <Route
         path="/settings"
         element={user ? <Settings /> : <Navigate to="/admin/login" replace />}
+      />
+
+      <Route
+        path="/profile"
+        element={user ? <Profile /> : <Navigate to="/admin/login" replace />}
       />
       <Route
         path="/agents/new"

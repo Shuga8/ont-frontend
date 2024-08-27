@@ -5,12 +5,14 @@ import { RiListIndefinite, RiListCheck3, RiListCheck2 } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
 import LineGraph from "./Admin/Charts/Line";
 import BarGraph from "./Admin/Charts/Bar";
+import Info from "./Admin/Widgets/Info";
 const Admin = () => {
   return (
     <>
       <SideBar />
       <div className="elements-container mt-14">
         <Loader />
+        <Info />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between ">
           <span className="font-bold text-lg text-gray-900">Dasbhoard</span>
           <span>
