@@ -11,6 +11,7 @@ import {
   Agents,
   Settings,
   Profile,
+  Unfinished,
 } from "../components/Admin/index";
 
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -55,6 +56,11 @@ function AdminRoutes() {
       <Route
         path="/survey/rejected"
         element={user ? <Rejected /> : <Navigate to="/admin/login" replace />}
+      />
+
+      <Route
+        path="/survey/unfinished"
+        element={user ? <Unfinished /> : <Navigate to="/admin/login" replace />}
       />
       <Route
         path="/survey/pending/complete"

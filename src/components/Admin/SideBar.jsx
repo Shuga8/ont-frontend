@@ -230,6 +230,22 @@ const SideBar = () => {
 
                 <li>
                   <Link
+                    to={"/admin/survey/unfinished"}
+                    className={`text-sm mb-3 mt-2 flex flex-row justify-between place-items-center text-white hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
+                      pathNameCheck("/admin/survey/unfinished")
+                        ? "bg-gray-600"
+                        : ""
+                    }`}
+                  >
+                    <span>Unfinished Surveys</span>
+                    <span className="bg-purple-500 px-2 text-center text-sm text-white rounded-lg">
+                      10
+                    </span>
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
                     to={"/admin/survey/pending"}
                     className={`text-sm mb-3 flex flex-row justify-between text-white place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
                       pathNameCheck("/admin/survey/pending")
