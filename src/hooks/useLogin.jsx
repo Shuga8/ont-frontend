@@ -32,9 +32,13 @@ export const useLogin = () => {
     if (!loginUser.ok) {
       setError(response.message);
     } else {
-      localStorage.setItem("user", JSON.stringify(response.data));
-      dispatch({ type: "LOGIN", payload: response.data });
       setSuccess("login successfull");
+
+      setTimeout(() => {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        dispatch({ type: "LOGIN", payload: response.data });
+        localStorage.setItem("justLoggedIn", true);
+      }, 1500);
     }
 
     setIsloading(false);

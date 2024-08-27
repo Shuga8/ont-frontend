@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import one_thought from "../../../assets/one_thought.jpg";
 import logo from "../../../assets/logo.png";
 import { Button } from "@mui/material";
@@ -7,17 +7,28 @@ import { BiSolidSkipNextCircle } from "react-icons/bi";
 const Info = () => {
   const [isLeaving, setIsLeaving] = useState(false);
   const [hasLeft, setHasLeft] = useState(false);
+  const justLoggedIn = localStorage.getItem("justLoggedIn");
+
+  useEffect(() => {
+    if (justLoggedIn == "false") {
+      setHasLeft(true);
+    }
+  }, []);
 
   const handleNext = () => {
     setIsLeaving(true);
-
     setTimeout(() => {
       setHasLeft(true);
+      localStorage.setItem("justLoggedIn", false);
     }, 1000);
   };
 
   return (
-    <div className={`info-widget-container ${hasLeft ? "hidden" : "flex"}`}>
+    <div
+      className={`info-widget-container ${
+        hasLeft && justLoggedIn == "false" ? "hidden" : "flex"
+      }`}
+    >
       <div className="wrapper">
         <div
           className={`info-widget bg-white ${
