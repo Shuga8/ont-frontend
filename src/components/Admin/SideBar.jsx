@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
 import {
   RiMenu3Line,
@@ -17,7 +17,39 @@ import { useLogout } from "../../hooks/useLogout";
 
 const SideBar = () => {
   const { logout } = useLogout();
-  const navigate = useNavigate();
+  const [dropDownOpen, setDropDownOpen] = useState(false);
+  const [asideActive, setAsideActive] = useState(false);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const logoToggle = document.querySelector("#logoToggleBtn");
+      const sidebar = document.querySelector("#logo-sidebar");
+      const dropdown = document.querySelector("#dropdown-user");
+      const dropdownBtn = document.querySelector("#dropdownBtn");
+      if (
+        dropdown &&
+        !dropdown.contains(event.target) &&
+        dropdownBtn &&
+        !dropdownBtn.contains(event.target)
+      ) {
+        setDropDownOpen(false);
+      }
+
+      if (
+        sidebar &&
+        !sidebar.contains(event.target) &&
+        !logoToggle.contains(event.target)
+      ) {
+        setAsideActive(false);
+      }
+    }
+
+    window.addEventListener("click", handleClickOutside);
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   const pathNameCheck = (name) => {
     return window.location.pathname == name;
   };
@@ -67,11 +99,10 @@ const SideBar = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
               <button
-                data-drawer-target="logo-sidebar"
-                data-drawer-toggle="logo-sidebar"
-                aria-controls="logo-sidebar"
+                id="logoToggleBtn"
                 type="button"
                 className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                onClick={() => setAsideActive(!asideActive)}
               >
                 <span className="sr-only">Open sidebar</span>
                 <RiMenu3Line color="#fff" />
@@ -89,8 +120,9 @@ const SideBar = () => {
                   <button
                     type="button"
                     className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                    aria-expanded="false"
-                    data-dropdown-toggle="dropdown-user"
+                    aria-expanded={dropDownOpen}
+                    onClick={() => setDropDownOpen(!dropDownOpen)}
+                    id="dropdownBtn"
                   >
                     <span className="sr-only">Open user menu</span>
                     <img
@@ -101,7 +133,9 @@ const SideBar = () => {
                   </button>
                 </div>
                 <div
-                  className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                  className={`z-50 ${
+                    dropDownOpen ? "block" : "hidden"
+                  } fixed my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}
                   id="dropdown-user"
                 >
                   <div className="px-4 py-3" role="none">
@@ -149,8 +183,13 @@ const SideBar = () => {
 
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+        className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700 ${
+          asideActive ? "transform-none" : "-translate-x-full"
+        }`}
+        aria-modal={asideActive}
         aria-label="Sidebar"
+        aria-hidden={!asideActive}
+        role={asideActive ? "modal" : null}
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
           <ul className="space-y-2 font-medium">

@@ -30,9 +30,8 @@
   position: fixed;
   width: 100%;
   height: 100% !important;
-  z-index: 12;
+  z-index: 14;
   background: rgba($color: #aaa, $alpha: 0.99);
-  display: flex;
   justify-content: center;
   place-items: center;
   padding: 0px 10px;
@@ -68,6 +67,11 @@
       right: 15px;
     }
   }
+}
+
+#dropdown-user {
+  top: 42px;
+  right: 0px;
 }
 
 .new-survey-form {
@@ -268,9 +272,9 @@
       }
     }
 
-    .info-widget-container {
-      width: calc(100% - 16rem);
-    }
+    // .info-widget-container {
+    //   width: calc(100% - 16rem);
+    // }
 
     > .container-content {
       height: fit-content !important;

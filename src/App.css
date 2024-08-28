@@ -30,9 +30,8 @@
   position: fixed;
   width: 100%;
   height: 100% !important;
-  z-index: 12;
+  z-index: 14;
   background: rgba(170, 170, 170, 0.99);
-  display: flex;
   justify-content: center;
   place-items: center;
   padding: 0px 10px;
@@ -61,6 +60,11 @@
   position: absolute;
   bottom: 80px;
   right: 15px;
+}
+
+#dropdown-user {
+  top: 42px;
+  right: 0px;
 }
 
 .new-survey-form {
@@ -249,9 +253,6 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     font-size: 3rem;
-  }
-  .elements-container .info-widget-container {
-    width: calc(100% - 16rem);
   }
   .elements-container > .container-content {
     height: -moz-fit-content !important;

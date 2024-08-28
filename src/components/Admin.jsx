@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Loader, SideBar } from "./Admin/index";
 import { Link } from "react-router-dom";
 import { RiListIndefinite, RiListCheck3, RiListCheck2 } from "react-icons/ri";
@@ -17,6 +17,7 @@ const Admin = () => {
       <div className="elements-container mt-14">
         <Loader />
         <Info />
+
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between ">
           <span className="font-bold text-lg text-gray-900">Dasbhoard</span>
           <span>
@@ -116,7 +117,7 @@ const Admin = () => {
             <div
               className={`flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block col-span-1 relative  ${
                 user.user.type === "call-center"
-                  ? "md:col-span-2 xl:col-span-4"
+                  ? ""
                   : "md:col-span-2 xl:col-span-4"
               }`}
             >
