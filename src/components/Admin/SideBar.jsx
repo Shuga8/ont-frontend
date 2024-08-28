@@ -288,9 +288,7 @@ const SideBar = () => {
                   <Link
                     to={"/admin/survey/pending"}
                     className={`text-sm mb-3 flex flex-row justify-between text-white place-items-center hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md cursor-pointer ${
-                      pathNameCheck("/admin/survey/pending")
-                        ? "bg-gray-600"
-                        : ""
+                      pathNameLike("/admin/survey/pending") ? "bg-gray-600" : ""
                     }`}
                   >
                     <span>Pending Surveys</span>

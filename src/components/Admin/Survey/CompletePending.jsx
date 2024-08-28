@@ -6,6 +6,14 @@ import { Link, useNavigate } from "react-router-dom";
 const CompletePending = () => {
   const [languages, setLanguages] = useState(null);
 
+  const giveConsent = () => {
+    const consentScreen = document.querySelector(".consent-screen");
+    const first_screen = document.querySelector(".screen-1");
+
+    consentScreen.classList.replace("flex", "hidden");
+    first_screen.classList.replace("hidden", "block");
+  };
+
   const getSelectedLanguages = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -93,7 +101,26 @@ const CompletePending = () => {
 
         <div className="container-content  px-1 py-2 md:px-6 md:py-5">
           <div className="screens w-full py-6 px-3 md:px-8 bg-white rounded-lg">
-            <div className="screen-1 block">
+            <div className="consent-screen w-full min-h-96 flex flex-col gap-y-4 place-items-center justify-center">
+              <h3 className="text-xl text-blue-600 font-semibold">
+                Does the Respondent Agree to Continue?
+              </h3>
+
+              <div className="button-list flex flex-row gap-x-3">
+                <Button variant="contained" color="error">
+                  No
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={giveConsent}
+                >
+                  Yes
+                </Button>
+              </div>
+            </div>
+
+            <div className="screen-1 hidden">
               <h2 className="text-stone-700 font-bold text-xl">
                 Respondent Details
               </h2>

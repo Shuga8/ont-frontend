@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { BiLoaderAlt } from "react-icons/bi";
 
 const Loader = () => {
   useEffect(() => {
@@ -8,7 +9,9 @@ const Loader = () => {
   }, []);
   return (
     <div className="preloader">
-      <span className="material-symbols-outlined">progress_activity</span>
+      <span className="">
+        <BiLoaderAlt />
+      </span>
     </div>
   );
 };
