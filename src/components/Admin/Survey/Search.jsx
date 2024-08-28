@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { GrCloudUpload } from "react-icons/gr";
 import { FiSearch } from "react-icons/fi";
 import { Button } from "@mui/material";
-import { MdFormatListBulletedAdd } from "react-icons/md";
+import { MdFormatListBulletedAdd, MdPlaylistAddCheck } from "react-icons/md";
 import csvThumbnail from "../../../assets/csv_thumbnail.png";
 
 const Search = () => {
-  const showNewSurveyForm = (e) => {
+  const [formType, setFromType] = useState(null);
+
+  const showNewSurveyForm = (type) => {
+    setFromType(type);
     document.querySelector(".new-survey-form").classList.remove("hidden");
   };
   window.addEventListener("click", function (e) {
@@ -49,14 +52,23 @@ const Search = () => {
         <Button
           variant="outlined"
           color="primary"
-          className="flex flex-row gap-x-2"
-          onClick={showNewSurveyForm}
+          className="flex flex-row gap-x-2 "
+          onClick={() => showNewSurveyForm("new")}
         >
           <span className="hidden md:block text-base">New Survey</span>
           <MdFormatListBulletedAdd className="text-blue-700 text-2xl" />
         </Button>
+        <Button
+          variant="outlined"
+          color="success"
+          className="flex flex-row gap-x-2"
+          onClick={() => showNewSurveyForm("add")}
+        >
+          <span className="hidden md:block text-base">Add Survey</span>
+          <MdPlaylistAddCheck className="text-green-700 text-2xl" />
+        </Button>
         <div className="search-form">
-          <form className="max-w-md min-w-72 md:min-w-80 mx-auto md:mx-0">
+          <form className="max-w-md min-w-60 md:min-w-80 mx-auto md:mx-0">
             <label
               htmlFor="default-search"
               className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -70,13 +82,14 @@ const Search = () => {
               <input
                 type="search"
                 id="default-search"
-                className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 placeholder:text-xs"
                 placeholder="Search by phone number..."
+                autoComplete="phone"
                 required
               />
               <button
                 type="submit"
-                className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-xs md:text-sm px-2 py-2 md:px-4"
               >
                 Search
               </button>
