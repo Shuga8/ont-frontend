@@ -213,7 +213,11 @@ const Admin = () => {
                 <Donut />
               </div>
             </div>
-            <div className="graph-widget h-96 p-2 bg-white rounded-md col-span-1 xl:col-span-2  shadow-xl"></div>
+            <div className="graph-widget h-96 p-2 bg-white rounded-md col-span-1 xl:col-span-2  shadow-xl">
+              <h3 className="text-xl text-gray-700 px-5 font-semibold py-2">
+                Region Labels
+              </h3>
+            </div>
           </div>
         </div>
       </div>

@@ -46,7 +46,7 @@ class LineGraph extends Component {
           },
           yaxis: {
             lines: {
-              show: true,
+              show: false,
             },
           },
         },
