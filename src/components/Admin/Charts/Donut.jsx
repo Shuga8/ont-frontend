@@ -10,7 +10,7 @@ class Donut extends Component {
         chart: {
           type: "donut",
         },
-        colors: ["#22C55E", "#6577F3", "#EF4444"],
+        colors: ["#22C55E", "#A855F7", "#EF4444"],
         labels: ["Completed LGA's", "Uncompleted LGA's", "Rejected LGA's"],
         legend: {
           show: true,
