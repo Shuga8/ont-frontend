@@ -97,6 +97,12 @@
     border-radius: 7px;
     box-shadow: 1px 1px 9px #999;
   }
+
+  > .new-form {
+    min-width: 340px;
+    width: 500px;
+    max-width: 550px;
+  }
 }
 
 .preloader {

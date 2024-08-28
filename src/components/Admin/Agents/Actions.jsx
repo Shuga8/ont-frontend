@@ -3,6 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import { Button } from "@mui/material";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 import { PiUserCirclePlusDuotone } from "react-icons/pi";
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { BsSend } from "react-icons/bs";
 import { ImSpinner3 } from "react-icons/im";
 import ErrorToast from "../../Alerts/ErrorToast";
@@ -25,6 +26,7 @@ const Actions = () => {
   const [success, setSuccess] = useState(null);
   const [isErrorActive, setErrorActive] = useState(false);
   const [isSuccessActive, setSuccessActive] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,8 +38,9 @@ const Actions = () => {
     const firstname = document.forms["invite_form"]["firstname"].value;
     const lastname = document.forms["invite_form"]["lastname"].value;
     const role = document.forms["invite_form"]["role"].value;
+    const password = document.forms["invite_form"]["password"].value;
 
-    const data = JSON.stringify({ email, firstname, lastname, role });
+    const data = JSON.stringify({ email, firstname, lastname, role, password });
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -96,6 +99,18 @@ const Actions = () => {
     }
   }, [error, success]);
 
+  const generatePassword = () => {
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?";
+    const passwordLength = 12;
+    let password = "";
+    for (let i = 0; i < passwordLength; i++) {
+      const randomIndex = Math.floor(Math.random() * chars.length);
+      password += chars[randomIndex];
+    }
+    return password;
+  };
+
   return (
     <>
       <div className="flex justify-end p-3 flex-row gap-x-2">
@@ -140,7 +155,7 @@ const Actions = () => {
         </div>
       </div>
       <div className="new-survey-form  hidden">
-        <div className="flex items-center justify-center px-6 py-8 mx-auto md:h-screen min-w-96 lg:py-0">
+        <div className="new-form flex items-center justify-center px-6 py-8 mx-auto md:h-screen min-w-96 lg:py-0">
           <div className="w-full  rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700 min-w-96">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -217,6 +232,47 @@ const Actions = () => {
                     <option value="admin">Admin</option>
                     <option value="call-center">Call Center Agent</option>
                   </select>
+                </div>
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block mb-2 text-sm font-medium text-white"
+                  >
+                    Password
+                  </label>
+                  <div className="flex items-center">
+                    <div className="relative w-full">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        id="password"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="password"
+                        autoComplete="suggest-password"
+                        required
+                      />
+
+                      <span
+                        className="absolute top-2 right-px px-2 py-px text-gray-300 text-2xl cursor-pointer eye-icon"
+                        onClick={(e) => {
+                          setShowPassword(!showPassword);
+                        }}
+                      >
+                        {!showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const generatedPassword = generatePassword();
+                        document.getElementById("password").value =
+                          generatedPassword;
+                      }}
+                      className="ml-2 bg-blue-600 text-white text-xs rounded-lg px-2.5 py-3 hover:bg-blue-700"
+                    >
+                      Generate
+                    </button>
+                  </div>
                 </div>
 
                 <Button
