@@ -6,12 +6,12 @@ import {
   Rejected,
   List,
   CompletePending,
-  Login,
   Add,
   Agents,
   Settings,
   Profile,
   Unfinished,
+  Download,
 } from "../components/Admin/index";
 
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -32,6 +32,10 @@ function AdminRoutes() {
       <Route
         path="/settings"
         element={user ? <Settings /> : <Navigate to="/admin/login" replace />}
+      />
+      <Route
+        path="/download"
+        element={user ? <Download /> : <Navigate to="/admin/login" replace />}
       />
 
       <Route

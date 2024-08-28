@@ -10,8 +10,8 @@ import {
 } from "react-icons/ri";
 import { PiUsersFourDuotone } from "react-icons/pi";
 import { CgProfile } from "react-icons/cg";
+import { TbWorldDownload } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
-
 import user_icon from "../../assets/user_icon.png";
 import { useLogout } from "../../hooks/useLogout";
 
@@ -329,6 +329,19 @@ const SideBar = () => {
                 </li>
               </div>
             </div>
+
+            <li>
+              <Link
+                to={"/admin/download"}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  pathNameCheck("/admin/download") ? "bg-gray-600" : ""
+                }`}
+              >
+                <TbWorldDownload color="#fff" />
+
+                <span className="ms-3">Download</span>
+              </Link>
+            </li>
 
             <li>
               <Link

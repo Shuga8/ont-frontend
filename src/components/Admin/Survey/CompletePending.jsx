@@ -88,6 +88,10 @@ const CompletePending = () => {
     e.preventDefault();
   };
 
+  const rejectConsent = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       <SideBar />
@@ -107,7 +111,11 @@ const CompletePending = () => {
               </h3>
 
               <div className="button-list flex flex-row gap-x-3">
-                <Button variant="contained" color="error">
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={rejectConsent}
+                >
                   No
                 </Button>
                 <Button
