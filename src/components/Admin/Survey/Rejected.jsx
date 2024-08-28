@@ -26,15 +26,16 @@ const Rejected = () => {
       const moreContent = document.querySelectorAll(".more-content");
 
       moreBtns.forEach((btn) => {
+        const content = btn.nextElementSibling;
         if (
           btn &&
           !btn.contains(event.target) &&
-          btn.nextElementSibling.classList.contains("block")
+          content.classList.contains("block") &&
+          !content.contains(event.target)
         ) {
           setMoreContent(false);
-          moreContent.forEach((ctn) => {
-            ctn.classList.replace("block", "hidden");
-          });
+
+          content.classList.replace("block", "hidden");
         }
       });
     }

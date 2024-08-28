@@ -7,7 +7,6 @@ export { default as List } from "./Survey/List";
 export { default as Unfinished } from "./Survey/Unfinished";
 export { default as CompletePending } from "./Survey/CompletePending";
 export { default as Login } from "./Login";
-export { default as Add } from "./Agents/Add";
 export { default as Agents } from "./Agents/Agents";
 export { default as Settings } from "./Settings";
 export { default as ErrorToast } from "../Alerts/ErrorToast";

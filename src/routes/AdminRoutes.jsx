@@ -6,7 +6,6 @@ import {
   Rejected,
   List,
   CompletePending,
-  Add,
   Agents,
   Settings,
   Profile,
@@ -41,10 +40,6 @@ function AdminRoutes() {
       <Route
         path="/profile"
         element={user ? <Profile /> : <Navigate to="/admin/login" replace />}
-      />
-      <Route
-        path="/agents/new"
-        element={user ? <Add /> : <Navigate to="/admin/login" replace />}
       />
       <Route
         path="/survey/completed"
