@@ -9,6 +9,7 @@ import LineGraph from "./Admin/Charts/Line";
 import BarGraph from "./Admin/Charts/Bar";
 import Info from "./Admin/Widgets/Info";
 import { useAuthContext } from "../hooks/useAuthContext";
+import Donut from "./Admin/Charts/Donut";
 
 const Admin = () => {
   const { user } = useAuthContext();
@@ -32,7 +33,7 @@ const Admin = () => {
 
         <div className="container-content  px-1 py-2 md:px-6 md:py-5">
           <div className="flow-widgets grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 justify-center md:justify-normal">
-            <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+            <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
               <div className="icon w-12 h-12 rounded-full  bg-green-500 flex place-items-center justify-center mb-4 relative">
                 <RiListCheck3 color="#fff" />
               </div>
@@ -53,7 +54,7 @@ const Admin = () => {
               </div>
             </div>
 
-            <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+            <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
               <div className="icon w-12 h-12 rounded-full  bg-purple-500 flex place-items-center justify-center mb-4 relative">
                 <FaListCheck color="#fff" />
               </div>
@@ -74,7 +75,7 @@ const Admin = () => {
               </div>
             </div>
 
-            <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+            <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
               <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4 ">
                 <RiListCheck2 color="#fff" />
               </div>
@@ -95,7 +96,7 @@ const Admin = () => {
               </div>
             </div>
 
-            <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+            <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
               <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
                 <RiListCheck2 color="#fff" />
               </div>
@@ -117,7 +118,7 @@ const Admin = () => {
             </div>
 
             <div
-              className={`flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block col-span-1 relative  ${
+              className={`flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block col-span-1 relative shadow-xl ${
                 user.user.type === "call-center"
                   ? ""
                   : "md:col-span-2 xl:col-span-4"
@@ -145,7 +146,7 @@ const Admin = () => {
 
             {user.user.type === "call-center" ? (
               <>
-                <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+                <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
                   <div className="icon w-12 h-12 rounded-full  bg-green-500 flex place-items-center justify-center mb-4">
                     <FaMapLocationDot color="#fff" />
                   </div>
@@ -159,7 +160,7 @@ const Admin = () => {
                   </div>
                 </div>
 
-                <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+                <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
                   <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4">
                     <TbLocationQuestion color="#fff" />
                   </div>
@@ -173,7 +174,7 @@ const Admin = () => {
                   </div>
                 </div>
 
-                <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+                <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
                   <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
                     <MdOutlineWrongLocation color="#fff" />
                   </div>
@@ -192,14 +193,27 @@ const Admin = () => {
             )}
           </div>
 
-          <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-4 xl:grid-cols-3">
-            <div className="graph-widget col-span-1 xl:col-span-2 p-2 h-96 bg-white rounded-md">
+          <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-x-8 gap-y-6 xl:grid-cols-3">
+            <div className="graph-widget col-span-1 xl:col-span-2 p-2 h-96 bg-white rounded-md shadow-xl">
               <LineGraph />
             </div>
 
-            <div className="graph-widget p-2 h-96 bg-white rounded-md">
+            <div className="graph-widget p-2 h-96 bg-white rounded-md shadow-xl">
               <BarGraph />
             </div>
+          </div>
+
+          <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 xl:grid-cols-3 gap-x-8 gap-y-6">
+            <div className="graph-widget h-96 p-2 bg-white rounded-md shadow-xl">
+              <h3 className="text-xl text-gray-700 px-5 font-semibold py-2">
+                LGA's
+              </h3>
+
+              <div className="graph w-full px-5 py-1 h-full">
+                <Donut />
+              </div>
+            </div>
+            <div className="graph-widget h-96 p-2 bg-white rounded-md col-span-1 xl:col-span-2  shadow-xl"></div>
           </div>
         </div>
       </div>
