@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import { Loader, SideBar } from "./Admin/index";
 import { Link } from "react-router-dom";
 import { RiListIndefinite, RiListCheck3, RiListCheck2 } from "react-icons/ri";
-import { FaListCheck } from "react-icons/fa6";
+import { FaListCheck, FaMapLocationDot } from "react-icons/fa6";
+import { MdOutlineWrongLocation } from "react-icons/md";
+import { TbLocationQuestion } from "react-icons/tb";
 import LineGraph from "./Admin/Charts/Line";
 import BarGraph from "./Admin/Charts/Bar";
 import Info from "./Admin/Widgets/Info";
@@ -141,7 +143,53 @@ const Admin = () => {
               </div>
             </div>
 
-            {user.user.type === "call-center" ? <></> : ""}
+            {user.user.type === "call-center" ? (
+              <>
+                <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+                  <div className="icon w-12 h-12 rounded-full  bg-green-500 flex place-items-center justify-center mb-4">
+                    <FaMapLocationDot color="#fff" />
+                  </div>
+
+                  <div className="flow-widget-amount text-2xl text-gray-900">
+                    40
+                  </div>
+
+                  <div className="flow-widget-title text-sm text-gray-400">
+                    Completed LGA's
+                  </div>
+                </div>
+
+                <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+                  <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4">
+                    <TbLocationQuestion color="#fff" />
+                  </div>
+
+                  <div className="flow-widget-amount text-2xl text-gray-900">
+                    149
+                  </div>
+
+                  <div className="flow-widget-title text-sm text-gray-400">
+                    Uncompleted LGA's
+                  </div>
+                </div>
+
+                <div className="flow-widget rounded-sm border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative">
+                  <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
+                    <MdOutlineWrongLocation color="#fff" />
+                  </div>
+
+                  <div className="flow-widget-amount text-2xl text-gray-900">
+                    11
+                  </div>
+
+                  <div className="flow-widget-title text-sm text-gray-400">
+                    Rejected LGA's
+                  </div>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
           </div>
 
           <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-4 xl:grid-cols-3">
