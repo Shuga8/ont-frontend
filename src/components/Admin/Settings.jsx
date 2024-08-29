@@ -7,9 +7,6 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { CgSpinner } from "react-icons/cg";
 
 const Settings = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault(e);
-  };
   const { user } = useAuthContext();
   const [isOtherFormVIsible, setOtherFormVisible] = useState(false);
   const [error, setError] = useState(null);
@@ -19,6 +16,68 @@ const Settings = () => {
   const [isSuccessActive, setSuccessActive] = useState(false);
   const [isInfoActive, setInfoActive] = useState(false);
   const [isPassLoading, setPassLoading] = useState(false);
+  const [isDetailsLoading, setDetailsLoading] = useState(false);
+
+  const fname = user.user.name.split(" ")[0];
+  const lname = user.user.name.split(" ")[1];
+
+  const handleSubmit = async (e) => {
+    if (e.target.checkValidity()) {
+      e.preventDefault();
+      setDetailsLoading(true);
+      setInfo(null);
+      setError(null);
+      setSuccess(null);
+
+      const f_name = document.forms["details_form"]["firstname"];
+      const l_name = document.forms["details_form"]["lastname"];
+
+      const firstname = f_name.value;
+      const lastname = l_name.value;
+
+      const reqBody = JSON.stringify({ firstname, lastname });
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("authorization", `Bearer ${user.token}`);
+
+      const response = await fetch(
+        "https://ont-survey-tracker-development.up.railway.app/v1/auth/update-password",
+        {
+          method: "PATCH",
+          headers: myHeaders,
+          body: reqBody,
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.error.message) {
+          setError(data.error.message);
+          let recommendedtActions = data.error.recommendedActions;
+          if (recommendedtActions.length > 0) {
+            let timer = 1000;
+            for (let i = 0; i < recommendedtActions.length; i++) {
+              setTimeout(() => {
+                setInfoActive(false);
+                setInfo(null);
+                setInfo(recommendedtActions[i]);
+              }, timer);
+              timer += 5000;
+            }
+          }
+        } else {
+          setError(data.error);
+        }
+      } else {
+        setSuccess(
+          "Details Updated Successfully, login again to complete changes!"
+        );
+      }
+
+      setDetailsLoading(false);
+    }
+  };
 
   const handlePasswordSubmit = async (e) => {
     if (e.target.checkValidity()) {
@@ -134,6 +193,7 @@ const Settings = () => {
                 method=""
                 onSubmit={handleSubmit}
                 className="w-full"
+                name="details_form"
               >
                 <label className="block">
                   <label htmlFor="email" className="text-gray-900">
@@ -164,7 +224,7 @@ const Settings = () => {
                     name="firstname"
                     id="firstname"
                     placeholder="firstname"
-                    defaultValue={"John"}
+                    defaultValue={fname}
                     required={true}
                   />
                 </label>
@@ -179,7 +239,7 @@ const Settings = () => {
                     name="lastname"
                     id="lastname"
                     placeholder="lastname"
-                    defaultValue={"Doe"}
+                    defaultValue={lname}
                     required={true}
                   />
                 </label>
@@ -189,10 +249,18 @@ const Settings = () => {
                     type="submit"
                     variant="contained"
                     color="success"
-                    className="flex flex-row gap-x-2"
+                    disabled={isDetailsLoading}
+                    className="text-xs"
                   >
-                    <RiSave3Line className="text-white" />{" "}
-                    <span>Save Changes</span>
+                    {isDetailsLoading ? (
+                      <span className="px-3 py-1 md:px-4  spinner text-white">
+                        <CgSpinner />
+                      </span>
+                    ) : (
+                      <span className="flex flex-row gap-x-2 text-xs place-items-center">
+                        <RiSave3Line className="text-white" /> <span>Save</span>
+                      </span>
+                    )}
                   </Button>
 
                   <Button
