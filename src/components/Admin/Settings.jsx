@@ -1,20 +1,115 @@
-import React, { useState } from "react";
-import { Loader, SideBar } from "./index";
+import React, { useState, useEffect } from "react";
+import { ErrorToast, InfoToast, Loader, SideBar, SuccessToast } from "./index";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import { RiSave3Line } from "react-icons/ri";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { CgSpinner } from "react-icons/cg";
 
 const Settings = () => {
   const handleSubmit = (e) => {
     e.preventDefault(e);
   };
-
+  const { user } = useAuthContext();
   const [isOtherFormVIsible, setOtherFormVisible] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [info, setInfo] = useState(null);
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [isSuccessActive, setSuccessActive] = useState(false);
+  const [isInfoActive, setInfoActive] = useState(false);
+  const [isPassLoading, setPassLoading] = useState(false);
+
+  const handlePasswordSubmit = async (e) => {
+    if (e.target.checkValidity()) {
+      e.preventDefault();
+      setPassLoading(true);
+      setInfo(null);
+      setError(null);
+      setSuccess(null);
+
+      const old = document.forms["passForm"]["password"];
+      const confirm = document.forms["passForm"]["password_confirmation"];
+
+      const oldPassword = old.value;
+      const password = confirm.value;
+
+      const reqBody = JSON.stringify({ oldPassword, password });
+
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("authorization", `Bearer ${user.token}`);
+
+      const response = await fetch(
+        "https://ont-survey-tracker-development.up.railway.app/v1/auth/update-password",
+        {
+          method: "POST",
+          headers: myHeaders,
+          body: reqBody,
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error.message);
+        let recommendedtActions = data.error.recommendedActions;
+        if (recommendedtActions.length > 0) {
+          let timer = 1000;
+          for (let i = 0; i < recommendedtActions.length; i++) {
+            setTimeout(() => {
+              setInfoActive(false);
+              setInfo(null);
+              setInfo(recommendedtActions[i]);
+            }, timer);
+            timer += 5000;
+          }
+        }
+      } else {
+        setSuccess("Password successfully changed...");
+        old.value = "";
+        confirm.value = "";
+      }
+
+      setPassLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      setErrorActive(true);
+      const timer = setTimeout(() => {
+        setErrorActive(false);
+        setError(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+    if (success) {
+      setSuccessActive(true);
+      const timer = setTimeout(() => {
+        setSuccessActive(false);
+        setSuccess(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+    if (info) {
+      setInfoActive(true);
+      const timer = setTimeout(() => {
+        setInfoActive(false);
+        setInfo(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, success, info]);
 
   return (
     <>
       <SideBar />
       <div className="elements-container mt-14">
+        <InfoToast message={info} isActive={isInfoActive} />
+        <ErrorToast message={error} isActive={isErrorActive} />
+        <SuccessToast message={success} isActive={isSuccessActive} />
+
         <Loader />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between ">
           <span className="font-bold text-lg text-gray-900">Settings</span>
@@ -122,8 +217,9 @@ const Settings = () => {
               <form
                 action=""
                 method=""
-                onSubmit={handleSubmit}
+                onSubmit={handlePasswordSubmit}
                 className="w-full"
+                name="passForm"
               >
                 <label className="block">
                   <label htmlFor="password" className="text-gray-900">
@@ -162,10 +258,18 @@ const Settings = () => {
                     type="submit"
                     variant="contained"
                     color="success"
-                    className="flex flex-row gap-x-2"
+                    disabled={isPassLoading}
+                    className="text-xs"
                   >
-                    <RiSave3Line className="text-white" />{" "}
-                    <span>Save Changes</span>
+                    {isPassLoading ? (
+                      <span className="px-3 py-1 md:px-4  spinner text-white">
+                        <CgSpinner />
+                      </span>
+                    ) : (
+                      <span className="flex flex-row gap-x-2 text-xs place-items-center">
+                        <RiSave3Line className="text-white" /> <span>Save</span>
+                      </span>
+                    )}
                   </Button>
 
                   <Button
@@ -175,6 +279,7 @@ const Settings = () => {
                     onClick={() => {
                       setOtherFormVisible(false);
                     }}
+                    className="text-sm"
                   >
                     Change User Details
                   </Button>

@@ -10,5 +10,7 @@ export { default as Login } from "./Login";
 export { default as Agents } from "./Agents/Agents";
 export { default as Settings } from "./Settings";
 export { default as ErrorToast } from "../Alerts/ErrorToast";
+export { default as InfoToast } from "../Alerts/InfoToast";
+export { default as SuccessToast } from "../Alerts/SuccessToast";
 export { default as Profile } from "./Profile";
 export { default as Download } from "./Download";
