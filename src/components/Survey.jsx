@@ -146,32 +146,32 @@ const Survey = () => {
   return (
     <>
       <div hidden={questionsVisible}>
-        <h1 className="text-3xl text-center py-4 text-cyan-600">ONT Survey</h1>
-        <div className="survey-widgets-container w-1/2 p-6 flex flex-row justify-center mx-auto overflow-x-scroll gap-1">
+        <h1 className="text-3xl font-semibold text-center py-4 text-yellow-700">
+          ONT Survey
+        </h1>
+        <div className="survey-widgets-container w-1/2 p-6 flex flex-row justify-center mx-auto overflow-x-scroll gap-x-2 gap-y-1">
           {surveyList.map((survey, index) => (
             <div
               key={index}
-              className={`survey-widget ${
+              className={`survey-widget shadow-2xl shadow-slate-700 ${
                 activeIndex === index ? "active-widget" : ""
               } 
             ${survey.isCompleted ? "cursor-not-allowed" : "cursor-pointer"}`}
               onClick={() => setActiveIndex(index)}
-            >
-              {index + 1}
-            </div>
+            ></div>
           ))}
         </div>
 
         <div className="surveys-container sm:px-1 py-9 md:px-6">
           <div className="questions-container py-2">
-            <h2 className="text-center text-2xl text-cyan-600 mb-6 font-extrabold">
+            <h2 className="text-center text-2xl text-yellow-600 mb-6 font-extrabold">
               {surveyList[activeIndex].title}
             </h2>
 
             {surveyList[activeIndex].questions[language].map((q, qIndex) => (
-              <div key={qIndex} className="question mb-4">
+              <div key={qIndex} className="question mb-4 shadow-xl">
                 <p className="mb-2">
-                  <span className="text-xl font-medium text-gray-500">
+                  <span className="text-xl font-medium text-yellow-500">
                     {getQuestionId(surveyList, activeIndex, qIndex)}
                   </span>
                   . {q.question}
