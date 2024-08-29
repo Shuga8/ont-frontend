@@ -34,6 +34,13 @@ function App() {
               }
             />
 
+            <Route
+              path="/survey"
+              element={
+                user ? <Survey /> : <Navigate to="/admin/login" replace />
+              }
+            />
+
             {/* Catch-All Route */}
             <Route path="*" element={<ErrorPage />} />
           </Routes>

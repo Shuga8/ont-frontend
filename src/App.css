@@ -22,6 +22,15 @@
   animation-duration: 0.9s;
 }
 
+#toast-info {
+  position: fixed;
+  z-index: 11;
+  right: 10px;
+  top: 120px;
+  animation: smooth-up;
+  animation-duration: 0.9s;
+}
+
 .elements-container {
   position: relative;
 }

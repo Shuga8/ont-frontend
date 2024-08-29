@@ -5,12 +5,15 @@ import { Button } from "@mui/material";
 import { RiFileDownloadLine } from "react-icons/ri";
 import { CgSpinner } from "react-icons/cg";
 import SuccessToast from "../Alerts/SuccessToast";
+import InfoToast from "../Alerts/InfoToast";
 
 const Download = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [info, setInfo] = useState(null);
   const [isErrorActive, setErrorActive] = useState(false);
   const [isSuccessActive, setSuccessActive] = useState(false);
+  const [isInfoActive, setInfoActive] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -24,13 +27,17 @@ const Download = () => {
       (status == null || status == "" || status == "none") &&
       (region == null || region == "" || region == "none")
     ) {
-      setError("One or both export type mustcan be picked");
+      setError("One or both export type must be picked");
       setLoading(false);
       return;
     }
 
     if (status !== "none" && region === "none") {
-      setSuccess("");
+      setInfo(`Downloading Surveys of Status "${status}"`);
+    } else if (status === "none" && region !== "none") {
+      setInfo(`Downloading Surveys of Region "${region}"`);
+    } else if (status !== "none" && region !== "none") {
+      setInfo(`Downloading all ${status} Surveys Of ${region}`);
     }
   };
 
@@ -43,7 +50,6 @@ const Download = () => {
       }, 2000);
       return () => clearTimeout(timer);
     }
-
     if (success) {
       setSuccessActive(true);
       const timer = setTimeout(() => {
@@ -52,12 +58,21 @@ const Download = () => {
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [error, success]);
+    if (info) {
+      setInfoActive(true);
+      const timer = setTimeout(() => {
+        setInfoActive(false);
+        setInfo(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, success, info]);
 
   return (
     <>
       <SideBar />
       <div className="elements-container mt-14">
+        <InfoToast message={info} isActive={isInfoActive} />
         <ErrorToast message={error} isActive={isErrorActive} />
         <SuccessToast message={success} isActive={isSuccessActive} />
         <Loader />
@@ -135,7 +150,7 @@ const Download = () => {
                   disabled={isLoading}
                 >
                   {isLoading ? (
-                    <span className="text-white spinner">
+                    <span className="text-white py-2 px-10 spinner">
                       <CgSpinner />
                     </span>
                   ) : (
