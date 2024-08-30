@@ -90,6 +90,22 @@
   transition: all 0.3s ease-in-out;
   padding: 0px 10px;
 }
+.new-survey-form form {
+  min-width: 300px;
+  width: 650px;
+  max-width: 650px;
+  min-height: 500px;
+}
+.new-survey-form form .preview-div {
+  padding: 5px;
+}
+.new-survey-form form .preview-div::-webkit-scrollbar {
+  height: 2px;
+}
+.new-survey-form form .preview-div::-webkit-scrollbar-thumb {
+  background-color: #32ae01;
+  border-radius: 6px;
+}
 .new-survey-form > .agent-form {
   min-width: 340px;
   width: 500px;

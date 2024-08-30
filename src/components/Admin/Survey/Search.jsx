@@ -12,13 +12,15 @@ const Search = () => {
     setFromType(type);
     document.querySelector(".new-survey-form").classList.remove("hidden");
   };
+
+  const [csvPreview, setCsvPreview] = useState("");
+
   window.addEventListener("click", function (e) {
     if (e.target == document.querySelector(".new-survey-form")) {
       document.querySelector(".new-survey-form").classList.add("hidden");
+      setCsvPreview("");
     }
   });
-
-  const [csvPreview, setCsvPreview] = useState("");
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -102,27 +104,29 @@ const Search = () => {
         </div>
       </div>
       <div className="new-survey-form hidden">
-        <form method="POST" encType="multipart/formdata" className="min-w-96">
-          <div className="flex items-center justify-center ">
-            <label
-              htmlFor="dropzone-file"
-              className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-300"
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-            >
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+        <form
+          method="POST"
+          encType="multipart/formdata "
+          className="grid grid-cols-1 justify-center items-center place-items-center grid-rows-3 bg-white px-3"
+        >
+          <label
+            htmlFor="dropzone-file"
+            className="flex flex-col items-center justify-center w-full h-auto cursor-pointer row-span-2 "
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
+            {csvPreview ? (
+              <div className="preview-div w-full h-full leading-8 overflow-auto text-base">
+                {csvPreview}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center place-content-center place-items-center justify-center py-6 px-2">
                 <div className="mb-4">
-                  {csvPreview ? (
-                    <pre className="w-full h-20 overflow-auto text-xs text-gray-600 bg-gray-200 p-2 rounded-md">
-                      {csvPreview}
-                    </pre>
-                  ) : (
-                    <img
-                      src={csvThumbnail}
-                      className="w-20 h-20 object-contain mix-blend-multiply"
-                      alt="CSV Thumbnail"
-                    />
-                  )}
+                  <img
+                    src={csvThumbnail}
+                    className="w-20 h-20 object-contain mix-blend-multiply"
+                    alt="CSV Thumbnail"
+                  />
                 </div>
                 <GrCloudUpload className="w-8 h-8 mb-4 text-gray-500" />
 
@@ -134,19 +138,18 @@ const Search = () => {
                   CSV only
                 </p>
               </div>
-              <input
-                id="dropzone-file"
-                type="file"
-                className="hidden"
-                onChange={handleDrop}
-              />
-              <Button variant="contained" color="primary">
-                Submit
-              </Button>
+            )}
+            <input
+              id="dropzone-file"
+              type="file"
+              className="hidden"
+              onChange={handleDrop}
+            />
+          </label>
 
-              <br />
-            </label>
-          </div>
+          <Button variant="contained" color="primary" className="flex-end">
+            Submit
+          </Button>
         </form>
       </div>
     </>

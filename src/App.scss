@@ -97,6 +97,24 @@
   transition: all 0.3s ease-in-out;
   padding: 0px 10px;
 
+  form {
+    min-width: 300px;
+    width: 650px;
+    max-width: 650px;
+    min-height: 500px;
+    .preview-div {
+      padding: 5px;
+      &::-webkit-scrollbar {
+        height: 2px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #32ae01;
+        border-radius: 6px;
+      }
+    }
+  }
+
   > .agent-form {
     min-width: 340px;
     width: 500px;

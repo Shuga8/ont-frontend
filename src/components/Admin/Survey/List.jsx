@@ -28,7 +28,7 @@ const List = () => {
           <span className="font-bold text-lg text-gray-900">All Surveys</span>
           <span>
             ONT&nbsp;/&nbsp;Survey&nbsp;/
-            <Link to={"/admin/survey/pending"} className=" text-blue-700">
+            <Link to={"/admin/survey/all"} className=" text-blue-700">
               &nbsp;All
             </Link>
           </span>
