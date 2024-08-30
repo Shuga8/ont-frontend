@@ -47,7 +47,7 @@ const Actions = () => {
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
     const response = await fetch(
-      "https://ont-survey-tracker-development.up.railway.app/v1/admin/create",
+      "https://ont-survey-tracker-development.up.railway.app/v1/admins/create",
       {
         method: "POST",
         headers: myHeaders,

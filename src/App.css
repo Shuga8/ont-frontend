@@ -267,6 +267,9 @@
     animation-timing-function: linear;
     font-size: 3rem;
   }
+  .elements-container .info-widget-container {
+    width: calc(100% - 16rem);
+  }
   .elements-container > .container-content {
     height: -moz-fit-content !important;
     height: fit-content !important;
