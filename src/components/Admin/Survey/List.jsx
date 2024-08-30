@@ -72,10 +72,13 @@ const List = () => {
 
               {respondents ? (
                 respondents.map((data, index) => {
-                  let status;
+                  let status = data.survey.status;
 
                   return (
-                    <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
+                    <div
+                      className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                      key={index + 1}
+                    >
                       <div className="flex items-center p-2 xl:p-5">
                         <p className="font-medium text-gray-800 ">
                           {index + 1}.
@@ -88,15 +91,23 @@ const List = () => {
                         </p>
                       </div>
 
-                      <div className="flex items-center p-2 xl:p-5 text-xs">
-                        <p className="font-medium text-gray-800 ">
+                      <div className="flex items-center p-2 xl:p-5 text-sm">
+                        <p className="font-medium text-blue-700 ">
                           0{data.respondent.phone}
                         </p>
                       </div>
 
                       <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                        <p className="font-medium text-yellow-600 p-2 bg-slate-200 rounded-full">
-                          Pending
+                        <p
+                          className={`font-medium ${
+                            status == "pending" ? "text-yellow-600" : ""
+                          } ${status == "completed" ? "text-green-600" : ""} ${
+                            status == "unfinished" ? "text-purple-600" : ""
+                          }  ${
+                            status == "rejected" ? "text-red-600" : ""
+                          }   p-2 bg-slate-200 rounded-full capitalize`}
+                        >
+                          {status}
                         </p>
                       </div>
 
