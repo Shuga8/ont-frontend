@@ -46,6 +46,7 @@ const Search = () => {
     e.preventDefault();
     e.stopPropagation();
   };
+
   return (
     <>
       <div className="flex justify-end p-3 flex-row gap-x-2">
@@ -68,7 +69,10 @@ const Search = () => {
           <MdPlaylistAddCheck className="text-green-700 text-2xl" />
         </Button>
         <div className="search-form">
-          <form className="max-w-md min-w-60 md:min-w-80 mx-auto md:mx-0">
+          <form
+            className="max-w-md min-w-60 md:min-w-80 mx-auto md:mx-0"
+            name="search_form"
+          >
             <label
               htmlFor="default-search"
               className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"

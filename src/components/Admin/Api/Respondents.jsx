@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 
-const useGetRespondents = () => {
+const useGetRespondents = (type = "all") => {
   const { user } = useAuthContext();
 
   const getRespondents = async () => {

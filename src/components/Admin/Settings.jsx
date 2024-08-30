@@ -41,7 +41,7 @@ const Settings = () => {
       myHeaders.append("authorization", `Bearer ${user.token}`);
 
       const response = await fetch(
-        "https://ont-survey-tracker-development.up.railway.app/v1/auth/update-password",
+        "https://ont-survey-tracker-development.up.railway.app/v1/admins/update",
         {
           method: "PATCH",
           headers: myHeaders,

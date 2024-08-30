@@ -87,7 +87,7 @@ const List = () => {
 
                       <div className="hidden md:flex  items-center p-2 xl:p-5">
                         <p className="font-medium text-gray-800 ">
-                          {data.respondent.name}
+                          {data.respondent.firstname}
                         </p>
                       </div>
 
