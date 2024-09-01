@@ -197,17 +197,15 @@ const Survey = () => {
                   {q.content.question}
                 </p>
 
-                {/* <div className="input-group px-4 py-6">
+                <div className="input-group px-4 py-6">
                   {q.type === "open-ended" && (
                     <input
-                      type={q.meta.formType}
+                      type={"text"}
                       className="w-full p-2 border"
-                      value={selectedOptions[qIndex] || ""}
-                      onChange={(e) =>
-                        handleInputChange(qIndex, e.target.value)
-                      }
                       placeholder="Your answer ..."
-                      maxLength={q.field === "number" ? "999999" : q.limit}
+                      maxLength={60}
+                      defaultValue={q.previousResponse}
+                      disabled={q.previousResponse ? true : false}
                     />
                   )}
                   {q.type === "single-choice" && (
@@ -217,10 +215,10 @@ const Survey = () => {
                           <input
                             type="radio"
                             id={`q${qIndex}-o${oIndex}`}
-                            name={`q${qIndex}`}
+                            name={q._id}
                             value={option}
                             className="custom-radio mr-2"
-                            checked={selectedOptions[qIndex] === option}
+                            checked={q.previousResponse === option}
                             onChange={(e) =>
                               handleSingleChoiceChange(qIndex, e.target.value)
                             }
@@ -268,7 +266,7 @@ const Survey = () => {
                       ))}
                     </div>
                   )}
-                </div> */}
+                </div>
               </div>
             ))}
           </div>
