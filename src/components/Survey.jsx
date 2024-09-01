@@ -1,139 +1,152 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
-import { List as surveyList } from "./index";
-
-// Extract language from the URL
-const getLanguageFromUrl = () => {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("language") || "english";
-};
-
-const getQuestionId = (surveyList, activeIndex, qIndex) => {
-  let id = 1;
-  for (let i = 0; i < activeIndex; i++) {
-    if (surveyList[i].questions) {
-      id += surveyList[i].questions[getLanguageFromUrl()].length;
-    }
-  }
-  return id + qIndex;
-};
+import useRespondentList from "../hooks/useRespondentList";
 
 const Survey = () => {
+  const getRespondentIdFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("respondent") || "english";
+  };
+
+  const getLanguageFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("language") || "english";
+  };
+
   const [categoryLoading, setCategoryLoading] = useState(false);
   const [questionsVisible, setQuestionsVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [errors, setErrors] = useState(false);
 
-  // Get language from URL
+  const respondentId = getRespondentIdFromUrl();
   const language = getLanguageFromUrl();
+  const { loadingQuestions, surveyList, respondent } =
+    useRespondentList(respondentId);
 
   useEffect(() => {
-    const firstIncompleteIndex = surveyList.findIndex(
-      (survey) => !survey.isCompleted
-    );
-    if (firstIncompleteIndex !== -1) {
-      setActiveIndex(firstIncompleteIndex);
+    if (surveyList.length > 0) {
+      const firstIncompleteIndex = surveyList.findIndex(
+        (survey) => !survey.isCompleted
+      );
+      if (firstIncompleteIndex !== -1) {
+        setActiveIndex(firstIncompleteIndex);
+      }
     }
-  }, []);
+  }, [surveyList]);
 
   useEffect(() => {
     const currentSurvey = surveyList[activeIndex];
-    const initialOptions = {};
     if (currentSurvey) {
-      currentSurvey.questions[language].forEach((q, qIndex) => {
-        if (q.answers.length > 0) {
-          if (q.type === "multiple_choice") {
-            initialOptions[qIndex] = q.answers;
-          } else {
-            initialOptions[qIndex] = q.answers[0] || "";
-            if (q.answers[0] === "Others...please specify") {
-              initialOptions[`${qIndex}_other`] = q.answers[1] || "";
-            }
+      const questions = currentSurvey.questions || [];
+      const initialOptions = {};
+      questions.forEach((q, qIndex) => {
+        if (q.type === "multiple-choice") {
+          initialOptions[qIndex] = [];
+        } else if (q.type === "single-choice" || q.type === "open-ended") {
+          initialOptions[qIndex] = q.options ? q.options[0] || "" : "";
+          if (q.options && q.options[0] === "Others...please specify") {
+            initialOptions[`${qIndex}_other`] = "";
           }
         }
       });
       setSelectedOptions(initialOptions);
     }
-  }, [activeIndex, language]);
+  }, [activeIndex, surveyList]);
+
+  const handleInputChange = (qIndex, value) => {
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [qIndex]: value,
+    }));
+  };
 
   const handleSingleChoiceChange = (qIndex, value) => {
-    setSelectedOptions((prev) => ({ ...prev, [qIndex]: value }));
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [qIndex]: value,
+    }));
   };
 
-  const handleOtherOptionChange = (qIndex, value) => {
-    setSelectedOptions((prev) => ({ ...prev, [`${qIndex}_other`]: value }));
-  };
-
-  const handleMultipleChoiceChange = (qIndex, value) => {
-    setSelectedOptions((prev) => {
-      const currentValues = prev[qIndex] || [];
+  const handleMultipleChoiceChange = (qIndex, option) => {
+    setSelectedOptions((prevOptions) => {
+      const updatedOptions = [...(prevOptions[qIndex] || [])];
+      if (updatedOptions.includes(option)) {
+        updatedOptions.splice(updatedOptions.indexOf(option), 1);
+      } else {
+        updatedOptions.push(option);
+      }
       return {
-        ...prev,
-        [qIndex]: currentValues.includes(value)
-          ? currentValues.filter((v) => v !== value)
-          : [...currentValues, value],
+        ...prevOptions,
+        [qIndex]: updatedOptions,
       };
     });
   };
 
-  const handleInputChange = (qIndex, value) => {
-    setSelectedOptions((prev) => ({ ...prev, [qIndex]: value }));
+  const handleOtherOptionChange = (qIndex, value) => {
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [`${qIndex}_other`]: value,
+    }));
   };
 
   const validateSurvey = () => {
     const currentSurvey = surveyList[activeIndex];
-    const isValid = currentSurvey.questions[language].every((q, qIndex) => {
-      if (q.type === "open") {
-        return selectedOptions[qIndex] && selectedOptions[qIndex].trim() !== "";
-      } else if (q.type === "single_choice") {
-        return (
-          selectedOptions[qIndex] !== undefined &&
-          (selectedOptions[qIndex] !== "Others...please specify" ||
-            selectedOptions[`${qIndex}_other`])
-        );
-      } else if (q.type === "multiple_choice") {
-        return selectedOptions[qIndex] && selectedOptions[qIndex].length > 0;
-      }
-      return false;
-    });
-
-    setErrors(!isValid);
-    return isValid;
+    if (currentSurvey) {
+      const questions = currentSurvey.questions || [];
+      return questions.every((q, qIndex) => {
+        if (q.isRequired) {
+          const answer = selectedOptions[qIndex];
+          if (q.type === "multiple-choice") {
+            return answer && answer.length > 0;
+          } else if (q.type === "single-choice") {
+            return answer && answer.length > 0;
+          } else if (q.type === "open-ended") {
+            return answer && answer.trim() !== "";
+          }
+        }
+        return true;
+      });
+    }
+    return false;
   };
 
   const handleSaveAndContinue = () => {
     setCategoryLoading(true);
     if (validateSurvey()) {
       const currentSurvey = surveyList[activeIndex];
-      currentSurvey.questions[language].forEach((q, qIndex) => {
-        if (
-          q.type === "single_choice" &&
-          selectedOptions[qIndex] === "Others...please specify"
-        ) {
-          q.answers.push(selectedOptions[`${qIndex}_other`]);
+      if (currentSurvey) {
+        currentSurvey.questions.forEach((q, qIndex) => {
+          if (
+            q.type === "single-choice" &&
+            selectedOptions[qIndex] === "Others...please specify"
+          ) {
+            q.options.push(selectedOptions[`${qIndex}_other`]);
+          } else {
+            q.options.push(selectedOptions[qIndex]);
+          }
+        });
+        currentSurvey.isCompleted = true;
+
+        const nextIncompleteIndex = surveyList.findIndex(
+          (survey) => !survey.isCompleted
+        );
+
+        if (nextIncompleteIndex !== -1) {
+          setActiveIndex(nextIncompleteIndex);
+          setSelectedOptions({});
+          setErrors(false);
         } else {
-          q.answers.push(selectedOptions[qIndex]);
+          setTimeout(() => {
+            setQuestionsVisible(true);
+          }, 1600);
+          console.log(surveyList);
         }
-      });
-      currentSurvey.isCompleted = true;
-
-      const nextIncompleteIndex = surveyList.findIndex(
-        (survey) => !survey.isCompleted
-      );
-
-      if (nextIncompleteIndex !== -1) {
-        setActiveIndex(nextIncompleteIndex);
-        setSelectedOptions({});
-        setErrors(false);
       } else {
-        setTimeout(() => {
-          setQuestionsVisible(true);
-        }, 1600);
-        console.log(surveyList);
+        console.error("Current survey not found.");
       }
     } else {
-      console.error("Please answer all questions in the current category.");
+      setErrors(true);
     }
 
     setTimeout(() => {
@@ -141,7 +154,14 @@ const Survey = () => {
     }, 1500);
   };
 
-  const isLastSurvey = activeIndex === surveyList.length - 1;
+  if (loadingQuestions) {
+    return <div>Loading...</div>;
+  }
+
+  if (!surveyList || surveyList.length === 0) return null;
+
+  const currentSurvey = surveyList[activeIndex] || {};
+  const questions = currentSurvey.questions || [];
 
   return (
     <>
@@ -155,8 +175,8 @@ const Survey = () => {
               key={index}
               className={`survey-widget shadow-2xl shadow-slate-700 ${
                 activeIndex === index ? "active-widget" : ""
-              } 
-            ${survey.isCompleted ? "cursor-not-allowed" : "cursor-pointer"}`}
+              }
+              ${survey.isCompleted ? "cursor-not-allowed" : "cursor-pointer"}`}
               onClick={() => setActiveIndex(index)}
             ></div>
           ))}
@@ -165,22 +185,22 @@ const Survey = () => {
         <div className="surveys-container sm:px-1 py-9 md:px-6">
           <div className="questions-container py-2">
             <h2 className="text-center text-2xl text-yellow-600 mb-6 font-extrabold">
-              {surveyList[activeIndex].title}
+              {currentSurvey.title}
             </h2>
 
-            {surveyList[activeIndex].questions[language].map((q, qIndex) => (
+            {questions.map((q, qIndex) => (
               <div key={qIndex} className="question mb-4 shadow-xl">
                 <p className="mb-2">
                   <span className="text-xl font-medium text-yellow-500">
-                    {getQuestionId(surveyList, activeIndex, qIndex)}
-                  </span>
-                  . {q.question}
+                    {`${qIndex + 1}.`}
+                  </span>{" "}
+                  {q.content.question}
                 </p>
 
-                <div className="input-group px-4 py-6">
-                  {q.type === "open" && (
+                {/* <div className="input-group px-4 py-6">
+                  {q.type === "open-ended" && (
                     <input
-                      type={q.field}
+                      type={q.meta.formType}
                       className="w-full p-2 border"
                       value={selectedOptions[qIndex] || ""}
                       onChange={(e) =>
@@ -190,9 +210,9 @@ const Survey = () => {
                       maxLength={q.field === "number" ? "999999" : q.limit}
                     />
                   )}
-                  {q.type === "single_choice" && (
+                  {q.type === "single-choice" && (
                     <div>
-                      {q.options.map((option, oIndex) => (
+                      {q.content.responseOptions.map((option, oIndex) => (
                         <div key={oIndex} className="flex items-center mb-2">
                           <input
                             type="radio"
@@ -224,7 +244,7 @@ const Survey = () => {
                       )}
                     </div>
                   )}
-                  {q.type === "multiple_choice" && (
+                  {q.type === "multiple-choice" && (
                     <div>
                       {q.options.map((option, oIndex) => (
                         <div key={oIndex} className="flex items-center mb-2">
@@ -248,7 +268,7 @@ const Survey = () => {
                       ))}
                     </div>
                   )}
-                </div>
+                </div> */}
               </div>
             ))}
           </div>
@@ -259,36 +279,34 @@ const Survey = () => {
             </p>
           )}
 
-          <div className="button-list block float-right p-3">
+          <div className="actions-container flex justify-center py-6">
             <Button
+              onClick={handleSaveAndContinue}
               variant="contained"
               color="primary"
-              onClick={handleSaveAndContinue}
               disabled={categoryLoading}
             >
-              {!categoryLoading ? (
-                <span>
-                  {isLastSurvey ? "Finish Survey" : "Save & Continue"}
-                </span>
-              ) : (
-                <span className="material-symbols-outlined spinner">
-                  progress_activity
-                </span>
-              )}
+              {categoryLoading ? "Saving..." : "Save and Continue"}
             </Button>
           </div>
         </div>
       </div>
 
-      <div
-        className={`p-4 text-xl w-full h-screen place-items-center justify-center items-center text-green-600 text-center ${
-          questionsVisible ? "flex" : "hidden"
-        }`}
-      >
-        <span className="material-symbols-outlined text-green-600 text-center">
-          task_alt
-        </span>
-        Survey Completed Successfully!
+      <div hidden={!questionsVisible}>
+        <h1 className="text-3xl font-semibold text-center py-4 text-yellow-700">
+          Thank you for completing the survey!
+        </h1>
+        <div className="text-center">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              window.location.href = "/";
+            }}
+          >
+            Back to Home
+          </Button>
+        </div>
       </div>
     </>
   );
