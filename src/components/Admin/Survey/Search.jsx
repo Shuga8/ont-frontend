@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import { MdFormatListBulletedAdd, MdPlaylistAddCheck } from "react-icons/md";
 import csvThumbnail from "../../../assets/csv_thumbnail.png";
 
-const Search = () => {
+const Search = (page) => {
   const [formType, setFromType] = useState(null);
 
   const showNewSurveyForm = (type) => {

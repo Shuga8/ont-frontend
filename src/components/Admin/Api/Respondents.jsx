@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
+import { useSearchFilter } from "../../../hooks/useSearchFilter";
 
-const useGetRespondents = (type = "all") => {
+export const useGetRespondents = () => {
+  const [loadingGetRespondents, setLoadingRespondents] = useState(false);
   const { user } = useAuthContext();
 
-  const getRespondents = async () => {
+  const getRespondents = async (type = "all") => {
+    console.log(type);
+    setLoadingRespondents(true);
     const myHeaders = new Headers();
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
@@ -19,13 +23,26 @@ const useGetRespondents = (type = "all") => {
     const data = await response.json();
 
     if (response.ok) {
-      return data.data.respondents;
+      const filteredRespondents = await useSearchFilter(
+        type,
+        data.data.respondents
+      );
+      setLoadingRespondents(false);
+      let pagination = {
+        page: data.page,
+        totalPages: data.totalPages,
+        totalResults: data.totalResults,
+      };
+
+      // console.log(filteredRespondents);
+      return { pagination, filteredRespondents };
     } else {
+      setLoadingRespondents(false);
       return null;
     }
   };
 
-  return getRespondents;
+  return { loadingGetRespondents, getRespondents };
 };
 
 export default useGetRespondents;

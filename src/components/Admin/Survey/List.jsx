@@ -8,14 +8,15 @@ import useGetRespondents from "../Api/Respondents";
 
 const List = () => {
   const [respondents, setRespondents] = useState(null);
-  const getRespondents = useGetRespondents();
+  const { loadingGetRespondents, getRespondents } = useGetRespondents();
+  const [pagination, setPagination] = useState(null);
 
   useEffect(() => {
     const fetchRespondents = async () => {
-      const data = await getRespondents();
-      setRespondents(data);
+      const { pagination, filteredRespondents } = await getRespondents();
+      setRespondents(filteredRespondents);
+      setPagination(pagination);
     };
-
     fetchRespondents();
   }, [getRespondents]);
 
@@ -70,9 +71,20 @@ const List = () => {
                 </div>
               </div>
 
-              {respondents ? (
+              {respondents !== null ? (
                 respondents.map((data, index) => {
-                  let status = data.survey.status;
+                  // Skip if the respondent or survey is null
+                  if (!data || !data.survey || !data.respondent) {
+                    return null;
+                  }
+
+                  const status = data.survey.status;
+                  const statusClasses = {
+                    pending: "text-yellow-600",
+                    completed: "text-green-600",
+                    unfinished: "text-purple-600",
+                    rejected: "text-red-600",
+                  };
 
                   return (
                     <div
@@ -80,32 +92,26 @@ const List = () => {
                       key={index + 1}
                     >
                       <div className="flex items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800 ">
+                        <p className="font-medium text-gray-800">
                           {index + 1}.
                         </p>
                       </div>
 
-                      <div className="hidden md:flex  items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800 ">
+                      <div className="hidden md:flex items-center p-2 xl:p-5">
+                        <p className="font-medium text-gray-800">
                           {data.respondent.firstname}
                         </p>
                       </div>
 
                       <div className="flex items-center p-2 xl:p-5 text-sm">
-                        <p className="font-medium text-blue-700 ">
+                        <p className="font-medium text-blue-700">
                           0{data.respondent.phone}
                         </p>
                       </div>
 
                       <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
                         <p
-                          className={`font-medium ${
-                            status == "pending" ? "text-yellow-600" : ""
-                          } ${status == "completed" ? "text-green-600" : ""} ${
-                            status == "unfinished" ? "text-purple-600" : ""
-                          }  ${
-                            status == "rejected" ? "text-red-600" : ""
-                          }   p-2 bg-slate-200 rounded-full capitalize`}
+                          className={`font-medium ${statusClasses[status]} p-2 bg-slate-200 rounded-full capitalize`}
                         >
                           {status}
                         </p>
@@ -113,6 +119,7 @@ const List = () => {
 
                       <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
                         <Link
+                          to={`/admin/survey/${status}?search=${data.respondent.phone}`}
                           className="text-blue-500 p-2 bg-slate-200 rounded-full text-base md:text-lg"
                           title="go to survey"
                         >
@@ -122,165 +129,32 @@ const List = () => {
                           className="font-medium text-yellow-600 p-2 text-xs bg-slate-200 rounded-full block md:hidden"
                           title="status"
                         >
-                          Pending
+                          {status === "pending" && "Pending"}
                         </p>
                       </div>
                     </div>
                   );
                 })
+              ) : loadingGetRespondents ? (
+                <div className="flex border-b border-stroke text-green-800 justify-center text-base dark:border-stone-600 py-3">
+                  Loading...
+                </div>
               ) : (
                 <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
                   No Respondents Available
                 </div>
               )}
-
-              {/* <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">2.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">GI Jinn</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5 text-xs">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
-
-                <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                  <p className="font-medium text-green-600 p-2 bg-slate-200 rounded-full">
-                    Completed
-                  </p>
-                </div>
-
-                <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                  <Link
-                    className="text-blue-500 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <TbWorldSearch />
-                  </Link>
-                  <p
-                    className="font-medium text-green-600 p-2 text-xs bg-slate-200 rounded-full block md:hidden"
-                    title="status"
-                  >
-                    Completed
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">3.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Surpuruchukwu</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5 text-xs">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
-
-                <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                  <p className="font-medium text-green-600 p-2 bg-slate-200 rounded-full">
-                    Completed
-                  </p>
-                </div>
-
-                <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                  <Link
-                    className="text-blue-500 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <TbWorldSearch />
-                  </Link>
-                  <p
-                    className="font-medium text-green-600 p-2 text-xs bg-slate-200 rounded-full block md:hidden"
-                    title="status"
-                  >
-                    Completed
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">4.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Ogunmepon</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 text-xs ">
-                    +2341234567898
-                  </p>
-                </div>
-
-                <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                  <p className="font-medium text-red-700 p-2 bg-slate-200 rounded-full">
-                    Rejected
-                  </p>
-                </div>
-
-                <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                  <Link
-                    className="text-blue-500 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <TbWorldSearch />
-                  </Link>
-                  <p
-                    className="font-medium text-red-600 p-2 text-xs bg-slate-200 rounded-full block md:hidden"
-                    title="status"
-                  >
-                    Rejected
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0 ">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">5.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Aisha</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 text-xs">
-                    +2341234567898
-                  </p>
-                </div>
-
-                <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                  <p className="font-medium text-yellow-600 p-2 bg-slate-200 rounded-full">
-                    Pending
-                  </p>
-                </div>
-
-                <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                  <Link
-                    className="text-blue-500 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <TbWorldSearch />
-                  </Link>
-                  <p
-                    className="font-medium text-yellow-600 p-2 text-xs bg-slate-200 rounded-full block md:hidden"
-                    title="status"
-                  >
-                    Pending
-                  </p>
-                </div>
-              </div> */}
             </div>
 
             <div className="table-pagination pb-4 pt-6 flex flex-row justify-between gap-x-2 place-items-center">
-              <p className="text-gray-700">Showing 1-5 of 25</p>
+              <p className="text-gray-700">
+                {pagination && (
+                  <>
+                    Showing {pagination.page} - {pagination.totalResults} of{" "}
+                    {pagination.totalPages}
+                  </>
+                )}
+              </p>
               <nav>
                 <ul className="flex items-center gap-x-2 h-8 text-sm">
                   <li>
