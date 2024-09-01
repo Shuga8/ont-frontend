@@ -109,7 +109,9 @@ const CompletePending = () => {
 
   const handleEnterSurveyButtonClick = () => {
     setEnterSurveyLoading(true);
-    const url = `/survey?language=${selectedLanguage}&phone=${phone}&agent=${user._id}`;
+    const url = `/survey?language=${selectedLanguage}&phone=${getPhone()}&agent=${
+      user.user._id
+    }`;
     navigate(url);
   };
 
