@@ -2,9 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Loader, SideBar } from "../index";
 import { Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../../hooks/useAuthContext";
 
 const CompletePending = () => {
+  const { user } = useAuthContext();
   const [languages, setLanguages] = useState(null);
+  const [respondent, setRespondent] = useState(null);
+  const [isRejecting, setIsRejecting] = useState(false);
+  const [rejectButtonLoading, setRejectButtonLoading] = useState(false);
+  const [isContinuing, setIsContinuing] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("english");
+  const [enterSurveyLoading, setEnterSurveyLoading] = useState(false);
+  const navigate = useNavigate();
 
   const giveConsent = () => {
     const consentScreen = document.querySelector(".consent-screen");
@@ -32,17 +41,37 @@ const CompletePending = () => {
     }
   };
 
+  const getPhone = () => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("phone") || null;
+  };
+
+  const getRespondentByPhone = async (phone) => {
+    const myHeaders = new Headers();
+    myHeaders.append("authorization", `Bearer ${user.token}`);
+
+    const response = await fetch(
+      `https://ont-survey-tracker-development.up.railway.app/v1/respondents/id/${phone}`,
+      {
+        method: "GET",
+        headers: myHeaders,
+      }
+    );
+
+    const data = await response.json();
+    return data.data;
+  };
+
   useEffect(() => {
     getSelectedLanguages();
-  }, []);
 
-  const [isRejecting, setIsRejecting] = useState(false);
-  const [rejectButtonLoading, setRejectButtonLoading] = useState(false);
-  const [isContinuing, setIsContinuing] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("english");
-  const [enterSurveyLoading, setEnterSurveyLoading] = useState(false);
+    const getUser = async () => {
+      const res = await getRespondentByPhone(getPhone());
+      setRespondent(res);
+    };
 
-  const navigate = useNavigate();
+    getUser();
+  }, [getRespondentByPhone]);
 
   const handleChange = (event) => {
     setSelectedLanguage(event.target.value);
@@ -80,7 +109,7 @@ const CompletePending = () => {
 
   const handleEnterSurveyButtonClick = () => {
     setEnterSurveyLoading(true);
-    const url = `/survey?language=${selectedLanguage}&phone=+2341234567890&agent=agent1`;
+    const url = `/survey?language=${selectedLanguage}&phone=${phone}&agent=${user._id}`;
     navigate(url);
   };
 
@@ -91,6 +120,15 @@ const CompletePending = () => {
   const rejectConsent = () => {
     navigate(-1);
   };
+
+  if (respondent == null) return false;
+
+  const entry = respondent.survey.entries[0].responses;
+
+  if (entry == null) {
+    console.log("entries are null");
+    return false;
+  }
 
   return (
     <>
@@ -134,128 +172,47 @@ const CompletePending = () => {
               </h2>
               <div className="details grid grid-cols-2 gap-x-2 mt-4 gap-y-2 md:gap-y-7 px-2 py-2">
                 <p className="text-black font-semibold">Name:</p>
-                <p className="text-gray-700">John Doe</p>
+                <p className="text-gray-700">
+                  {respondent.user.firstname ?? "Loading..."}
+                </p>
                 <p className="text-black font-semibold">Phone Number:</p>
-                <p className="text-gray-700">+2341234567898</p>
+                <p className="text-gray-700">
+                  {respondent.user.phone ?? "Loading..."}
+                </p>
                 <p className="text-black font-semibold">Gender:</p>
-                <p className="text-gray-700">Male</p>
+                <p className="text-gray-700">
+                  {respondent.user.gender ?? "Loading..."}
+                </p>
                 <p className="text-black font-semibold">Age:</p>
-                <p className="text-gray-700">40</p>
-                <p className="text-black font-semibold">Employment Status:</p>
-                <p className="text-gray-700">Employed</p>
+                <p className="text-gray-700">
+                  {respondent.user.age ?? "Loading..."}
+                </p>
+                <p className="text-black font-semibold">Location:</p>
+                <p className="text-gray-700">
+                  {respondent.user.location ?? "Loading..."}
+                </p>
               </div>
 
               <h2 className="text-blue-700 font-bold text-xl mt-4">
-                Preset Q&A
+                Previous Q&A
               </h2>
 
-              <div className="preset-q-and-a px-2 py-2">
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">
-                    1. May I ask you a few short questions? The survey will take
-                    about 15 minutes and you may stop at any time.
-                  </p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    Yes
+              {entry.map((data, index) => {
+                return (
+                  <div className="preset-q-and-a px-2 py-2" key={index + 1}>
+                    <div className="mb-2 py-3">
+                      <p className="text-stone-800">
+                        {index + 1}. {data.question}
+                      </p>
+                      <div className="px-4 py-1 italic text-gray-500 text-sm">
+                        {data.answer}
+                      </div>
+                    </div>
+
+                    <hr className="text-cyan-600" />
                   </div>
-                </div>
-
-                <hr className="text-cyan-600" />
-
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">
-                    2. Are you the parent or caregiver of any children who are
-                    younger than 2 years old?
-                  </p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    Yes
-                  </div>
-                </div>
-
-                <hr className="text-cyan-600" />
-
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">
-                    3. Are you residing in [name LGA from listing] ?
-                  </p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    Yes
-                  </div>
-                </div>
-
-                <hr className="text-cyan-600" />
-
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">
-                    4. Number of total household members
-                  </p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    7
-                  </div>
-                </div>
-
-                <hr className="text-cyan-600" />
-
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">
-                    5. What is your relationship with the child?
-                  </p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    Guardian
-                  </div>
-                </div>
-
-                <hr className="text-cyan-600" />
-
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">
-                    6. You are a caregiver to how many children under -2?
-                  </p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    3
-                  </div>
-                </div>
-
-                <hr className="text-cyan-600" />
-
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">7. What is your age?</p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    40
-                  </div>
-                </div>
-
-                <hr className="text-cyan-600" />
-
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">8. What is your gender?</p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    Male
-                  </div>
-                </div>
-
-                <hr className="text-cyan-600" />
-
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">
-                    9. What is your education level?
-                  </p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    Graduate
-                  </div>
-                </div>
-
-                <hr className="text-cyan-600" />
-
-                <div className="mb-2 py-3">
-                  <p className="text-stone-800">
-                    10. What is your employment status?
-                  </p>
-                  <div className="px-4 py-1 italic text-gray-500 text-sm">
-                    Employed
-                  </div>
-                </div>
-              </div>
+                );
+              })}
 
               <div className="screen-1-action-buttons flex flex-row gap-x-4 justify-end">
                 <Button
