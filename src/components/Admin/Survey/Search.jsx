@@ -4,9 +4,13 @@ import { FiSearch } from "react-icons/fi";
 import { Button } from "@mui/material";
 import { MdFormatListBulletedAdd, MdPlaylistAddCheck } from "react-icons/md";
 import csvThumbnail from "../../../assets/csv_thumbnail.png";
+import { useAuthContext } from "../../../hooks/useAuthContext";
 
 const Search = (page) => {
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [isSuccessActive, setSuccessActive] = useState(false);
   const [formType, setFromType] = useState(null);
+  const { user } = useAuthContext();
 
   const showNewSurveyForm = (type) => {
     setFromType(type);
@@ -49,6 +53,35 @@ const Search = (page) => {
     e.stopPropagation();
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const myHeaders = new Headers();
+    myHeaders.append("authorization", `Bearer ${user.token}`);
+    myHeaders.append(
+      "Content-Type",
+      "multipart/form-data; boundary=<calculated when request is sent>"
+    );
+
+    const file = document.forms["csv-form"]["dropzone-file"].value;
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    const response = await fetch(
+      `https://ont-survey-tracker-development.up.railway.app/v1/surveys/upload`,
+      {
+        method: "POST",
+        headers: myHeaders,
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+  };
+
   return (
     <>
       <div className="flex justify-end p-3 flex-row gap-x-2">
@@ -61,7 +94,7 @@ const Search = (page) => {
           <span className="hidden md:block text-base">New Survey</span>
           <MdFormatListBulletedAdd className="text-blue-700 text-2xl" />
         </Button>
-        <Button
+        {/* <Button
           variant="outlined"
           color="success"
           className="flex flex-row gap-x-2"
@@ -69,7 +102,7 @@ const Search = (page) => {
         >
           <span className="hidden md:block text-base">Add Survey</span>
           <MdPlaylistAddCheck className="text-green-700 text-2xl" />
-        </Button>
+        </Button> */}
         <div className="search-form">
           <form
             className="max-w-md min-w-60 md:min-w-80 mx-auto md:mx-0"
@@ -108,6 +141,8 @@ const Search = (page) => {
           method="POST"
           encType="multipart/formdata "
           className="grid grid-cols-1 justify-center items-center place-items-center grid-rows-3 bg-white px-3"
+          onSubmit={handleSubmit}
+          name="csv-form"
         >
           <label
             htmlFor="dropzone-file"
@@ -147,7 +182,12 @@ const Search = (page) => {
             />
           </label>
 
-          <Button variant="contained" color="primary" className="flex-end">
+          <Button
+            variant="contained"
+            color="primary"
+            className="flex-end"
+            type="submit"
+          >
             Submit
           </Button>
         </form>
