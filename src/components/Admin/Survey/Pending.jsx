@@ -83,9 +83,7 @@ const Pending = () => {
                   if (!data || !data.survey || !data.respondent) {
                     return null;
                   }
-
                   const status = data.survey.status;
-
                   return (
                     <div
                       className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
@@ -98,22 +96,26 @@ const Pending = () => {
                       </div>
 
                       <div className="hidden md:flex items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800 ">John Doe</p>
+                        <p className="font-medium text-gray-800 ">
+                          {data.respondent.firstname}
+                        </p>
                       </div>
 
                       <div className="flex items-center p-2 xl:p-5">
                         <p className="font-medium text-gray-800 ">
-                          +2341234567898
+                          0{data.respondent.phone}
                         </p>
                       </div>
 
                       <div className="hidden md:flex items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800 ">Male</p>
+                        <p className="font-medium text-gray-800 ">
+                          {data.respondent.gender}
+                        </p>
                       </div>
 
                       <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
                         <Link
-                          to={"/admin/survey/pending/complete?survey_id=1"}
+                          to={`/admin/survey/pending/complete?phone=${data.respondent.phone}`}
                           className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
                           title="Complete Survey"
                         >

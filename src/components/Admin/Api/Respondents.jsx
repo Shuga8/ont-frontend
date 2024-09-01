@@ -7,7 +7,6 @@ export const useGetRespondents = () => {
   const { user } = useAuthContext();
 
   const getRespondents = async (type = "all") => {
-    console.log(type);
     setLoadingRespondents(true);
     const myHeaders = new Headers();
     myHeaders.append("authorization", `Bearer ${user.token}`);
