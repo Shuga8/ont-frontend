@@ -44,9 +44,9 @@ const Survey = () => {
       const initialOptions = {};
       questions.forEach((q, qIndex) => {
         if (q.type === "multiple-choice") {
-          initialOptions[qIndex] = [];
+          initialOptions[qIndex] = q.previousResponse || [];
         } else if (q.type === "single-choice" || q.type === "open-ended") {
-          initialOptions[qIndex] = q.options ? q.options[0] || "" : "";
+          initialOptions[qIndex] = q.previousResponse || "";
           if (q.options && q.options[0] === "Others...please specify") {
             initialOptions[`${qIndex}_other`] = "";
           }
@@ -102,7 +102,7 @@ const Survey = () => {
           if (q.type === "multiple-choice") {
             return answer && answer.length > 0;
           } else if (q.type === "single-choice") {
-            return answer && answer.length > 0;
+            return answer && answer !== "";
           } else if (q.type === "open-ended") {
             return answer && answer.trim() !== "";
           }
@@ -202,14 +202,18 @@ const Survey = () => {
                 <div className="input-group px-4 py-6">
                   {q.type === "open-ended" && (
                     <input
-                      type={"text"}
+                      type="text"
                       className="w-full p-2 border"
                       placeholder="Your answer ..."
                       maxLength={60}
-                      defaultValue={q.previousResponse}
+                      value={selectedOptions[qIndex] || ""}
+                      onChange={(e) =>
+                        handleInputChange(qIndex, e.target.value)
+                      }
                       disabled={!!q.previousResponse}
                     />
                   )}
+
                   {q.type === "single-choice" && (
                     <div>
                       {q.content.responseOptions.map((option, oIndex) => (

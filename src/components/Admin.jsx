@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Loader, SideBar } from "./Admin/index";
 import { Link } from "react-router-dom";
 import { RiListIndefinite, RiListCheck3, RiListCheck2 } from "react-icons/ri";
@@ -13,6 +13,52 @@ import Donut from "./Admin/Charts/Donut";
 
 const Admin = () => {
   const { user } = useAuthContext();
+  const [stats, setStats] = useState(null);
+  const [surveyTotals, setSurveyTotals] = useState({
+    totalPending: 0,
+    totalUnfinished: 0,
+    totalCompleted: 0,
+    totalRejected: 0,
+  });
+
+  useEffect(() => {
+    const getDashboardStats = async () => {
+      const myHeaders = new Headers();
+      myHeaders.append("authorization", `Bearer ${user.token}`);
+
+      const response = await fetch(
+        `https://ont-survey-tracker-development.up.railway.app/v1/stats/widgets`,
+        {
+          method: "GET",
+          headers: myHeaders,
+        }
+      );
+
+      const data = await response.json();
+
+      const totals = data.data.stats.surveyStatsByLga.reduce(
+        (acc, lga) => {
+          acc.totalPending += lga.totalPending;
+          acc.totalUnfinished += lga.totalUnfinished;
+          acc.totalCompleted += lga.totalCompleted;
+          acc.totalRejected += lga.totalRejected;
+          return acc;
+        },
+        {
+          totalPending: 0,
+          totalUnfinished: 0,
+          totalCompleted: 0,
+          totalRejected: 0,
+        }
+      );
+
+      setSurveyTotals(totals);
+
+      setStats(data.data.stats);
+    };
+
+    getDashboardStats();
+  }, [user.token]);
 
   return (
     <>
@@ -39,7 +85,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                100
+                {stats ? stats.totalCompletedSurvey : 0}
               </div>
 
               <Link
@@ -60,7 +106,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                10
+                {stats ? stats.totalUnfinishedSurvey : 0}
               </div>
 
               <Link
@@ -81,7 +127,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                118
+                {stats ? stats.totalPendingSurvey : 0}
               </div>
 
               <Link
@@ -102,7 +148,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                56
+                {stats ? stats.totalUnfinishedSurvey : 0}
               </div>
 
               <Link
@@ -129,7 +175,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                218
+                {stats ? stats.totalSurvey : 0}
               </div>
 
               <Link
@@ -144,53 +190,47 @@ const Admin = () => {
               </div>
             </div>
 
-            {user.user.type === "call-center" ? (
-              <>
-                <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-                  <div className="icon w-12 h-12 rounded-full  bg-green-500 flex place-items-center justify-center mb-4">
-                    <FaMapLocationDot color="#fff" />
-                  </div>
+            <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
+              <div className="icon w-12 h-12 rounded-full  bg-green-500 flex place-items-center justify-center mb-4">
+                <FaMapLocationDot color="#fff" />
+              </div>
 
-                  <div className="flow-widget-amount text-2xl text-gray-900">
-                    40
-                  </div>
+              <div className="flow-widget-amount text-2xl text-gray-900">
+                {surveyTotals.totalCompleted}
+              </div>
 
-                  <div className="flow-widget-title text-sm text-gray-400">
-                    Completed LGA's
-                  </div>
-                </div>
+              <div className="flow-widget-title text-sm text-gray-400">
+                Completed LGA's
+              </div>
+            </div>
 
-                <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-                  <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4">
-                    <TbLocationQuestion color="#fff" />
-                  </div>
+            <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
+              <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4">
+                <TbLocationQuestion color="#fff" />
+              </div>
 
-                  <div className="flow-widget-amount text-2xl text-gray-900">
-                    149
-                  </div>
+              <div className="flow-widget-amount text-2xl text-gray-900">
+                {surveyTotals.totalPending}
+              </div>
 
-                  <div className="flow-widget-title text-sm text-gray-400">
-                    Uncompleted LGA's
-                  </div>
-                </div>
+              <div className="flow-widget-title text-sm text-gray-400">
+                Uncompleted LGA's
+              </div>
+            </div>
 
-                <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-                  <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
-                    <MdOutlineWrongLocation color="#fff" />
-                  </div>
+            <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
+              <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
+                <MdOutlineWrongLocation color="#fff" />
+              </div>
 
-                  <div className="flow-widget-amount text-2xl text-gray-900">
-                    11
-                  </div>
+              <div className="flow-widget-amount text-2xl text-gray-900">
+                {surveyTotals.totalRejected}
+              </div>
 
-                  <div className="flow-widget-title text-sm text-gray-400">
-                    Rejected LGA's
-                  </div>
-                </div>
-              </>
-            ) : (
-              ""
-            )}
+              <div className="flow-widget-title text-sm text-gray-400">
+                Rejected LGA's
+              </div>
+            </div>
           </div>
 
           <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-x-8 gap-y-6 xl:grid-cols-3">
