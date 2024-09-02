@@ -291,7 +291,7 @@ const Settings = () => {
               >
                 <label className="block">
                   <label htmlFor="password" className="text-gray-900">
-                    New Password{" "}
+                    Old Password{" "}
                   </label>
                   <input
                     className="w-full my-2 py-3 px-3 rounded-md bg-transparent text-gray-900 border-2 border-blue-300"
@@ -308,7 +308,7 @@ const Settings = () => {
                     htmlFor="password_confirmation"
                     className="text-gray-900"
                   >
-                    Confirm Password{" "}
+                    New Password{" "}
                   </label>
                   <input
                     className="w-full my-2 py-3 px-3 rounded-md bg-transparent text-gray-900 border-2 border-blue-300"
