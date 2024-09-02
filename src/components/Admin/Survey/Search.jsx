@@ -61,17 +61,25 @@ const Search = (page) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+
+    // Get the file input element
+    const fileInput = document.forms["csv-form"]["dropzone-file"];
+    const file = fileInput.files[0]; // Get the actual file object
+
+    if (!file) {
+      setError("Please select a file to upload.");
+      return;
+    }
+
     const myHeaders = new Headers();
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
-    const file = document.forms["csv-form"]["dropzone-file"].value;
-
     const formData = new FormData();
-
     formData.append("file", file);
     formData.append("language", "english");
     formData.append("uploadType", "new");
 
+    setSuccess("please wait while it been uploaded");
     const response = await fetch(
       `https://ont-survey-tracker-development.up.railway.app/v1/surveys/upload`,
       {
