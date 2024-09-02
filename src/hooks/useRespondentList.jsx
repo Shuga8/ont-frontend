@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "./useAuthContext";
 
-export const useRespondentList = (id) => {
+export const useRespondentList = (id, language) => {
   const [loadingQuestions, setLoadingQuestion] = useState(false);
   const [surveyList, setSurveyList] = useState([]);
   const [respondent, setRespondent] = useState(null);
@@ -14,7 +14,7 @@ export const useRespondentList = (id) => {
       myHeaders.append("authorization", `Bearer ${user.token}`);
 
       const response = await fetch(
-        `https://ont-survey-tracker-development.up.railway.app/v1/questions/categories/${id}`,
+        `https://ont-survey-tracker-development.up.railway.app/v1/questions/categories/${id}?language=${language}`,
         {
           method: "GET",
           headers: myHeaders,

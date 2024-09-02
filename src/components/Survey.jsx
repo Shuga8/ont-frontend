@@ -21,8 +21,10 @@ const Survey = () => {
 
   const respondentId = getRespondentIdFromUrl();
   const language = getLanguageFromUrl();
-  const { loadingQuestions, surveyList, respondent } =
-    useRespondentList(respondentId);
+  const { loadingQuestions, surveyList, respondent } = useRespondentList(
+    respondentId,
+    language
+  );
 
   useEffect(() => {
     if (surveyList.length > 0) {
@@ -205,7 +207,7 @@ const Survey = () => {
                       placeholder="Your answer ..."
                       maxLength={60}
                       defaultValue={q.previousResponse}
-                      disabled={q.previousResponse ? true : false}
+                      disabled={!!q.previousResponse}
                     />
                   )}
                   {q.type === "single-choice" && (
@@ -218,10 +220,16 @@ const Survey = () => {
                             name={q._id}
                             value={option}
                             className="custom-radio mr-2"
-                            checked={q.previousResponse === option}
+                            checked={
+                              q.previousResponse
+                                ? q.previousResponse.toLowerCase() ===
+                                  option.toLowerCase()
+                                : selectedOptions[qIndex] === option
+                            }
                             onChange={(e) =>
                               handleSingleChoiceChange(qIndex, e.target.value)
                             }
+                            disabled={!!q.previousResponse}
                           />
                           <label htmlFor={`q${qIndex}-o${oIndex}`}>
                             {option}
@@ -244,7 +252,7 @@ const Survey = () => {
                   )}
                   {q.type === "multiple-choice" && (
                     <div>
-                      {q.options.map((option, oIndex) => (
+                      {q.content.responseOptions.map((option, oIndex) => (
                         <div key={oIndex} className="flex items-center mb-2">
                           <input
                             type="checkbox"
@@ -258,6 +266,7 @@ const Survey = () => {
                             onChange={() =>
                               handleMultipleChoiceChange(qIndex, option)
                             }
+                            disabled={!!q.previousResponse}
                           />
                           <label htmlFor={`q${qIndex}-o${oIndex}`}>
                             {option}
