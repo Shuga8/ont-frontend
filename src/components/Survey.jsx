@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import useRespondentList from "../hooks/useRespondentList";
+import { ErrorToast } from "./Admin/index";
+import { SuccessToast } from "./Admin/index";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Survey = () => {
+  const { user } = useAuthContext();
   const getRespondentIdFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
     return params.get("respondent") || "english";
@@ -18,6 +22,10 @@ const Survey = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [errors, setErrors] = useState(false);
+  const [surveyError, setSurveyError] = useState(null);
+  const [surveySuccess, setSurveySuccess] = useState(null);
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [isSuccessActive, setSuccessActive] = useState(false);
 
   const respondentId = getRespondentIdFromUrl();
   const language = getLanguageFromUrl();
@@ -25,6 +33,25 @@ const Survey = () => {
     respondentId,
     language
   );
+
+  useEffect(() => {
+    if (surveyError) {
+      setErrorActive(true);
+      const timer = setTimeout(() => {
+        setErrorActive(false);
+        setSurveyError(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+    if (surveySuccess) {
+      setSuccessActive(true);
+      const timer = setTimeout(() => {
+        setSuccessActive(false);
+        setSurveySuccess(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [surveyError, surveySuccess]);
 
   useEffect(() => {
     if (surveyList.length > 0) {
@@ -47,7 +74,10 @@ const Survey = () => {
           initialOptions[qIndex] = q.previousResponse || [];
         } else if (q.type === "single-choice" || q.type === "open-ended") {
           initialOptions[qIndex] = q.previousResponse || "";
-          if (q.options && q.options[0] === "Others...please specify") {
+          if (
+            q.content.responseOptions &&
+            q.content.responseOptions[0] === "Others...please specify"
+          ) {
             initialOptions[`${qIndex}_other`] = "";
           }
         }
@@ -113,21 +143,40 @@ const Survey = () => {
     return false;
   };
 
-  const handleSaveAndContinue = () => {
+  const handleSaveAndContinue = async () => {
     setCategoryLoading(true);
     if (validateSurvey()) {
       const currentSurvey = surveyList[activeIndex];
       if (currentSurvey) {
+        const res = {
+          respondent: getRespondentIdFromUrl(),
+          language: getLanguageFromUrl(),
+          category: currentSurvey._id,
+        };
+        const response = [];
         currentSurvey.questions.forEach((q, qIndex) => {
           if (
             q.type === "single-choice" &&
             selectedOptions[qIndex] === "Others...please specify"
           ) {
-            q.options.push(selectedOptions[`${qIndex}_other`]);
+            q.previousResponse = selectedOptions[`${qIndex}_other`];
+            response.push({
+              question: q._id,
+              answer: selectedOptions[`${qIndex}_other`],
+            });
           } else {
-            q.options.push(selectedOptions[qIndex]);
+            q.previousResponse = selectedOptions[qIndex];
+            response.push({
+              question: q._id,
+              answer: selectedOptions[qIndex],
+            });
           }
         });
+
+        res.responses = response;
+
+        await submitResponse(res);
+
         currentSurvey.isCompleted = true;
 
         const nextIncompleteIndex = surveyList.findIndex(
@@ -156,6 +205,35 @@ const Survey = () => {
     }, 1500);
   };
 
+  const submitResponse = async (data) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("authorization", `Bearer ${user.token}`);
+
+    const reqBody = JSON.stringify(data);
+
+    const response = await fetch(
+      "https://ont-survey-tracker-development.up.railway.app/v1/surveys",
+      {
+        method: "POST",
+        headers: myHeaders,
+        body: reqBody,
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      if (result.error.message) {
+        setSurveyError(result.error.message);
+      } else {
+        setSurveyError(result.message);
+      }
+    } else {
+      setSurveySuccess("Category completed successfully");
+    }
+  };
+
   if (loadingQuestions) {
     return <div>Loading...</div>;
   }
@@ -167,11 +245,13 @@ const Survey = () => {
 
   return (
     <>
+      <ErrorToast isActive={isErrorActive} message={surveyError} />
+      <SuccessToast isActive={isSuccessActive} message={surveySuccess} />
       <div hidden={questionsVisible}>
         <h1 className="text-3xl font-semibold text-center py-4 text-yellow-700">
           ONT Survey
         </h1>
-        <div className="survey-widgets-container w-1/2 p-6 flex flex-row justify-center mx-auto overflow-x-scroll gap-x-2 gap-y-1">
+        {/* <div className="survey-widgets-container w-1/2 p-6 flex flex-row justify-center mx-auto overflow-x-scroll gap-x-2 gap-y-1">
           {surveyList.map((survey, index) => (
             <div
               key={index}
@@ -182,7 +262,7 @@ const Survey = () => {
               onClick={() => setActiveIndex(index)}
             ></div>
           ))}
-        </div>
+        </div> */}
 
         <div className="surveys-container sm:px-1 py-9 md:px-6">
           <div className="questions-container py-2">

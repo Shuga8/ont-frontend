@@ -23,7 +23,8 @@ export const useRespondentList = (id, language) => {
 
       if (response.ok) {
         await response.json().then((data) => {
-          setSurveyList(data.data.categories);
+          const categories = data.data.categories;
+          setSurveyList(categories.slice(1)); // Skip the first category
           setRespondent(data.data.respondent);
           console.log(surveyList);
         });
