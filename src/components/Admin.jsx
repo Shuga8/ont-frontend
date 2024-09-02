@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { RiListIndefinite, RiListCheck3, RiListCheck2 } from "react-icons/ri";
 import { FaListCheck, FaMapLocationDot } from "react-icons/fa6";
 import { MdOutlineWrongLocation } from "react-icons/md";
-import { TbLocationQuestion } from "react-icons/tb";
+import { TbLocationQuestion, TbLocationPause } from "react-icons/tb";
 import LineGraph from "./Admin/Charts/Line";
 import BarGraph from "./Admin/Charts/Bar";
 import Info from "./Admin/Widgets/Info";
@@ -168,80 +168,95 @@ const Admin = () => {
 
             {stats
               ? stats.surveyStatsByLga.map((lga) =>
-                  lga.localStations.map((station, index) => (
-                    <>
-                      <div
-                        className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
-                        key={`${lga.lga}-${index}`} // Using a unique key based on LGA and station index
-                      >
-                        <div className="icon w-12 h-12 rounded-full bg-green-500 flex place-items-center justify-center mb-4">
-                          <FaMapLocationDot color="#fff" />
-                        </div>
-                        <div className="flow-widget-amount text-2xl text-gray-900">
-                          {station.totalCompleted}
-                        </div>
-                        <div className="flow-widget-title text-sm text-gray-400">
-                          Completed for {lga.lga.toUpperCase()} -{" "}
-                          {station.station}
-                        </div>
-                      </div>
-                      <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-                        <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4">
-                          <TbLocationQuestion color="#fff" />
-                        </div>
-
-                        <div className="flow-widget-amount text-2xl text-gray-900">
-                          {station.totalPending}
+                  lga.localStations.map((station, index) => {
+                    return (
+                      <>
+                        <div
+                          className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
+                          key={`${lga.lga}-${index}`} // Using a unique key based on LGA and station index
+                        >
+                          <div className="icon w-12 h-12 rounded-full bg-green-500 flex place-items-center justify-center mb-4">
+                            <FaMapLocationDot color="#fff" />
+                          </div>
+                          <div className="flow-widget-amount text-2xl text-gray-900">
+                            {station.totalCompleted}
+                          </div>
+                          <div className="flow-widget-title text-sm text-gray-400">
+                            <span className="text-green-600">Completed</span>{" "}
+                            for{" "}
+                            <span className=" text-gray-800 font-semibold">
+                              {lga.lga.toUpperCase()}{" "}
+                              {station.station.replace("-", " ")}
+                            </span>
+                          </div>
                         </div>
 
-                        <div className="flow-widget-title text-sm text-gray-400">
-                          Pending for {lga.lga.toUpperCase()} -{" "}
-                          {station.station}
+                        <div
+                          className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
+                          key={`${lga.lga}-${index}`} // Using a unique key based on LGA and station index
+                        >
+                          <div className="icon w-12 h-12 rounded-full bg-purple-500 flex place-items-center justify-center mb-4">
+                            <TbLocationPause color="#fff" />
+                          </div>
+                          <div className="flow-widget-amount text-2xl text-gray-900">
+                            {station.totalUnfinished}
+                          </div>
+                          <div className="flow-widget-title text-sm text-gray-400">
+                            <span className="text-purple-600">Unfinished</span>{" "}
+                            for{" "}
+                            <span className=" text-gray-800 font-semibold">
+                              {lga.lga.toUpperCase()}{" "}
+                              {station.station.replace("-", " ")}
+                            </span>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-                        <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
-                          <MdOutlineWrongLocation color="#fff" />
+                        <div
+                          className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
+                          key={`${lga.lga}-${index}`}
+                        >
+                          <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4">
+                            <TbLocationQuestion color="#fff" />
+                          </div>
+
+                          <div className="flow-widget-amount text-2xl text-gray-900">
+                            {station.totalPending}
+                          </div>
+
+                          <div className="flow-widget-title text-sm text-gray-400">
+                            <span className="text-yellow-600">Pending</span> for{" "}
+                            <span className=" text-gray-800 font-semibold">
+                              {lga.lga.toUpperCase()}{" "}
+                              {station.station.replace("-", " ")}
+                            </span>
+                          </div>
                         </div>
 
-                        <div className="flow-widget-amount text-2xl text-gray-900">
-                          {station.totalRejected}
-                        </div>
+                        <div
+                          className={`flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl flex-grow`}
+                          key={`${lga.lga}-${index}`}
+                        >
+                          <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
+                            <MdOutlineWrongLocation color="#fff" />
+                          </div>
 
-                        <div className="flow-widget-title text-sm text-gray-400">
-                          Rejected for {lga.lga.toUpperCase()} -{" "}
-                          {station.station}
+                          <div className="flow-widget-amount text-2xl text-gray-900">
+                            {station.totalRejected}
+                          </div>
+
+                          <div className="flow-widget-title text-sm text-gray-400">
+                            <span className="text-red-600">Rejected</span> for{" "}
+                            <span className=" text-gray-800 font-semibold">
+                              {lga.lga.toUpperCase()}{" "}
+                              {station.station.replace("-", " ")}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  ))
+                      </>
+                    );
+                  })
                 )
               : "Please wait, loading LGA's statistics..."}
-
-            {/* <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-              <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4">
-                <TbLocationQuestion color="#fff" />
-              </div>
-
-              <div className="flow-widget-amount text-2xl text-gray-900"></div>
-
-              <div className="flow-widget-title text-sm text-gray-400">
-                Uncompleted LGA's
-              </div>
-            </div>
-
-            <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-              <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
-                <MdOutlineWrongLocation color="#fff" />
-              </div>
-
-              <div className="flow-widget-amount text-2xl text-gray-900"></div>
-
-              <div className="flow-widget-title text-sm text-gray-400">
-                Rejected LGA's
-              </div>
-            </div> */}
           </div>
 
           <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-x-8 gap-y-6 xl:grid-cols-3">
