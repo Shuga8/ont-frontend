@@ -1,12 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Loader, SideBar } from "../index";
 import { Link } from "react-router-dom";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { IoTrashOutline } from "react-icons/io5";
 import { TbPencilCog } from "react-icons/tb";
 import Actions from "./Actions";
+import { useAuthContext } from "../../../hooks/useAuthContext";
 
 const Agents = () => {
+  const [userList, setUserList] = useState(null);
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    const getList = async () => {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("authorization", `Bearer ${user.token}`);
+      const response = await fetch(
+        `https://ont-survey-tracker-development.up.railway.app/v1/admins`,
+        {
+          method: "GET",
+          headers: myHeaders,
+        }
+      );
+
+      await response.json().then((data) => {
+        setUserList(data.data.admins);
+      });
+    };
+
+    getList();
+  }, [user.token]);
   return (
     <>
       <SideBar />
@@ -47,7 +71,7 @@ const Agents = () => {
 
                 <div className="p-2 xl:p-5 hidden md:block">
                   <h5 className="text-sm font-medium text-center uppercase sm:text-base text-stone-900">
-                    Email
+                    Role
                   </h5>
                 </div>
 
@@ -58,208 +82,56 @@ const Agents = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">1.</p>
-                </div>
+              {userList
+                ? userList.map((user, index) => {
+                    if (user.type == "respondent") return false;
+                    return (
+                      <div
+                        className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                        key={index + 1}
+                      >
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {index + 1}.
+                          </p>
+                        </div>
 
-                <div className="hidden md:flex  items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">John</p>
-                </div>
+                        <div className="hidden md:flex  items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {user.firstname}
+                          </p>
+                        </div>
 
-                <div className="flex items-center p-2 xl:p-5 text-base">
-                  <p className="font-medium text-gray-800 ">Doe</p>
-                </div>
+                        <div className="flex items-center p-2 xl:p-5 text-base">
+                          <p className="font-medium text-gray-800 ">
+                            {user.lastname}
+                          </p>
+                        </div>
 
-                <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                  <p className="font-medium text-gray-600 text-sm">
-                    johndoe@mail.com
-                  </p>
-                </div>
+                        <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
+                          <p className="font-medium text-gray-600 text-sm">
+                            {user.type.replace("-", " ")}
+                          </p>
+                        </div>
 
-                <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                  <Link
-                    className="text-red-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <IoTrashOutline />
-                  </Link>
-                  <Link
-                    className="text-blue-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <TbPencilCog />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">1.</p>
-                </div>
-
-                <div className="hidden md:flex  items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">John</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5 text-base">
-                  <p className="font-medium text-gray-800 ">Doe</p>
-                </div>
-
-                <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                  <p className="font-medium text-gray-600 text-sm">
-                    johndoe@mail.com
-                  </p>
-                </div>
-
-                <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                  <Link
-                    className="text-red-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <IoTrashOutline />
-                  </Link>
-                  <Link
-                    className="text-blue-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <TbPencilCog />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">1.</p>
-                </div>
-
-                <div className="hidden md:flex  items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">John</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5 text-base">
-                  <p className="font-medium text-gray-800 ">Doe</p>
-                </div>
-
-                <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                  <p className="font-medium text-gray-600 text-sm">
-                    johndoe@mail.com
-                  </p>
-                </div>
-
-                <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                  <Link
-                    className="text-red-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <IoTrashOutline />
-                  </Link>
-                  <Link
-                    className="text-blue-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <TbPencilCog />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">1.</p>
-                </div>
-
-                <div className="hidden md:flex  items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">John</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5 text-base">
-                  <p className="font-medium text-gray-800 ">Doe</p>
-                </div>
-
-                <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                  <p className="font-medium text-gray-600 text-sm">
-                    johndoe@mail.com
-                  </p>
-                </div>
-
-                <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                  <Link
-                    className="text-red-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <IoTrashOutline />
-                  </Link>
-                  <Link
-                    className="text-blue-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <TbPencilCog />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">1.</p>
-                </div>
-
-                <div className="hidden md:flex  items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">John</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5 text-base">
-                  <p className="font-medium text-gray-800 ">Doe</p>
-                </div>
-
-                <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                  <p className="font-medium text-gray-600 text-sm">
-                    johndoe@mail.com
-                  </p>
-                </div>
-
-                <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                  <Link
-                    className="text-red-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <IoTrashOutline />
-                  </Link>
-                  <Link
-                    className="text-blue-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                    title="go to survey"
-                  >
-                    <TbPencilCog />
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="table-pagination pb-4 pt-6 flex flex-row justify-between gap-x-2 place-items-center">
-              <p className="text-gray-700">Showing 1-5 of 25</p>
-              <nav>
-                <ul className="flex items-center gap-x-2 h-8 text-sm">
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-gray-100 hover:text-gray-700"
-                    >
-                      <span className="sr-only">Previous</span>
-                      <GrFormPrevious />
-                    </a>
-                  </li>
-
-                  <li>
-                    <a
-                      href="#"
-                      className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-full hover:bg-gray-100 hover:text-gray-700"
-                    >
-                      <span className="sr-only">Next</span>
-
-                      <GrFormNext />
-                    </a>
-                  </li>
-                </ul>
-              </nav>
+                        <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
+                          <Link
+                            className="text-red-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
+                            title="go to survey"
+                          >
+                            <IoTrashOutline />
+                          </Link>
+                          <Link
+                            className="text-blue-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
+                            title="go to survey"
+                          >
+                            <TbPencilCog />
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })
+                : "Loading..."}
             </div>
           </div>
         </div>

@@ -14,12 +14,6 @@ import Donut from "./Admin/Charts/Donut";
 const Admin = () => {
   const { user } = useAuthContext();
   const [stats, setStats] = useState(null);
-  const [surveyTotals, setSurveyTotals] = useState({
-    totalPending: "loading....",
-    totalUnfinished: "loading...",
-    totalCompleted: "loading...",
-    totalRejected: "loading...",
-  });
 
   useEffect(() => {
     const getDashboardStats = async () => {
@@ -35,24 +29,6 @@ const Admin = () => {
       );
 
       const data = await response.json();
-
-      const totals = data.data.stats.surveyStatsByLga.reduce(
-        (acc, lga) => {
-          acc.totalPending += lga.totalPending;
-          acc.totalUnfinished += lga.totalUnfinished;
-          acc.totalCompleted += lga.totalCompleted;
-          acc.totalRejected += lga.totalRejected;
-          return acc;
-        },
-        {
-          totalPending: 0,
-          totalUnfinished: 0,
-          totalCompleted: 0,
-          totalRejected: 0,
-        }
-      );
-
-      setSurveyTotals(totals);
 
       setStats(data.data.stats);
     };
@@ -195,9 +171,7 @@ const Admin = () => {
                 <FaMapLocationDot color="#fff" />
               </div>
 
-              <div className="flow-widget-amount text-2xl text-gray-900">
-                {surveyTotals.totalCompleted}
-              </div>
+              <div className="flow-widget-amount text-2xl text-gray-900"></div>
 
               <div className="flow-widget-title text-sm text-gray-400">
                 Completed LGA's
@@ -209,9 +183,7 @@ const Admin = () => {
                 <TbLocationQuestion color="#fff" />
               </div>
 
-              <div className="flow-widget-amount text-2xl text-gray-900">
-                {surveyTotals.totalPending}
-              </div>
+              <div className="flow-widget-amount text-2xl text-gray-900"></div>
 
               <div className="flow-widget-title text-sm text-gray-400">
                 Uncompleted LGA's
@@ -223,9 +195,7 @@ const Admin = () => {
                 <MdOutlineWrongLocation color="#fff" />
               </div>
 
-              <div className="flow-widget-amount text-2xl text-gray-900">
-                {surveyTotals.totalRejected}
-              </div>
+              <div className="flow-widget-amount text-2xl text-gray-900"></div>
 
               <div className="flow-widget-title text-sm text-gray-400">
                 Rejected LGA's
