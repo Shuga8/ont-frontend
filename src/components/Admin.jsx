@@ -15,10 +15,10 @@ const Admin = () => {
   const { user } = useAuthContext();
   const [stats, setStats] = useState(null);
   const [surveyTotals, setSurveyTotals] = useState({
-    totalPending: 0,
-    totalUnfinished: 0,
-    totalCompleted: 0,
-    totalRejected: 0,
+    totalPending: "loading....",
+    totalUnfinished: "loading...",
+    totalCompleted: "loading...",
+    totalRejected: "loading...",
   });
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalCompletedSurvey : 0}
+                {stats ? stats.totalCompletedSurvey : "loading...."}
               </div>
 
               <Link
@@ -106,7 +106,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalUnfinishedSurvey : 0}
+                {stats ? stats.totalUnfinishedSurvey : "loading...."}
               </div>
 
               <Link
@@ -127,7 +127,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalPendingSurvey : 0}
+                {stats ? stats.totalPendingSurvey : "loading...."}
               </div>
 
               <Link
@@ -148,7 +148,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalUnfinishedSurvey : 0}
+                {stats ? stats.totalUnfinishedSurvey : "loading...."}
               </div>
 
               <Link
@@ -175,7 +175,7 @@ const Admin = () => {
               </div>
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalSurvey : 0}
+                {stats ? stats.totalSurvey : "loading...."}
               </div>
 
               <Link

@@ -138,7 +138,7 @@ const Pending = () => {
               )}
             </div>
 
-            <div className="table-pagination pb-4 pt-6 flex flex-row justify-between gap-x-2 place-items-center">
+            {/* <div className="table-pagination pb-4 pt-6 flex flex-row justify-between gap-x-2 place-items-center">
               <p className="text-gray-700">Showing 1-5 of 25</p>
               <nav>
                 <ul className="flex items-center gap-x-2 h-8 text-sm">
@@ -164,7 +164,7 @@ const Pending = () => {
                   </li>
                 </ul>
               </nav>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
