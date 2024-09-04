@@ -6,6 +6,7 @@ import { IoTrashOutline } from "react-icons/io5";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import Search from "./Search";
+import Skeleton from "../../Skeleton/Skeleton";
 
 const Completed = () => {
   return (
@@ -55,7 +56,7 @@ const Completed = () => {
                 </div>
 
                 <div className="p-2 xl:p-5">
-                  <h5 className="text-sm text-center md:text-left  font-medium uppercase sm:text-base text-stone-900">
+                  <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
                     Actions
                   </h5>
                 </div>
@@ -78,16 +79,7 @@ const Completed = () => {
                   <p className="font-medium text-gray-800 ">English</p>
                 </div>
 
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <span
-                    className="font-medium text-green-600 text-base"
-                    title="View Survey"
-                  >
-                    <Link>
-                      <TbEye />
-                    </Link>
-                  </span>
-
+                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center ">
                   <span
                     className="font-medium text-blue-600 text-base"
                     title="Download Survey"
@@ -95,204 +87,29 @@ const Completed = () => {
                     <Link>
                       <HiDownload />
                     </Link>
-                  </span>
-
-                  <span
-                    className="font-medium text-red-600 text-base"
-                    title="Delete Survey"
-                  >
-                    <button type="button">
-                      <IoTrashOutline />
-                    </button>
                   </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
                 <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">2.</p>
+                  <Skeleton type={"table-short-text"} />
                 </div>
 
                 <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">GI Jinn</p>
+                  <Skeleton type={"table-long-text"} />
                 </div>
 
                 <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
+                  <Skeleton type={"table-long-text"} />
                 </div>
 
                 <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Pidgin</p>
+                  <Skeleton type={"table-long-text"} />
                 </div>
 
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <span
-                    className="font-medium text-green-600 text-base"
-                    title="View Survey"
-                  >
-                    <Link>
-                      <TbEye />
-                    </Link>
-                  </span>
-
-                  <span
-                    className="font-medium text-blue-600 text-base"
-                    title="Download Survey"
-                  >
-                    <Link>
-                      <HiDownload />
-                    </Link>
-                  </span>
-
-                  <span
-                    className="font-medium text-red-600 text-base"
-                    title="Delete Survey"
-                  >
-                    <button type="button">
-                      <IoTrashOutline />
-                    </button>
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">3.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Surpuruchukwu</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Igbo</p>
-                </div>
-
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <span
-                    className="font-medium text-green-600 text-base"
-                    title="View Survey"
-                  >
-                    <Link>
-                      <TbEye />
-                    </Link>
-                  </span>
-
-                  <span
-                    className="font-medium text-blue-600 text-base"
-                    title="Download Survey"
-                  >
-                    <Link>
-                      <HiDownload />
-                    </Link>
-                  </span>
-
-                  <span
-                    className="font-medium text-red-600 text-base"
-                    title="Delete Survey"
-                  >
-                    <button type="button">
-                      <IoTrashOutline />
-                    </button>
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">4.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Ogunmepon</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Yoruba</p>
-                </div>
-
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <span
-                    className="font-medium text-green-600 text-base"
-                    title="View Survey"
-                  >
-                    <Link>
-                      <TbEye />
-                    </Link>
-                  </span>
-
-                  <span
-                    className="font-medium text-blue-600 text-base"
-                    title="Download Survey"
-                  >
-                    <Link>
-                      <HiDownload />
-                    </Link>
-                  </span>
-
-                  <span
-                    className="font-medium text-red-600 text-base"
-                    title="Delete Survey"
-                  >
-                    <button type="button">
-                      <IoTrashOutline />
-                    </button>
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">4.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Bello</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Hausa</p>
-                </div>
-
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <span
-                    className="font-medium text-green-600 text-base"
-                    title="View Survey"
-                  >
-                    <Link>
-                      <TbEye />
-                    </Link>
-                  </span>
-
-                  <span
-                    className="font-medium text-blue-600 text-base"
-                    title="Download Survey"
-                  >
-                    <Link>
-                      <HiDownload />
-                    </Link>
-                  </span>
-
-                  <span
-                    className="font-medium text-red-600 text-base"
-                    title="Delete Survey"
-                  >
-                    <button type="button">
-                      <IoTrashOutline />
-                    </button>
-                  </span>
+                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center ">
+                  <Skeleton type={"table-short-text"} />
                 </div>
               </div>
             </div>

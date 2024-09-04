@@ -11,21 +11,15 @@ export const useGetRespondents = () => {
     const myHeaders = new Headers();
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
-    const response = await fetch(
-      "https://ont-survey-tracker-development.up.railway.app/v1/respondents",
-      {
-        method: "GET",
-        headers: myHeaders,
-      }
-    );
+    const response = await fetch(await useSearchFilter(type), {
+      method: "GET",
+      headers: myHeaders,
+    });
 
     const data = await response.json();
 
     if (response.ok) {
-      const filteredRespondents = await useSearchFilter(
-        type,
-        data.data.respondents
-      );
+      const filteredRespondents = data.data.respondents;
       setLoadingRespondents(false);
       let pagination = {
         page: data.page,
@@ -33,7 +27,6 @@ export const useGetRespondents = () => {
         totalResults: data.totalResults,
       };
 
-      // console.log(filteredRespondents);
       return { pagination, filteredRespondents };
     } else {
       setLoadingRespondents(false);

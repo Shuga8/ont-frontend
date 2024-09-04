@@ -1,10 +1,7 @@
-export const useSearchFilter = async (type, respondents) => {
+export const useSearchFilter = async (type) => {
   if (type === "all") {
-    return respondents;
+    return "https://ont-survey-tracker-development.up.railway.app/v1/respondents";
   } else {
-    return respondents.filter((respondent) => {
-      if (respondent === null) return false;
-      return respondent.survey.status === type;
-    });
+    return `https://ont-survey-tracker-development.up.railway.app/v1/respondents?status=${type}`;
   }
 };
