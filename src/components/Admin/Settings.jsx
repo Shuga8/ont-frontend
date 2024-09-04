@@ -18,8 +18,8 @@ const Settings = () => {
   const [isPassLoading, setPassLoading] = useState(false);
   const [isDetailsLoading, setDetailsLoading] = useState(false);
 
-  const fname = user.user.name.split(" ")[0];
-  const lname = user.user.name.split(" ")[1];
+  const fname = user.user.firstname;
+  const lname = user.user.lastname;
 
   const handleSubmit = async (e) => {
     if (e.target.checkValidity()) {
@@ -208,7 +208,7 @@ const Settings = () => {
                     name="email"
                     id="email"
                     placeholder="email address "
-                    defaultValue={"johndoe@mail.com"}
+                    defaultValue={user.user.email}
                     required={true}
                     disabled={true}
                   />
