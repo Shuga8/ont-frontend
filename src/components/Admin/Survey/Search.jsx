@@ -25,7 +25,6 @@ const Search = (page) => {
   const [file, setFile] = useState(null);
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const showNewSurveyForm = (type) => {
     setFromType(type);
@@ -117,8 +116,7 @@ const Search = (page) => {
       }, 700);
 
       setTimeout(() => {
-        let to_url = "/admin/survey/pending";
-        navigate(to_url);
+        window.location.href = "/admin/survey/pending"; // Navigate and refresh
       }, 1000);
     }
   };
