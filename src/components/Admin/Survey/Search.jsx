@@ -9,6 +9,7 @@ import { useAuthContext } from "../../../hooks/useAuthContext";
 import ErrorToast from "../../Alerts/ErrorToast";
 import SuccessToast from "../../Alerts/SuccessToast";
 import Preloader from "../Widgets/Preloader";
+import { useNavigate } from "react-router-dom";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -24,6 +25,7 @@ const Search = (page) => {
   const [file, setFile] = useState(null);
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const showNewSurveyForm = (type) => {
     setFromType(type);
@@ -69,24 +71,21 @@ const Search = (page) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-    setLoading(true);
-
-    // Get the file input element
-    const fileInput = document.forms["csv-form"]["dropzone-file"];
-    const file = files.files[0]; // Get the actual file object
 
     if (!file) {
       setError("Please select a file to upload.");
       return;
     }
 
-    return;
+    setLoading(true);
+
+    const inputfile = file; // Get the actual file object from application state
 
     const myHeaders = new Headers();
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", inputfile);
     formData.append("language", "english");
     formData.append("uploadType", "new");
 
@@ -104,12 +103,23 @@ const Search = (page) => {
 
     if (!response.ok) {
       if (data.error.message) {
+        setLoading(false);
         setError(data.error.message);
       } else {
-        setError();
+        setLoading(false);
+        setError(data.message);
       }
     } else {
       setSuccess(data.message);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 700);
+
+      setTimeout(() => {
+        let to_url = "/admin/survey/pending";
+        navigate(to_url);
+      }, 1000);
     }
   };
 
