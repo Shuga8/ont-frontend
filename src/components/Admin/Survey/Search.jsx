@@ -8,6 +8,11 @@ import { useAuthContext } from "../../../hooks/useAuthContext";
 import ErrorToast from "../../Alerts/ErrorToast";
 import SuccessToast from "../../Alerts/SuccessToast";
 
+const getSearchValue = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("search") || null;
+};
+
 const Search = (page) => {
   const [isErrorActive, setErrorActive] = useState(false);
   const [isSuccessActive, setSuccessActive] = useState(false);
@@ -149,6 +154,7 @@ const Search = (page) => {
           <form
             className="max-w-md min-w-60 md:min-w-80 mx-auto md:mx-0"
             name="search_form"
+            method="GET"
           >
             <label
               htmlFor="default-search"
@@ -166,6 +172,8 @@ const Search = (page) => {
                 className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 placeholder:text-xs"
                 placeholder="Search by phone number..."
                 autoComplete="phone"
+                defaultValue={getSearchValue() ?? ""}
+                name="search"
                 required
               />
               <button
