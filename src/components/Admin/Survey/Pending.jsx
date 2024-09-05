@@ -78,62 +78,68 @@ const Pending = () => {
                   </h5>
                 </div>
               </div>
-              {respondents !== null ? (
-                respondents.map((data, index) => {
-                  if (!data || !data.survey || !data.respondent) {
-                    return null;
-                  }
-                  const status = data.survey.status;
-                  return (
-                    <div
-                      className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
-                      key={index + 1}
-                    >
-                      <div className="flex items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800 ">
-                          {index + 1}
-                        </p>
-                      </div>
+              {respondents && respondents.length > 0 ? (
+                respondents.filter((data) => data !== null).length > 0 ? (
+                  respondents.map((data, index) => {
+                    if (!data) {
+                      return null;
+                    }
+                    const status = data.survey.status;
+                    return (
+                      <div
+                        className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                        key={index + 1}
+                      >
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {index + 1}
+                          </p>
+                        </div>
 
-                      <div className="hidden md:flex items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800 ">
-                          {data.respondent.firstname}
-                        </p>
-                      </div>
+                        <div className="hidden md:flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {data.respondent.firstname}
+                          </p>
+                        </div>
 
-                      <div className="flex items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800 ">
-                          0{data.respondent.phone}
-                        </p>
-                      </div>
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            0{data.respondent.phone}
+                          </p>
+                        </div>
 
-                      <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800 ">
-                          {data.respondent.gender}
-                        </p>
-                      </div>
+                        <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {data.respondent.gender}
+                          </p>
+                        </div>
 
-                      <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                        <Link
-                          to={`/admin/survey/pending/complete?phone=${data.respondent.phone}`}
-                          className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
-                          title="Complete Survey"
-                        >
-                          <span>
-                            <GoTasklist />
-                          </span>
-                        </Link>
+                        <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
+                          <Link
+                            to={`/admin/survey/pending/complete?phone=${data.respondent.phone}`}
+                            className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
+                            title="Complete Survey"
+                          >
+                            <span>
+                              <GoTasklist />
+                            </span>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
+                ) : (
+                  <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                    No Pending Respondents Available
+                  </div>
+                )
               ) : loadingGetRespondents ? (
                 <>
                   <TableSkeleton count={4} />
                 </>
               ) : (
                 <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
-                  No Respondents Available
+                  No Pending Respondents Available
                 </div>
               )}
             </div>
