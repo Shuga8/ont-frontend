@@ -55,7 +55,7 @@ const Rejected = () => {
       setRespondents(filteredRespondents);
     };
     fetchRespondents();
-  }, [getRespondents]);
+  }, []);
 
   return (
     <>

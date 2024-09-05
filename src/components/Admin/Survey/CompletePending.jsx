@@ -71,7 +71,7 @@ const CompletePending = () => {
     };
 
     getUser();
-  }, [getRespondentByPhone]);
+  }, []);
 
   const handleChange = (event) => {
     setSelectedLanguage(event.target.value);

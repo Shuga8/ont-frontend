@@ -24,7 +24,7 @@ const Pending = () => {
       setRespondents(filteredRespondents);
     };
     fetchRespondents();
-  }, [getRespondents]);
+  }, []);
 
   return (
     <>

@@ -20,7 +20,7 @@ const Completed = () => {
       setRespondents(filteredRespondents);
     };
     fetchRespondents();
-  }, [getRespondents]);
+  }, []);
 
   return (
     <>

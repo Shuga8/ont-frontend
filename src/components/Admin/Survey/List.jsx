@@ -20,7 +20,7 @@ const List = () => {
       setPagination(pagination);
     };
     fetchRespondents();
-  }, [getRespondents]);
+  }, []);
 
   return (
     <>

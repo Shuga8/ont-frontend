@@ -19,7 +19,7 @@ const Unfinished = () => {
       setRespondents(filteredRespondents);
     };
     fetchRespondents();
-  }, [getRespondents]);
+  }, []);
   return (
     <>
       <SideBar />
