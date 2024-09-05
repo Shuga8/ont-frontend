@@ -168,12 +168,13 @@ const Admin = () => {
 
             {stats
               ? stats.surveyStatsByLga.map((lga) =>
-                  lga.localStations.map((station, index) => {
+                  lga.localStations.map((station) => {
+                    const stationKey = station.station.replace("-", " ");
                     return (
-                      <>
+                      <React.Fragment key={`${lga.lga}-${stationKey}`}>
                         <div
                           className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
-                          key={`${lga.lga}-${index}`} // Using a unique key based on LGA and station index
+                          key={`${lga.lga}-completed-${stationKey}`} // Unique key based on LGA and station
                         >
                           <div className="icon w-12 h-12 rounded-full bg-green-500 flex place-items-center justify-center mb-4">
                             <FaMapLocationDot color="#fff" />
@@ -184,16 +185,15 @@ const Admin = () => {
                           <div className="flow-widget-title text-sm text-gray-400">
                             <span className="text-green-600">Completed</span>{" "}
                             for{" "}
-                            <span className=" text-gray-800 font-semibold">
-                              {lga.lga.toUpperCase()}{" "}
-                              {station.station.replace("-", " ")}
+                            <span className="text-gray-800 font-semibold">
+                              {lga.lga.toUpperCase()} {stationKey}
                             </span>
                           </div>
                         </div>
 
                         <div
                           className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
-                          key={`${lga.lga}-${index}`} // Using a unique key based on LGA and station index
+                          key={`${lga.lga}-unfinished-${stationKey}`}
                         >
                           <div className="icon w-12 h-12 rounded-full bg-purple-500 flex place-items-center justify-center mb-4">
                             <TbLocationPause color="#fff" />
@@ -204,55 +204,48 @@ const Admin = () => {
                           <div className="flow-widget-title text-sm text-gray-400">
                             <span className="text-purple-600">Unfinished</span>{" "}
                             for{" "}
-                            <span className=" text-gray-800 font-semibold">
-                              {lga.lga.toUpperCase()}{" "}
-                              {station.station.replace("-", " ")}
+                            <span className="text-gray-800 font-semibold">
+                              {lga.lga.toUpperCase()} {stationKey}
                             </span>
                           </div>
                         </div>
 
                         <div
                           className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
-                          key={`${lga.lga}-${index}`}
+                          key={`${lga.lga}-pending-${stationKey}`}
                         >
-                          <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4">
+                          <div className="icon w-12 h-12 rounded-full bg-yellow-500 flex place-items-center justify-center mb-4">
                             <TbLocationQuestion color="#fff" />
                           </div>
-
                           <div className="flow-widget-amount text-2xl text-gray-900">
                             {station.totalPending}
                           </div>
-
                           <div className="flow-widget-title text-sm text-gray-400">
                             <span className="text-yellow-600">Pending</span> for{" "}
-                            <span className=" text-gray-800 font-semibold">
-                              {lga.lga.toUpperCase()}{" "}
-                              {station.station.replace("-", " ")}
+                            <span className="text-gray-800 font-semibold">
+                              {lga.lga.toUpperCase()} {stationKey}
                             </span>
                           </div>
                         </div>
 
                         <div
-                          className={`flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl flex-grow`}
-                          key={`${lga.lga}-${index}`}
+                          className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl flex-grow"
+                          key={`${lga.lga}-rejected-${stationKey}`}
                         >
-                          <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
+                          <div className="icon w-12 h-12 rounded-full bg-red-500 flex place-items-center justify-center mb-4">
                             <MdOutlineWrongLocation color="#fff" />
                           </div>
-
                           <div className="flow-widget-amount text-2xl text-gray-900">
                             {station.totalRejected}
                           </div>
-
                           <div className="flow-widget-title text-sm text-gray-400">
                             <span className="text-red-600">Rejected</span> for{" "}
-                            <span className=" text-gray-800 font-semibold">
-                              {lga.lga.toUpperCase()}{" "}
-                              {station.station.replace("-", " ")}
+                            <span className="text-gray-800 font-semibold">
+                              {lga.lga.toUpperCase()} {stationKey}
                             </span>
                           </div>
                         </div>
-                      </>
+                      </React.Fragment>
                     );
                   })
                 )
