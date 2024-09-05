@@ -101,13 +101,27 @@ const Search = (page) => {
     const data = await response.json();
 
     if (!response.ok) {
-      if (data.error.message) {
+      if (data.error?.message) {
         setLoading(false);
         setError(data.error.message);
       } else {
         setLoading(false);
         setError(data.message);
       }
+    } else if (data.data?.surveyResponse) {
+      const errors = data.data.surveyResponse
+        .flat()
+        .map((res) => res.error)
+        .join(", ");
+      setError(errors);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 2800);
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } else {
       setSuccess(data.message);
 

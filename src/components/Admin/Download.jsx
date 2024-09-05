@@ -6,6 +6,7 @@ import { RiFileDownloadLine } from "react-icons/ri";
 import { CgSpinner } from "react-icons/cg";
 import SuccessToast from "../Alerts/SuccessToast";
 import InfoToast from "../Alerts/InfoToast";
+import Preloader from "./Widgets/Preloader";
 
 const Download = () => {
   const [error, setError] = useState(null);
@@ -15,30 +16,108 @@ const Download = () => {
   const [isSuccessActive, setSuccessActive] = useState(false);
   const [isInfoActive, setInfoActive] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [station, setStation] = useState(null);
+  const [selectedStations, setSelectedStations] = useState([]);
+  const stationsSet = {
+    ikorodu: [
+      "IKORODU-IKORODU",
+      "IKORODU-IJEDE",
+      "IKORODU-IMOTA",
+      "IKORODU-IGBOGBO",
+      "IKORODU-ODOGUNYAN",
+    ],
+    alimosho: [
+      "ALIMOSHO-EGBEDA",
+      "ALIMOSHO-IDIMU",
+      "ALIMOSHO-IKOTUN",
+      "ALIMOSHO-ISHERI OLOFIN",
+      "ALIMOSHO-IPAJA",
+    ],
+  };
+
+  const handleLGAChange = async (e) => {
+    setSelectedStations([]);
+    if (e.target.value === "none") {
+      setStation(null);
+      return;
+    }
+    setStation(e.target.value);
+  };
+
+  const handleStationSelected = async (e) => {
+    const { value, checked } = e.target;
+
+    // If "All Stations" is selected
+    if (value === "all-stations") {
+      if (checked) {
+        const allStations = stationsSet[station];
+        setSelectedStations(allStations);
+      } else {
+        setSelectedStations([]);
+      }
+    } else {
+      setSelectedStations((prev) =>
+        checked ? [...prev, value] : prev.filter((station) => station !== value)
+      );
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const status = document.forms["downloadForm"]["status"].value;
-    const region = document.forms["downloadForm"]["region"].value;
+    const form = e.target;
+    const status = form.status.value;
+    const region = form.region.value;
+
+    console.log(status);
 
     if (
-      (status == null || status == "" || status == "none") &&
-      (region == null || region == "" || region == "none")
+      (status === "none" || !status) &&
+      (region === "none" || !region || selectedStations.length === 0)
     ) {
-      setError("One or both export type must be picked");
+      setError("At least one export type or station must be selected.");
       setLoading(false);
       return;
     }
 
-    if (status !== "none" && region === "none") {
-      setInfo(`Downloading Surveys of Status "${status}"`);
+    let message = "";
+
+    if (status === "all" && region === "none") {
+      message = `Downloading All Surveys`;
+    } else if (status === "all" && region !== "none") {
+      if (selectedStations.length > 0) {
+        message = `Downloading All Surveys for the following stations: ${selectedStations.join(
+          ", "
+        )}`;
+      } else {
+        message = `Downloading All Surveys of Region "${region}"`;
+      }
+    } else if (status !== "none" && region === "none" && status !== "all") {
+      message = `Downloading Surveys of Status "${status}"`;
     } else if (status === "none" && region !== "none") {
-      setInfo(`Downloading Surveys of Region "${region}"`);
+      if (selectedStations.length > 0) {
+        message = `Downloading Surveys for the following stations: ${selectedStations.join(
+          ", "
+        )}`;
+      } else {
+        message = `Downloading Surveys of Region "${region}"`;
+      }
     } else if (status !== "none" && region !== "none") {
-      setInfo(`Downloading all ${status} Surveys Of ${region}`);
+      if (selectedStations.length > 0) {
+        message = `Downloading all ${status} Surveys for ${region} stations: ${selectedStations.join(
+          ", "
+        )}`;
+      } else {
+        message = `Downloading all ${status} Surveys of Region "${region}"`;
+      }
     }
+
+    setInfo(message);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 1200);
   };
 
   useEffect(() => {
@@ -66,12 +145,13 @@ const Download = () => {
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [error, success, info]);
+  }, [error, success, info, station]);
 
   return (
     <>
       <SideBar />
       <div className="elements-container mt-14">
+        <Preloader isVisible={isLoading} />
         <InfoToast message={info} isActive={isInfoActive} />
         <ErrorToast message={error} isActive={isErrorActive} />
         <SuccessToast message={success} isActive={isSuccessActive} />
@@ -85,7 +165,6 @@ const Download = () => {
             </Link>
           </span>
         </div>
-
         <div className="container-content px-1 py-2 md:px-6 md:py-5">
           <div className="rounded-sm border border-stroke bg-white px-5 pb-6 pt-6 shadow-default sm:px-7 xl:pb-6">
             <h3 className="text-blue-600 text-xl text-center my-4 font-semibold">
@@ -109,12 +188,13 @@ const Download = () => {
                   name="status"
                   id="status"
                   className="bg-white px-4 py-3 outline-none  focus:outline-none border-2 border-slate-200 w-full mt-2"
-                  defaultValue={"none"}
+                  defaultValue={null}
                 >
-                  <option value="none">None</option>
+                  <option value={"none"}>None</option>
                   <option value="completed">Completed</option>
                   <option value="pending">Pending</option>
                   <option value="rejected">Rejected</option>
+                  <option value="all">All</option>
                 </select>
               </div>
 
@@ -127,20 +207,67 @@ const Download = () => {
                   id="region"
                   className="bg-white px-4 py-3 outline-none  focus:outline-none border-2 border-slate-200 w-full mt-2"
                   defaultValue={"none"}
+                  onChange={handleLGAChange}
                 >
                   <option value="none">None</option>
-                  <option value="ikorodu-agric">Ikorodu (Agric)</option>
-                  <option value="ikorodu-zone-1">Ikorodu (Zone 1)</option>
-                  <option value="ikorodu-zone-2">Ikorodu (Zone 2)</option>
-                  <option value="ikorodu-zone-3">Ikorodu (Zone 3)</option>
-                  <option value="gbagada-main">Gbagada (Main)</option>
-                  <option value="gbagada-zone-1">Gbagada (Zone 1)</option>
-                  <option value="gbagada-zone-2">Gbagada (Zone 2)</option>
-                  <option value="gbagada-zone-3">Gbagada (Zone 3)</option>
-                  <option value="gbagada-zone-4">Gbagada (Zone 4)</option>
-                  <option value="gbagada-zone-5">Gbagada (Zone 5)</option>
+                  <option value="alimosho">ALIMOSHO</option>
+                  <option value="ikorodu">IKORODU</option>
                 </select>
               </div>
+
+              {station && (
+                <div className="h-auto px-4 py-1 block">
+                  <p className="text-gray-900 font-medium">
+                    Choose Local Station
+                  </p>
+
+                  <div className="station-input flex flex-col">
+                    {stationsSet[station].map((_ls, index) => (
+                      <label
+                        key={index}
+                        className="px-2 py-2 flex flex-row gap-x-3"
+                      >
+                        <input
+                          type="checkbox"
+                          name={`${station}-station`}
+                          id={`${_ls}-station`}
+                          value={_ls}
+                          onChange={handleStationSelected}
+                          checked={selectedStations.includes(_ls)}
+                          className="p-3"
+                        />
+                        <label
+                          htmlFor={`${_ls}-station`}
+                          className="text-gray-600 text-sm"
+                        >
+                          {_ls.replace("-", " ")}
+                        </label>
+                      </label>
+                    ))}
+                    <label className="px-2 py-2 flex flex-row gap-x-3">
+                      <input
+                        type="checkbox"
+                        name={`${station}-station`}
+                        id={`all-stations`}
+                        value={`all-stations`}
+                        onChange={handleStationSelected} // Use onChange here
+                        checked={
+                          selectedStations.length ===
+                          stationsSet[station].length
+                        }
+                        className="p-3"
+                      />
+
+                      <label
+                        htmlFor={`all-stations`}
+                        className="text-gray-600 text-sm"
+                      >
+                        All Stations
+                      </label>
+                    </label>
+                  </div>
+                </div>
+              )}
 
               <div className="my-10 px-4 py-1">
                 <Button

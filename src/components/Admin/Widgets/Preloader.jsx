@@ -11,7 +11,7 @@ const Preloader = ({ isVisible = false }) => {
         <RiLoader2Line />
       </span>
       <span className="text-base text-white">
-        Please wait, your upload is being proccessed
+        Please wait, your data is being processed
       </span>
     </div>
   );
