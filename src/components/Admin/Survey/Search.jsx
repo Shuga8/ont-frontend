@@ -4,9 +4,11 @@ import { FiSearch } from "react-icons/fi";
 import { Button } from "@mui/material";
 import { MdFormatListBulletedAdd, MdPlaylistAddCheck } from "react-icons/md";
 import csvThumbnail from "../../../assets/csv_thumbnail.png";
+import coloured_csv from "../../../assets/colored_csv.png";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import ErrorToast from "../../Alerts/ErrorToast";
 import SuccessToast from "../../Alerts/SuccessToast";
+import Preloader from "../Widgets/Preloader";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -19,41 +21,42 @@ const Search = (page) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [formType, setFromType] = useState(null);
+  const [file, setFile] = useState(null);
   const { user } = useAuthContext();
+  const [loading, setLoading] = useState(false);
 
   const showNewSurveyForm = (type) => {
     setFromType(type);
     document.querySelector(".new-survey-form").classList.remove("hidden");
   };
 
-  const [csvPreview, setCsvPreview] = useState("");
-
   window.addEventListener("click", function (e) {
     if (e.target == document.querySelector(".new-survey-form")) {
       document.querySelector(".new-survey-form").classList.add("hidden");
-      setCsvPreview("");
+      setFile(null);
     }
   });
 
   const handleDrop = (e) => {
     e.preventDefault();
-    let file;
-
+    setFile(null);
+    let file = null;
     if (e.dataTransfer && e.dataTransfer.files.length > 0) {
       file = e.dataTransfer.files[0];
+      e.dataTransfer.clearData();
     } else if (e.target && e.target.files.length > 0) {
       file = e.target.files[0];
+      e.target.value = "";
     }
 
+    console.log(file);
+
     if (file && file.type === "text/csv") {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        const text = event.target.result;
-        setCsvPreview(text.split("\n").slice(0, 5).join("\n"));
-      };
-
-      reader.readAsText(file);
+      setFile(file);
+    } else {
+      setError("Upload a csv file type!!!");
+      e.target.value = "";
+      return;
     }
   };
 
@@ -66,15 +69,18 @@ const Search = (page) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+    setLoading(true);
 
     // Get the file input element
     const fileInput = document.forms["csv-form"]["dropzone-file"];
-    const file = fileInput.files[0]; // Get the actual file object
+    const file = files.files[0]; // Get the actual file object
 
     if (!file) {
       setError("Please select a file to upload.");
       return;
     }
+
+    return;
 
     const myHeaders = new Headers();
     myHeaders.append("authorization", `Bearer ${user.token}`);
@@ -132,6 +138,7 @@ const Search = (page) => {
       <div className="flex justify-end p-3 flex-row gap-x-2">
         <ErrorToast isActive={isErrorActive} message={error} />
         <SuccessToast isActive={isSuccessActive} message={success} />
+        <Preloader isVisible={loading} />
         <Button
           variant="outlined"
           color="primary"
@@ -190,52 +197,67 @@ const Search = (page) => {
         <form
           method="POST"
           encType="multipart/formdata "
-          className="grid grid-cols-1 justify-center items-center place-items-center grid-rows-3 bg-white px-3"
+          className="bg-white px-3 "
           onSubmit={handleSubmit}
           name="csv-form"
         >
-          <label
-            htmlFor="dropzone-file"
-            className="flex flex-col items-center justify-center w-full h-auto cursor-pointer row-span-2 "
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-          >
-            {csvPreview ? (
-              <div className="preview-div w-full h-full leading-8 overflow-auto text-base">
-                {csvPreview}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center place-content-center place-items-center justify-center py-6 px-2">
-                <div className="mb-4">
+          {file ? (
+            <>
+              <div className="img_layer p-2">
+                <div className="mb-4 mx-auto mt-14">
                   <img
-                    src={csvThumbnail}
-                    className="w-20 h-20 object-contain mix-blend-multiply"
-                    alt="CSV Thumbnail"
+                    src={coloured_csv}
+                    className="w-32 h-32 object-contain mix-blend-multiply block mx-auto"
+                    alt="Uploaded CSV"
                   />
                 </div>
-                <GrCloudUpload className="w-8 h-8 mb-4 text-gray-500" />
 
-                <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span className="font-semibold">Click to upload</span> or drag
-                  and drop
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 hidden">
-                  CSV only
+                <p className="text-lg text-gray-700 dark:text-gray-400 text-center">
+                  {file.name}
                 </p>
               </div>
-            )}
-            <input
-              id="dropzone-file"
-              type="file"
-              className="hidden"
-              onChange={handleDrop}
-            />
-          </label>
+            </>
+          ) : (
+            <>
+              <label
+                htmlFor="dropzone-file"
+                className="flex flex-col items-center justify-center w-full h-auto cursor-pointer row-span-2 mt-14"
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+              >
+                <div className="flex flex-col items-center place-content-center place-items-center justify-center py-6 px-2">
+                  <div className="mb-4">
+                    <img
+                      src={csvThumbnail}
+                      className="w-20 h-20 object-contain mix-blend-multiply"
+                      alt="CSV Thumbnail"
+                    />
+                  </div>
+                  <GrCloudUpload className="w-8 h-8 mb-4 text-gray-500" />
+
+                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 hidden">
+                    CSV only
+                  </p>
+                </div>
+
+                <input
+                  id="dropzone-file"
+                  type="file"
+                  className="hidden"
+                  onChange={handleDrop}
+                />
+              </label>
+            </>
+          )}
 
           <Button
             variant="contained"
             color="primary"
-            className="flex-end"
+            className=""
             type="submit"
           >
             Submit
