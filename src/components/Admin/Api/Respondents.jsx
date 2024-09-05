@@ -22,9 +22,9 @@ export const useGetRespondents = () => {
       const filteredRespondents = data.data.respondents;
       setLoadingRespondents(false);
       let pagination = {
-        page: data.page,
-        totalPages: data.totalPages,
-        totalResults: data.totalResults,
+        page: data.data.page,
+        totalPages: data.data.totalPages,
+        totalResults: data.data.totalResults,
       };
 
       return { pagination, filteredRespondents };

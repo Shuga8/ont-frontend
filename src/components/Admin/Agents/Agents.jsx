@@ -6,6 +6,7 @@ import { IoTrashOutline } from "react-icons/io5";
 import { TbPencilCog } from "react-icons/tb";
 import Actions from "./Actions";
 import { useAuthContext } from "../../../hooks/useAuthContext";
+import TableSkeleton from "../../Skeleton/TableSkeleton";
 
 const Agents = () => {
   const [userList, setUserList] = useState(null);
@@ -82,56 +83,58 @@ const Agents = () => {
                 </div>
               </div>
 
-              {userList
-                ? userList.map((user, index) => {
-                    if (user.type == "respondent") return false;
-                    return (
-                      <div
-                        className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
-                        key={index + 1}
-                      >
-                        <div className="flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {index + 1}.
-                          </p>
-                        </div>
-
-                        <div className="hidden md:flex  items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {user.firstname}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center p-2 xl:p-5 text-base">
-                          <p className="font-medium text-gray-800 ">
-                            {user.lastname}
-                          </p>
-                        </div>
-
-                        <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                          <p className="font-medium text-gray-600 text-sm">
-                            {user.type.replace("-", " ")}
-                          </p>
-                        </div>
-
-                        <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                          <Link
-                            className="text-red-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                            title="go to survey"
-                          >
-                            <IoTrashOutline />
-                          </Link>
-                          <Link
-                            className="text-blue-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                            title="go to survey"
-                          >
-                            <TbPencilCog />
-                          </Link>
-                        </div>
+              {userList ? (
+                userList.map((user, index) => {
+                  if (user.type == "respondent") return false;
+                  return (
+                    <div
+                      className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                      key={index + 1}
+                    >
+                      <div className="flex items-center p-2 xl:p-5">
+                        <p className="font-medium text-gray-800 ">
+                          {index + 1}.
+                        </p>
                       </div>
-                    );
-                  })
-                : "Loading..."}
+
+                      <div className="hidden md:flex  items-center p-2 xl:p-5">
+                        <p className="font-medium text-gray-800 capitalize">
+                          {user.firstname}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center p-2 xl:p-5 text-base">
+                        <p className="font-medium text-gray-800 capitalize">
+                          {user.lastname}
+                        </p>
+                      </div>
+
+                      <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
+                        <p className="font-medium text-gray-600 text-sm capitalize">
+                          {user.type.replace("-", " ")}
+                        </p>
+                      </div>
+
+                      <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
+                        <Link
+                          className="text-red-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
+                          title="go to survey"
+                        >
+                          <IoTrashOutline />
+                        </Link>
+                        <Link
+                          className="text-blue-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
+                          title="go to survey"
+                        >
+                          <TbPencilCog />
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <TableSkeleton count={5} />
+              )}
             </div>
           </div>
         </div>

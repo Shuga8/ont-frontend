@@ -91,7 +91,7 @@ const Profile = () => {
             </div>
 
             <p className="text-xl text-gray-500 text-center uppercase my-4 font-semibold">
-              {user.user.name}
+              {user.user.firstname} {user.user.lastname}
             </p>
 
             <hr className="w-4/5 mx-auto border- border-stone-700" />
