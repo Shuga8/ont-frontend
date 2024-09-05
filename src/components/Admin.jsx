@@ -10,6 +10,7 @@ import BarGraph from "./Admin/Charts/Bar";
 import Info from "./Admin/Widgets/Info";
 import { useAuthContext } from "../hooks/useAuthContext";
 import Donut from "./Admin/Charts/Donut";
+import Skeleton from "./Skeleton/Skeleton";
 
 const Admin = () => {
   const { user } = useAuthContext();
@@ -47,7 +48,7 @@ const Admin = () => {
           <span className="font-bold text-lg text-gray-900">Dasbhoard</span>
           <span>
             ONT&nbsp;/&nbsp;
-            <Link to={"/admin/"} className="underline text-blue-500">
+            <Link to={"/admin/"} className="text-blue-500">
               Dashboard
             </Link>
           </span>
@@ -56,200 +57,282 @@ const Admin = () => {
         <div className="container-content  px-1 py-2 md:px-6 md:py-5">
           <div className="flow-widgets grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 justify-center md:justify-normal">
             <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-              <div className="icon w-12 h-12 rounded-full  bg-green-500 flex place-items-center justify-center mb-4 relative">
-                <RiListCheck3 color="#fff" />
-              </div>
+              {stats ? (
+                <div className="icon w-12 h-12 rounded-full  bg-green-500 flex place-items-center justify-center mb-4 relative">
+                  <RiListCheck3 color="#fff" />
+                </div>
+              ) : (
+                <Skeleton type="widget-icon" />
+              )}
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalCompletedSurvey : "loading...."}
+                {stats ? (
+                  stats.totalCompletedSurvey
+                ) : (
+                  <Skeleton type={"small-text"} />
+                )}
               </div>
 
-              <Link
-                to={"/admin/survey/completed"}
-                className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-green-400 text-green-600 rounded-lg hover:bg-green-400 hover:text-white"
-              >
-                view
-              </Link>
+              {stats ? (
+                <Link
+                  to={"/admin/survey/completed"}
+                  className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-green-400 text-green-600 rounded-lg hover:bg-green-400 hover:text-white"
+                >
+                  view
+                </Link>
+              ) : (
+                <div className="absolute top-4 right-5">
+                  <Skeleton type={"title"} />
+                </div>
+              )}
 
               <div className="flow-widget-title text-sm text-gray-400">
-                Completed Surveys
+                {stats ? "Completed Surveys" : <Skeleton type={"text"} />}
               </div>
             </div>
 
             <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-              <div className="icon w-12 h-12 rounded-full  bg-purple-500 flex place-items-center justify-center mb-4 relative">
-                <FaListCheck color="#fff" />
-              </div>
+              {stats ? (
+                <div className="icon w-12 h-12 rounded-full  bg-purple-500 flex place-items-center justify-center mb-4 relative">
+                  <FaListCheck color="#fff" />
+                </div>
+              ) : (
+                <Skeleton type="widget-icon" />
+              )}
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalUnfinishedSurvey : "loading...."}
+                {stats ? (
+                  stats.totalUnfinishedSurvey
+                ) : (
+                  <Skeleton type={"small-text"} />
+                )}
               </div>
 
-              <Link
-                to={"/admin/survey/unfinished"}
-                className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-purple-400 text-purple-600 rounded-lg hover:bg-purple-400 hover:text-white"
-              >
-                view
-              </Link>
+              {stats ? (
+                <Link
+                  to={"/admin/survey/unfinished"}
+                  className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-purple-400 text-purple-600 rounded-lg hover:bg-purple-400 hover:text-white"
+                >
+                  view
+                </Link>
+              ) : (
+                <div className="absolute top-4 right-5">
+                  <Skeleton type={"title"} />
+                </div>
+              )}
 
               <div className="flow-widget-title text-sm text-gray-400">
-                Unfinished Surveys
+                {stats ? "Unfinished Surveys" : <Skeleton type={"text"} />}
               </div>
             </div>
 
             <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-              <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4 ">
-                <RiListCheck2 color="#fff" />
-              </div>
+              {stats ? (
+                <div className="icon w-12 h-12 rounded-full  bg-yellow-500 flex place-items-center justify-center mb-4 ">
+                  <RiListCheck2 color="#fff" />
+                </div>
+              ) : (
+                <Skeleton type="widget-icon" />
+              )}
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalPendingSurvey : "loading...."}
+                {stats ? (
+                  stats.totalPendingSurvey
+                ) : (
+                  <Skeleton type={"small-text"} />
+                )}
               </div>
 
-              <Link
-                to={"/admin/survey/pending"}
-                className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-yellow-400 text-yellow-600 rounded-lg hover:bg-yellow-400 hover:text-white"
-              >
-                view
-              </Link>
+              {stats ? (
+                <Link
+                  to={"/admin/survey/pending"}
+                  className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-yellow-400 text-yellow-600 rounded-lg hover:bg-yellow-400 hover:text-white"
+                >
+                  view
+                </Link>
+              ) : (
+                <div className="absolute top-4 right-5">
+                  <Skeleton type={"title"} />
+                </div>
+              )}
 
               <div className="flow-widget-title text-sm text-gray-400">
-                Pending Surveys
+                {stats ? "Pending Surveys" : <Skeleton type={"text"} />}
               </div>
             </div>
 
             <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
-              <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
-                <RiListCheck2 color="#fff" />
-              </div>
+              {stats ? (
+                <div className="icon w-12 h-12 rounded-full  bg-red-500 flex place-items-center justify-center mb-4">
+                  <RiListCheck2 color="#fff" />
+                </div>
+              ) : (
+                <Skeleton type="widget-icon" />
+              )}
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalUnfinishedSurvey : "loading...."}
+                {stats ? (
+                  stats.totalUnfinishedSurvey
+                ) : (
+                  <Skeleton type={"small-text"} />
+                )}
               </div>
 
-              <Link
-                to={"/admin/survey/rejected"}
-                className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-red-400 text-red-600 rounded-lg hover:bg-red-400 hover:text-white"
-              >
-                view
-              </Link>
+              {stats ? (
+                <Link
+                  to={"/admin/survey/rejected"}
+                  className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-red-400 text-red-600 rounded-lg hover:bg-red-400 hover:text-white"
+                >
+                  view
+                </Link>
+              ) : (
+                <div className="absolute top-4 right-5">
+                  <Skeleton type={"title"} />
+                </div>
+              )}
 
               <div className="flow-widget-title text-sm text-gray-400">
-                Rejected Surveys
+                {stats ? "Rejected Surveys" : <Skeleton type={"text"} />}
               </div>
             </div>
 
             <div
-              className={`flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block col-span-1 relative shadow-xl ${
-                user.user.type === "call-center"
-                  ? ""
-                  : "md:col-span-2 xl:col-span-4"
-              }`}
+              className={`flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block col-span-1 relative shadow-xl`}
             >
-              <div className="icon w-12 h-12 rounded-full  bg-blue-500 flex place-items-center justify-center mb-4">
-                <RiListIndefinite color="#fff" />
-              </div>
+              {stats ? (
+                <div className="icon w-12 h-12 rounded-full  bg-blue-500 flex place-items-center justify-center mb-4">
+                  <RiListIndefinite color="#fff" />
+                </div>
+              ) : (
+                <Skeleton type="widget-icon" />
+              )}
 
               <div className="flow-widget-amount text-2xl text-gray-900">
-                {stats ? stats.totalSurvey : "loading...."}
+                {stats ? stats.totalSurvey : <Skeleton type={"small-text"} />}
               </div>
 
-              <Link
-                to={"/admin/survey/all"}
-                className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-blue-400 text-blue-600 rounded-lg hover:bg-blue-400 hover:text-white"
-              >
-                view
-              </Link>
+              {stats ? (
+                <Link
+                  to={"/admin/survey/all"}
+                  className="absolute top-4 right-5 py-px px-2 text-xs  border-2 border-blue-400 text-blue-600 rounded-lg hover:bg-blue-400 hover:text-white"
+                >
+                  view
+                </Link>
+              ) : (
+                <div className="absolute top-4 right-5">
+                  <Skeleton type={"title"} />
+                </div>
+              )}
 
               <div className="flow-widget-title text-sm text-gray-400">
-                All Surveys
+                {stats ? "All Surveys" : <Skeleton type={"text"} />}
               </div>
             </div>
 
-            {stats
-              ? stats.surveyStatsByLga.map((lga) =>
-                  lga.localStations.map((station) => {
-                    const stationKey = station.station.replace("-", " ");
-                    return (
-                      <React.Fragment key={`${lga.lga}-${stationKey}`}>
-                        <div
-                          className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
-                          key={`${lga.lga}-completed-${stationKey}`} // Unique key based on LGA and station
-                        >
-                          <div className="icon w-12 h-12 rounded-full bg-green-500 flex place-items-center justify-center mb-4">
-                            <FaMapLocationDot color="#fff" />
-                          </div>
-                          <div className="flow-widget-amount text-2xl text-gray-900">
-                            {station.totalCompleted}
-                          </div>
-                          <div className="flow-widget-title text-sm text-gray-400">
-                            <span className="text-green-600">Completed</span>{" "}
-                            for{" "}
-                            <span className="text-gray-800 font-semibold">
-                              {lga.lga.toUpperCase()} {stationKey}
-                            </span>
-                          </div>
+            {stats ? (
+              stats.surveyStatsByLga.map((lga) =>
+                lga.localStations.map((station) => {
+                  const stationKey = station.station.replace("-", " ");
+                  return (
+                    <React.Fragment key={`${lga.lga}-${stationKey}`}>
+                      <div
+                        className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
+                        key={`${lga.lga}-completed-${stationKey}`} // Unique key based on LGA and station
+                      >
+                        <div className="icon w-12 h-12 rounded-full bg-green-500 flex place-items-center justify-center mb-4">
+                          <FaMapLocationDot color="#fff" />
                         </div>
+                        <div className="flow-widget-amount text-2xl text-gray-900">
+                          {station.totalCompleted}
+                        </div>
+                        <div className="flow-widget-title text-sm text-gray-400">
+                          <span className="text-green-600">Completed</span> for{" "}
+                          <span className="text-gray-800 font-semibold">
+                            {lga.lga.toUpperCase()} {stationKey}
+                          </span>
+                        </div>
+                      </div>
 
-                        <div
-                          className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
-                          key={`${lga.lga}-unfinished-${stationKey}`}
-                        >
-                          <div className="icon w-12 h-12 rounded-full bg-purple-500 flex place-items-center justify-center mb-4">
-                            <TbLocationPause color="#fff" />
-                          </div>
-                          <div className="flow-widget-amount text-2xl text-gray-900">
-                            {station.totalUnfinished}
-                          </div>
-                          <div className="flow-widget-title text-sm text-gray-400">
-                            <span className="text-purple-600">Unfinished</span>{" "}
-                            for{" "}
-                            <span className="text-gray-800 font-semibold">
-                              {lga.lga.toUpperCase()} {stationKey}
-                            </span>
-                          </div>
+                      <div
+                        className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
+                        key={`${lga.lga}-unfinished-${stationKey}`}
+                      >
+                        <div className="icon w-12 h-12 rounded-full bg-purple-500 flex place-items-center justify-center mb-4">
+                          <TbLocationPause color="#fff" />
                         </div>
+                        <div className="flow-widget-amount text-2xl text-gray-900">
+                          {station.totalUnfinished}
+                        </div>
+                        <div className="flow-widget-title text-sm text-gray-400">
+                          <span className="text-purple-600">Unfinished</span>{" "}
+                          for{" "}
+                          <span className="text-gray-800 font-semibold">
+                            {lga.lga.toUpperCase()} {stationKey}
+                          </span>
+                        </div>
+                      </div>
 
-                        <div
-                          className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
-                          key={`${lga.lga}-pending-${stationKey}`}
-                        >
-                          <div className="icon w-12 h-12 rounded-full bg-yellow-500 flex place-items-center justify-center mb-4">
-                            <TbLocationQuestion color="#fff" />
-                          </div>
-                          <div className="flow-widget-amount text-2xl text-gray-900">
-                            {station.totalPending}
-                          </div>
-                          <div className="flow-widget-title text-sm text-gray-400">
-                            <span className="text-yellow-600">Pending</span> for{" "}
-                            <span className="text-gray-800 font-semibold">
-                              {lga.lga.toUpperCase()} {stationKey}
-                            </span>
-                          </div>
+                      <div
+                        className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
+                        key={`${lga.lga}-pending-${stationKey}`}
+                      >
+                        <div className="icon w-12 h-12 rounded-full bg-yellow-500 flex place-items-center justify-center mb-4">
+                          <TbLocationQuestion color="#fff" />
                         </div>
+                        <div className="flow-widget-amount text-2xl text-gray-900">
+                          {station.totalPending}
+                        </div>
+                        <div className="flow-widget-title text-sm text-gray-400">
+                          <span className="text-yellow-600">Pending</span> for{" "}
+                          <span className="text-gray-800 font-semibold">
+                            {lga.lga.toUpperCase()} {stationKey}
+                          </span>
+                        </div>
+                      </div>
 
-                        <div
-                          className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl flex-grow"
-                          key={`${lga.lga}-rejected-${stationKey}`}
-                        >
-                          <div className="icon w-12 h-12 rounded-full bg-red-500 flex place-items-center justify-center mb-4">
-                            <MdOutlineWrongLocation color="#fff" />
-                          </div>
-                          <div className="flow-widget-amount text-2xl text-gray-900">
-                            {station.totalRejected}
-                          </div>
-                          <div className="flow-widget-title text-sm text-gray-400">
-                            <span className="text-red-600">Rejected</span> for{" "}
-                            <span className="text-gray-800 font-semibold">
-                              {lga.lga.toUpperCase()} {stationKey}
-                            </span>
-                          </div>
+                      <div
+                        className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl flex-grow"
+                        key={`${lga.lga}-rejected-${stationKey}`}
+                      >
+                        <div className="icon w-12 h-12 rounded-full bg-red-500 flex place-items-center justify-center mb-4">
+                          <MdOutlineWrongLocation color="#fff" />
                         </div>
-                      </React.Fragment>
-                    );
-                  })
-                )
-              : "Please wait, loading LGA's statistics..."}
+                        <div className="flow-widget-amount text-2xl text-gray-900">
+                          {station.totalRejected}
+                        </div>
+                        <div className="flow-widget-title text-sm text-gray-400">
+                          <span className="text-red-600">Rejected</span> for{" "}
+                          <span className="text-gray-800 font-semibold">
+                            {lga.lga.toUpperCase()} {stationKey}
+                          </span>
+                        </div>
+                      </div>
+                    </React.Fragment>
+                  );
+                })
+              )
+            ) : (
+              <>
+                {Array.from({ length: 11 }).map((_, index) => (
+                  <>
+                    <div
+                      className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
+                      key={index}
+                    >
+                      <Skeleton type="widget-icon" />
+
+                      <div className="flow-widget-amount text-2xl text-gray-900">
+                        <Skeleton type={"small-text"} />
+                      </div>
+
+                      <div className="flow-widget-title text-sm text-gray-400">
+                        <Skeleton type={"text"} />
+                      </div>
+                    </div>
+                  </>
+                ))}
+              </>
+            )}
           </div>
 
           <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-x-8 gap-y-6 xl:grid-cols-3">

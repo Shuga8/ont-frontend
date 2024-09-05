@@ -10,6 +10,13 @@
   position: relative;
 }
 
+.skeleton.widget-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+
 .skeleton.small-icon {
   width: 15px;
   height: 15px;
@@ -47,7 +54,6 @@
   height: 30px;
   border-radius: 50%;
 }
-
 .shimmer-wrapper {
   position: absolute;
   top: 0;
