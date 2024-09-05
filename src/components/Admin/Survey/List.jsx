@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Loader, SideBar } from "../index";
+import { ErrorToast, Loader, SideBar } from "../index";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { TbWorldSearch } from "react-icons/tb";
 import { Link } from "react-router-dom";
@@ -7,25 +7,57 @@ import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
 import Skeleton from "../../Skeleton/Skeleton";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
+import useGetRespondentByPhone from "../Api/PhoneRespondent";
+
+const getSearchValue = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("search") || null;
+};
 
 const List = () => {
   const [respondents, setRespondents] = useState(null);
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [error, setError] = useState(null);
+  const [respondentByPhone, setRespondentByPhone] = useState(null);
   const { loadingGetRespondents, getRespondents } = useGetRespondents();
+  const { loadingPhoneRespondents, errorPhone, getPhoneRespondent } =
+    useGetRespondentByPhone(getSearchValue());
   const [pagination, setPagination] = useState(null);
 
   useEffect(() => {
     const fetchRespondents = async () => {
-      const { pagination, filteredRespondents } = await getRespondents();
-      setRespondents(filteredRespondents);
-      setPagination(pagination);
+      if (getSearchValue() == null) {
+        setRespondents(null);
+        const { pagination, filteredRespondents } = await getRespondents();
+        setRespondents(filteredRespondents);
+        setPagination(pagination);
+      } else {
+        setRespondents(null);
+        const { pagination, filteredRespondents } = await getPhoneRespondent();
+        setError(errorPhone);
+        setRespondentByPhone(filteredRespondents);
+        setPagination(pagination);
+      }
     };
     fetchRespondents();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setErrorActive(true);
+      const timer = setTimeout(() => {
+        setErrorActive(false);
+        setError(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   return (
     <>
       <SideBar />
       <div className="elements-container mt-14">
+        <ErrorToast isActive={isErrorActive} message={error} />
         <Loader />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between">
           <span className="font-bold text-lg text-gray-900">All Surveys</span>
@@ -73,79 +105,155 @@ const List = () => {
                 </div>
               </div>
 
-              {respondents !== null ? (
-                respondents.map((data, index) => {
-                  // Skip if the respondent or survey is null
-                  if (!data || !data.survey || !data.respondent) {
-                    return null;
-                  }
+              {!errorPhone &&
+                !respondentByPhone &&
+                !loadingPhoneRespondents && (
+                  <>
+                    {respondents !== null ? (
+                      respondents.map((data, index) => {
+                        // Skip if the respondent or survey is null
+                        if (!data || !data.survey || !data.respondent) {
+                          return null;
+                        }
 
-                  const status = data.survey.status;
-                  const statusClasses = {
-                    pending: "text-yellow-600",
-                    completed: "text-green-600",
-                    unfinished: "text-purple-600",
-                    rejected: "text-red-600",
-                  };
+                        const status = data.survey.status;
+                        const statusClasses = {
+                          pending: "text-yellow-600",
+                          completed: "text-green-600",
+                          unfinished: "text-purple-600",
+                          rejected: "text-red-600",
+                        };
 
-                  return (
-                    <div
-                      className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
-                      key={index + 1}
-                    >
-                      <div className="flex items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800">
-                          {index + 1}.
-                        </p>
+                        return (
+                          <div
+                            className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                            key={index + 1}
+                          >
+                            <div className="flex items-center p-2 xl:p-5">
+                              <p className="font-medium text-gray-800">
+                                {index + 1}.
+                              </p>
+                            </div>
+
+                            <div className="hidden md:flex items-center p-2 xl:p-5">
+                              <p className="font-medium text-gray-800">
+                                {data.respondent.firstname}
+                              </p>
+                            </div>
+
+                            <div className="flex items-center p-2 xl:p-5 text-sm">
+                              <p className="font-medium text-blue-700">
+                                {data.respondent.phone}
+                              </p>
+                            </div>
+
+                            <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
+                              <p
+                                className={`font-medium ${statusClasses[status]} p-2 bg-slate-200 rounded-full capitalize`}
+                              >
+                                {status}
+                              </p>
+                            </div>
+
+                            <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
+                              <Link
+                                to={`/admin/survey/${status}?search=${data.respondent.phone}`}
+                                className="text-blue-500 p-2 bg-slate-200 rounded-full text-base md:text-lg"
+                                title="go to survey"
+                              >
+                                <TbWorldSearch />
+                              </Link>
+                              <p
+                                className="font-medium text-yellow-600 p-2 text-xs bg-slate-200 rounded-full block md:hidden"
+                                title="status"
+                              >
+                                {status === "pending" && "Pending"}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : loadingGetRespondents ? (
+                      <>
+                        <TableSkeleton />
+                      </>
+                    ) : (
+                      <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                        No Respondents Available
                       </div>
+                    )}
+                  </>
+                )}
 
-                      <div className="hidden md:flex items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800">
-                          {data.respondent.firstname}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center p-2 xl:p-5 text-sm">
-                        <p className="font-medium text-blue-700">
-                          {data.respondent.phone}
-                        </p>
-                      </div>
-
-                      <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                        <p
-                          className={`font-medium ${statusClasses[status]} p-2 bg-slate-200 rounded-full capitalize`}
-                        >
-                          {status}
-                        </p>
-                      </div>
-
-                      <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
-                        <Link
-                          to={`/admin/survey/${status}?search=${data.respondent.phone}`}
-                          className="text-blue-500 p-2 bg-slate-200 rounded-full text-base md:text-lg"
-                          title="go to survey"
-                        >
-                          <TbWorldSearch />
-                        </Link>
-                        <p
-                          className="font-medium text-yellow-600 p-2 text-xs bg-slate-200 rounded-full block md:hidden"
-                          title="status"
-                        >
-                          {status === "pending" && "Pending"}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })
-              ) : loadingGetRespondents ? (
-                <>
-                  <TableSkeleton />
-                </>
-              ) : (
-                <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
-                  No Respondents Available
+              {errorPhone && (
+                <div className="flex flex-row border-b border-stroke dark:border-stone-600 text-red-600 justify-center py-3 text-xs md:text-base">
+                  Respondent &nbsp;
+                  <span className="font-bold">{getSearchValue()}</span>
+                  &nbsp;does not exist!
                 </div>
               )}
+
+              {loadingPhoneRespondents && (
+                <>
+                  <TableSkeleton count={2} />
+                </>
+              )}
+
+              {respondentByPhone
+                ? (() => {
+                    const status = respondentByPhone.survey.status;
+                    const statusClasses = {
+                      pending: "text-yellow-600",
+                      completed: "text-green-600",
+                      unfinished: "text-purple-600",
+                      rejected: "text-red-600",
+                    };
+
+                    return (
+                      <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800">1.</p>
+                        </div>
+
+                        <div className="hidden md:flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800">
+                            {respondentByPhone.user.firstname}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center p-2 xl:p-5 text-sm">
+                          <p className="font-medium text-blue-700">
+                            {respondentByPhone.user.phone}
+                          </p>
+                        </div>
+
+                        <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
+                          <p
+                            className={`font-medium ${statusClasses[status]} p-2 bg-slate-200 rounded-full capitalize`}
+                          >
+                            {status}
+                          </p>
+                        </div>
+
+                        <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
+                          <Link
+                            to={`/admin/survey/${status}?search=${respondentByPhone.user.phone}`}
+                            className="text-blue-500 p-2 bg-slate-200 rounded-full text-base md:text-lg"
+                            title="go to survey"
+                          >
+                            <TbWorldSearch />
+                          </Link>
+                          <p
+                            className={`font-medium  ${statusClasses[status]} p-2 text-xs bg-slate-200 rounded-full block md:hidden`}
+                            title="status"
+                          >
+                            {status}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })()
+                : ""}
             </div>
 
             <div className="table-pagination pb-4 pt-6 flex flex-row justify-between gap-x-2 place-items-center">
