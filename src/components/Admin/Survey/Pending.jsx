@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Loader, SideBar } from "../index";
-import { IoTrashOutline } from "react-icons/io5";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { GoTasklist } from "react-icons/go";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
 import Skeleton from "../../Skeleton/Skeleton";
+import TableSkeleton from "../../Skeleton/TableSkeleton";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -67,13 +66,13 @@ const Pending = () => {
                   </h5>
                 </div>
 
-                <div className="p-2 xl:p-5 hidden md:block">
+                <div className="p-2 xl:p-5 text-center hidden md:block">
                   <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
                     Gender
                   </h5>
                 </div>
 
-                <div className="p-2 xl:p-5">
+                <div className="p-2 xl:p-5 text-center">
                   <h5 className="text-sm text-center md:text-left  font-medium uppercase sm:text-base text-stone-900">
                     Actions
                   </h5>
@@ -108,7 +107,7 @@ const Pending = () => {
                         </p>
                       </div>
 
-                      <div className="hidden md:flex items-center p-2 xl:p-5">
+                      <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
                         <p className="font-medium text-gray-800 ">
                           {data.respondent.gender}
                         </p>
@@ -130,108 +129,7 @@ const Pending = () => {
                 })
               ) : loadingGetRespondents ? (
                 <>
-                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-200 sm:grid-cols-5 py-3 md:py-0">
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-short-text"} />
-                    </div>
-                    <div className="items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className=" items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-200 sm:grid-cols-5 py-3 md:py-0">
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-short-text"} />
-                    </div>
-                    <div className="items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className=" items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-200 sm:grid-cols-5 py-3 md:py-0">
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-short-text"} />
-                    </div>
-                    <div className="items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className=" items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-200 sm:grid-cols-5 py-3 md:py-0">
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-short-text"} />
-                    </div>
-                    <div className="items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className=" items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-200 sm:grid-cols-5 py-3 md:py-0">
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-short-text"} />
-                    </div>
-                    <div className="items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className=" items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-200 sm:grid-cols-5 py-3 md:py-0">
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-short-text"} />
-                    </div>
-                    <div className="items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className=" items-center p-2 xl:p-2 hidden md:block">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                    <div className="flex items-center p-2 xl:p-2">
-                      <Skeleton type={"table-long-text"} />
-                    </div>
-                  </div>
+                  <TableSkeleton count={4} />
                 </>
               ) : (
                 <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">

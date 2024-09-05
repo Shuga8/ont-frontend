@@ -5,6 +5,8 @@ import { TbWorldSearch } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
+import Skeleton from "../../Skeleton/Skeleton";
+import TableSkeleton from "../../Skeleton/TableSkeleton";
 
 const List = () => {
   const [respondents, setRespondents] = useState(null);
@@ -136,9 +138,9 @@ const List = () => {
                   );
                 })
               ) : loadingGetRespondents ? (
-                <div className="flex border-b border-stroke text-green-800 justify-center text-base dark:border-stone-600 py-3">
-                  Loading...
-                </div>
+                <>
+                  <TableSkeleton />
+                </>
               ) : (
                 <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
                   No Respondents Available

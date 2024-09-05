@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Loader, SideBar } from "../index";
-import { TbEye } from "react-icons/tb";
 import { HiDownload } from "react-icons/hi";
-import { IoTrashOutline } from "react-icons/io5";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import Skeleton from "../../Skeleton/Skeleton";
+import useGetRespondents from "../Api/Respondents";
+import TableSkeleton from "../../Skeleton/TableSkeleton";
 
 const Completed = () => {
+  const [respondents, setRespondents] = useState(null);
+  const { loadingGetRespondents, getRespondents } = useGetRespondents();
+
+  useEffect(() => {
+    const fetchRespondents = async () => {
+      const { pagination, filteredRespondents } = await getRespondents(
+        "completed"
+      );
+      setRespondents(filteredRespondents);
+    };
+    fetchRespondents();
+  }, [getRespondents]);
+
   return (
     <>
       <SideBar />
@@ -50,7 +63,7 @@ const Completed = () => {
                 </div>
 
                 <div className="p-2 xl:p-5 hidden md:block">
-                  <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
+                  <h5 className="text-sm text-center font-medium uppercase sm:text-base text-stone-900">
                     Language
                   </h5>
                 </div>
@@ -62,59 +75,70 @@ const Completed = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">1.</p>
-                </div>
+              {respondents && respondents.length > 0 ? (
+                respondents.filter((data) => data !== null).length > 0 ? (
+                  respondents.map((data, index) => {
+                    if (!data) {
+                      return null;
+                    }
+                    const status = data.survey.status;
+                    return (
+                      <div
+                        className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                        key={index}
+                      >
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {index + 1}
+                          </p>
+                        </div>
 
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">John Doe</p>
-                </div>
+                        <div className="hidden md:flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {data.respondent.firstname}
+                          </p>
+                        </div>
 
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            0{data.respondent.phone}
+                          </p>
+                        </div>
 
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">English</p>
-                </div>
+                        <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {data.survey.language}
+                          </p>
+                        </div>
 
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center ">
-                  <span
-                    className="font-medium text-blue-600 text-base"
-                    title="Download Survey"
-                  >
-                    <Link>
-                      <HiDownload />
-                    </Link>
-                  </span>
+                        <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
+                          <span
+                            className="font-medium text-blue-600 text-base"
+                            title="Download Survey"
+                          >
+                            <Link>
+                              <HiDownload />
+                            </Link>
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                    No Completed Respondents Available
+                  </div>
+                )
+              ) : loadingGetRespondents ? (
+                <TableSkeleton count={5} />
+              ) : (
+                <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                  No Completed Respondents Available
                 </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <Skeleton type={"table-short-text"} />
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <Skeleton type={"table-long-text"} />
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <Skeleton type={"table-long-text"} />
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <Skeleton type={"table-long-text"} />
-                </div>
-
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center ">
-                  <Skeleton type={"table-short-text"} />
-                </div>
-              </div>
+              )}
             </div>
 
-            <div className="table-pagination pb-4 pt-6 flex flex-row justify-between gap-x-2 place-items-center">
+            {/* <div className="table-pagination pb-4 pt-6 flex flex-row justify-between gap-x-2 place-items-center">
               <p className="text-gray-700">Showing 1-5 of 25</p>
               <nav>
                 <ul className="flex items-center gap-x-2 h-8 text-sm">
@@ -140,7 +164,7 @@ const Completed = () => {
                   </li>
                 </ul>
               </nav>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
