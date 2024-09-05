@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Loader, SideBar } from "../index";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { GoTasklist } from "react-icons/go";
 import { Link } from "react-router-dom";
 import Search from "./Search";
+import useGetRespondents from "../Api/Respondents";
+import TableSkeleton from "../../Skeleton/TableSkeleton";
 
 const Unfinished = () => {
+  const [respondents, setRespondents] = useState(null);
+  const { loadingGetRespondents, getRespondents } = useGetRespondents();
+
+  useEffect(() => {
+    const fetchRespondents = async () => {
+      const { pagination, filteredRespondents } = await getRespondents(
+        "in-progress"
+      );
+      setRespondents(filteredRespondents);
+    };
+    fetchRespondents();
+  }, [getRespondents]);
   return (
     <>
       <SideBar />
@@ -46,170 +60,84 @@ const Unfinished = () => {
                   </h5>
                 </div>
 
-                <div className="p-2 xl:p-5 hidden md:block">
+                <div className="p-2 xl:p-5 text-center hidden md:block">
                   <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
                     Gender
                   </h5>
                 </div>
 
-                <div className="p-2 xl:p-5">
+                <div className="p-2 xl:p-5 text-center">
                   <h5 className="text-sm text-center md:text-left  font-medium uppercase sm:text-base text-stone-900">
                     Actions
                   </h5>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">1.</p>
-                </div>
+              {respondents && respondents.length > 0 ? (
+                respondents.filter((data) => data !== null).length > 0 ? (
+                  respondents.map((data, index) => {
+                    if (!data) {
+                      return null;
+                    }
+                    const status = data.survey.status;
+                    return (
+                      <div
+                        className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                        key={index}
+                      >
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {index + 1}
+                          </p>
+                        </div>
 
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">John Doe</p>
-                </div>
+                        <div className="hidden md:flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {data.respondent.firstname}
+                          </p>
+                        </div>
 
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            0{data.respondent.phone}
+                          </p>
+                        </div>
 
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Male</p>
-                </div>
+                        <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {data.respondent.gender}
+                          </p>
+                        </div>
 
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <Link
-                    to={"/admin/survey/pending/complete?survey_id=1"}
-                    className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
-                    title="Complete Survey"
-                  >
-                    <span>
-                      <GoTasklist />
-                    </span>
-                  </Link>
+                        <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
+                          <Link
+                            to={`/admin/survey/pending/complete?phone=${data.respondent.phone}`}
+                            className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
+                            title="Complete Unfinished Survey"
+                          >
+                            <span>
+                              <GoTasklist />
+                            </span>
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                    No Unfinished Respondents Available
+                  </div>
+                )
+              ) : loadingGetRespondents ? (
+                <TableSkeleton count={5} />
+              ) : (
+                <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                  No Unfinished Respondents Available
                 </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">2.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">GI Jinn</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Female</p>
-                </div>
-
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <Link
-                    to={"/admin/survey/pending/complete?survey_id=1"}
-                    className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
-                    title="Complete Survey"
-                  >
-                    <span>
-                      <GoTasklist />
-                    </span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">3.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Surpuruchukwu</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Male</p>
-                </div>
-
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <Link
-                    to={"/admin/survey/pending/complete?survey_id=1"}
-                    className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
-                    title="Complete Survey"
-                  >
-                    <span>
-                      <GoTasklist />
-                    </span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">4.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Ogunmepon</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Male</p>
-                </div>
-
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <Link
-                    to={"/admin/survey/pending/complete?survey_id=1"}
-                    className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
-                    title="Complete Survey"
-                  >
-                    <span>
-                      <GoTasklist />
-                    </span>
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">5.</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Aisha</p>
-                </div>
-
-                <div className="flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">+2341234567898</p>
-                </div>
-
-                <div className="hidden md:flex items-center p-2 xl:p-5">
-                  <p className="font-medium text-gray-800 ">Female</p>
-                </div>
-
-                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                  <Link
-                    className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full"
-                    title="Complete Survey"
-                  >
-                    <span>
-                      <GoTasklist />
-                    </span>
-                  </Link>
-                </div>
-              </div>
+              )}
             </div>
 
-            <div className="table-pagination pb-4 pt-6 flex flex-row justify-between gap-x-2 place-items-center">
+            {/* <div className="table-pagination pb-4 pt-6 flex flex-row justify-between gap-x-2 place-items-center">
               <p className="text-gray-700">Showing 1-5 of 25</p>
               <nav>
                 <ul className="flex items-center gap-x-2 h-8 text-sm">
@@ -235,7 +163,7 @@ const Unfinished = () => {
                   </li>
                 </ul>
               </nav>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
