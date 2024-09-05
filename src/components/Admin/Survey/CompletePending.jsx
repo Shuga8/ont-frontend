@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Loader, SideBar } from "../index";
+import { ErrorToast, InfoToast, SuccessToast, Loader, SideBar } from "../index";
 import { Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
+import { TbLoader3 } from "react-icons/tb";
+import Preloader from "../Widgets/Preloader";
 
 const CompletePending = () => {
   const { user } = useAuthContext();
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [info, setInfo] = useState(null);
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [isSuccessActive, setSuccessActive] = useState(false);
+  const [isInfoActive, setInfoActive] = useState(false);
   const [languages, setLanguages] = useState(null);
   const [respondent, setRespondent] = useState(null);
   const [isRejecting, setIsRejecting] = useState(false);
@@ -13,6 +21,8 @@ const CompletePending = () => {
   const [isContinuing, setIsContinuing] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("english");
   const [enterSurveyLoading, setEnterSurveyLoading] = useState(false);
+  const [isSubmittingRejectLoading, setSubmittingRejectLoading] =
+    useState(false);
   const navigate = useNavigate();
 
   const giveConsent = () => {
@@ -64,6 +74,7 @@ const CompletePending = () => {
 
   useEffect(() => {
     getSelectedLanguages();
+    setSubmittingRejectLoading(false);
 
     const getUser = async () => {
       const res = await getRespondentByPhone(getPhone());
@@ -72,6 +83,33 @@ const CompletePending = () => {
 
     getUser();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setErrorActive(true);
+      const timer = setTimeout(() => {
+        setErrorActive(false);
+        setError(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+    if (success) {
+      setSuccessActive(true);
+      const timer = setTimeout(() => {
+        setSuccessActive(false);
+        setSuccess(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+    if (info) {
+      setInfoActive(true);
+      const timer = setTimeout(() => {
+        setInfoActive(false);
+        setInfo(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, success, info]);
 
   const handleChange = (event) => {
     setSelectedLanguage(event.target.value);
@@ -115,8 +153,71 @@ const CompletePending = () => {
     navigate(url);
   };
 
-  const handleSubmitReject = (e) => {
+  const handleSubmitReject = async (e) => {
     e.preventDefault();
+
+    const form = e.target;
+    const reason = form.reason.value;
+    const survey = respondent.user._id ?? null;
+    const status = "reject";
+
+    if (survey == null) {
+      setError("Respondent Identification is invalid!");
+      return;
+    }
+
+    if (reason == null || reason == "") {
+      setError("Specify rejection reason!");
+      return;
+    }
+
+    setSubmittingRejectLoading(true);
+
+    const reqBody = JSON.stringify({
+      survey,
+      status,
+      reason,
+    });
+
+    const myHeaders = new Headers();
+    myHeaders.append("authorization", `Bearer ${user.token}`);
+    myHeaders.append("Content-Type", "application/json");
+
+    const response = await fetch(
+      "https://ont-survey-tracker-development.up.railway.app/v1/surveys/status",
+      {
+        method: "PATCH",
+        headers: myHeaders,
+        body: reqBody,
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      if (data.error.message) {
+        setError(data.message);
+        setTimeout(() => {
+          setSubmittingRejectLoading(false);
+        }, 1200);
+        return;
+      } else if (data.error) {
+        setError(data.error);
+        setTimeout(() => {
+          setSubmittingRejectLoading(false);
+        }, 1200);
+        return;
+      }
+    } else {
+      setSuccess("Survey Rejected successfully");
+      setTimeout(() => {
+        setSubmittingRejectLoading(false);
+      }, 1200);
+
+      setTimeout(() => {
+        window.location.href = "/admin/survey/rejected";
+      }, 1400);
+    }
   };
 
   const rejectConsent = () => {
@@ -137,6 +238,10 @@ const CompletePending = () => {
       <SideBar />
       <div className="elements-container mt-14">
         <Loader />
+        <Preloader isVisible={isSubmittingRejectLoading} />
+        <InfoToast message={info} isActive={isInfoActive} />
+        <ErrorToast message={error} isActive={isErrorActive} />
+        <SuccessToast message={success} isActive={isSuccessActive} />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between">
           <span className="font-bold text-lg text-gray-900">
             Complete Pending Survey
@@ -146,7 +251,7 @@ const CompletePending = () => {
         <div className="container-content  px-1 py-2 md:px-6 md:py-5">
           <div className="screens w-full py-6 px-3 md:px-8 bg-white rounded-lg">
             <div className="consent-screen w-full min-h-96 flex flex-col gap-y-4 place-items-center justify-center">
-              <h3 className="text-xl text-blue-600 font-semibold">
+              <h3 className="text-sm md:text-base text-blue-600 font-semibold">
                 Does the Respondent Agree to Continue?
               </h3>
 
@@ -227,8 +332,8 @@ const CompletePending = () => {
                   {!rejectButtonLoading ? (
                     "Reject"
                   ) : (
-                    <span className="material-symbols-outlined spinner">
-                      progress_activity
+                    <span className=" spinner text-white text-lg">
+                      <TbLoader3 />
                     </span>
                   )}
                 </Button>
@@ -244,8 +349,8 @@ const CompletePending = () => {
                   {!isContinuing ? (
                     "Continue"
                   ) : (
-                    <span className="material-symbols-outlined spinner">
-                      progress_activity
+                    <span className=" spinner text-white text-lg">
+                      <TbLoader3 />
                     </span>
                   )}
                 </Button>
@@ -257,15 +362,27 @@ const CompletePending = () => {
                     method="POST"
                     className="rejection-form flex flex-row w-full gap-x-3"
                     onSubmit={handleSubmitReject}
+                    name="rejectionReasonForm"
                   >
                     <input
                       type="text"
-                      name="reason_for_rejection"
+                      name="reason"
                       placeholder="Reason for rejection"
                       className="px-3 py-2 w-72"
                     />
-                    <Button variant="contained" color="primary" type="submit">
-                      Submit
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      disabled={isSubmittingRejectLoading}
+                    >
+                      {!isSubmittingRejectLoading ? (
+                        "Submit"
+                      ) : (
+                        <span className=" spinner text-white text-lg">
+                          <TbLoader3 />
+                        </span>
+                      )}
                     </Button>
                   </form>
                 </div>

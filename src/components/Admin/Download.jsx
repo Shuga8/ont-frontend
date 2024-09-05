@@ -199,8 +199,8 @@ const Download = () => {
               </div>
 
               <div className="h-auto px-4 py-1 block">
-                <label htmlFor="status" className="text-gray-900 font-medium">
-                  Choose Export Region:
+                <label htmlFor="region" className="text-gray-900 font-medium">
+                  Choose LGA
                 </label>
                 <select
                   name="region"

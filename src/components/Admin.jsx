@@ -55,7 +55,7 @@ const Admin = () => {
         </div>
 
         <div className="container-content  px-1 py-2 md:px-6 md:py-5">
-          <div className="flow-widgets grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 justify-center md:justify-normal">
+          <div className="flow-widgets grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-10 xl:grid-cols-4 2xl:gap-7.5 justify-center md:justify-normal">
             <div className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl">
               {stats ? (
                 <div className="icon w-12 h-12 rounded-full  bg-green-500 flex place-items-center justify-center mb-4 relative">
