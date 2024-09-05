@@ -175,8 +175,10 @@ const Pending = () => {
                 )}
 
               {errorPhone && (
-                <div className="flex flex-row border-b border-stroke dark:border-stone-600 text-red-600 justify-center py-3 ">
-                  Phone number {getSearchValue()} not found;
+                <div className="flex flex-row border-b border-stroke dark:border-stone-600 text-red-600 justify-center py-3 text-xs">
+                  Phone &nbsp;
+                  <span className="font-bold">{getSearchValue()}</span>&nbsp;not
+                  found in pending surveys
                 </div>
               )}
 

@@ -21,22 +21,21 @@ export const useGetRespondentByPhone = (phone, page = "all") => {
         }
       );
 
+      let filteredRespondents = null;
+      let pagination = null;
+
       if (!response.ok) {
         const errorData = await response.json();
         setErrorPhone(errorData.message || "Error fetching data");
         setLoadingPhoneRespondents(false);
-        return { pagination: null, filteredRespondents: null };
+        return { pagination, filteredRespondents };
       }
 
       const data = await response.json();
 
-      let filteredRespondents = null;
-      let pagination = null;
-
       if (page === "all") {
         filteredRespondents = data.data || [];
       } else {
-        // Check if data structure is valid
         if (data.data && data.data.survey && data.data.survey.status === page) {
           filteredRespondents = data.data;
         } else {

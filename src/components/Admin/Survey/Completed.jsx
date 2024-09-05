@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Loader, SideBar } from "../index";
+import { ErrorToast, Loader, SideBar } from "../index";
 import { HiDownload } from "react-icons/hi";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
@@ -7,25 +7,56 @@ import Search from "./Search";
 import Skeleton from "../../Skeleton/Skeleton";
 import useGetRespondents from "../Api/Respondents";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
+import useGetRespondentByPhone from "../Api/PhoneRespondent";
+
+const getSearchValue = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("search") || null;
+};
 
 const Completed = () => {
   const [respondents, setRespondents] = useState(null);
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [error, setError] = useState(null);
+  const [respondentByPhone, setRespondentByPhone] = useState(null);
   const { loadingGetRespondents, getRespondents } = useGetRespondents();
+  const { loadingPhoneRespondents, errorPhone, getPhoneRespondent } =
+    useGetRespondentByPhone(getSearchValue(), "completed");
 
   useEffect(() => {
     const fetchRespondents = async () => {
-      const { pagination, filteredRespondents } = await getRespondents(
-        "completed"
-      );
-      setRespondents(filteredRespondents);
+      if (getSearchValue() == null) {
+        setRespondents(null);
+        const { pagination, filteredRespondents } = await getRespondents(
+          "completed"
+        );
+        setRespondents(filteredRespondents);
+      } else {
+        setRespondents(null);
+        const { pagination, filteredRespondents } = await getPhoneRespondent();
+        setError(errorPhone);
+        setRespondentByPhone(filteredRespondents);
+      }
     };
     fetchRespondents();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setErrorActive(true);
+      const timer = setTimeout(() => {
+        setErrorActive(false);
+        setError(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   return (
     <>
       <SideBar />
       <div className="elements-container mt-14">
+        <ErrorToast isActive={isErrorActive} message={error} />
         <Loader />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between">
           <span className="font-bold text-lg text-gray-900">
@@ -75,66 +106,135 @@ const Completed = () => {
                 </div>
               </div>
 
-              {respondents && respondents.length > 0 ? (
-                respondents.filter((data) => data !== null).length > 0 ? (
-                  respondents.map((data, index) => {
-                    if (!data) {
-                      return null;
-                    }
-                    const status = data.survey.status;
-                    return (
-                      <div
-                        className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
-                        key={index}
-                      >
-                        <div className="flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {index + 1}
-                          </p>
-                        </div>
+              {!errorPhone &&
+                !respondentByPhone &&
+                !loadingPhoneRespondents && (
+                  <>
+                    {respondents && respondents.length > 0 ? (
+                      respondents.filter((data) => data !== null).length > 0 ? (
+                        respondents.map((data, index) => {
+                          if (!data) {
+                            return null;
+                          }
+                          const status = data.survey.status;
+                          return (
+                            <div
+                              className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                              key={index}
+                            >
+                              <div className="flex items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {index + 1}
+                                </p>
+                              </div>
 
-                        <div className="hidden md:flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {data.respondent.firstname}
-                          </p>
-                        </div>
+                              <div className="hidden md:flex items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {data.respondent.firstname}
+                                </p>
+                              </div>
 
-                        <div className="flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {data.respondent.phone}
-                          </p>
-                        </div>
+                              <div className="flex items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {data.respondent.phone}
+                                </p>
+                              </div>
 
-                        <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {data.survey.language}
-                          </p>
-                        </div>
+                              <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {data.survey.language}
+                                </p>
+                              </div>
 
-                        <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
-                          <span
-                            className="font-medium text-blue-600 text-base"
-                            title="Download Survey"
-                          >
-                            <Link>
-                              <HiDownload />
-                            </Link>
-                          </span>
+                              <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
+                                <span
+                                  className="font-medium text-blue-600 text-base"
+                                  title="Download Survey"
+                                >
+                                  <Link>
+                                    <HiDownload />
+                                  </Link>
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                          No Completed Respondents Available
                         </div>
+                      )
+                    ) : loadingGetRespondents ? (
+                      <TableSkeleton count={5} />
+                    ) : (
+                      <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                        No Completed Respondents Available
                       </div>
-                    );
-                  })
-                ) : (
-                  <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
-                    No Completed Respondents Available
-                  </div>
-                )
-              ) : loadingGetRespondents ? (
-                <TableSkeleton count={5} />
-              ) : (
-                <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
-                  No Completed Respondents Available
+                    )}
+                  </>
+                )}
+
+              {errorPhone && (
+                <div className="flex flex-row border-b border-stroke dark:border-stone-600 text-red-600 justify-center py-3 text-xs">
+                  Phone &nbsp;
+                  <span className="font-bold">{getSearchValue()}</span>&nbsp;not
+                  found in completed surveys
                 </div>
+              )}
+
+              {loadingPhoneRespondents && (
+                <>
+                  <TableSkeleton count={2} />
+                </>
+              )}
+
+              {respondentByPhone && (
+                <>
+                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
+                    <div className="flex items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">1</p>
+                    </div>
+
+                    <div className="hidden md:flex items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.user.firstname}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.user.phone}
+                      </p>
+                    </div>
+
+                    <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.survey.language}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
+                      <span
+                        className="font-medium text-blue-600 text-base"
+                        title="Download Survey"
+                      >
+                        <Link>
+                          <HiDownload />
+                        </Link>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
+                    <div className="font-medium text-xs text-stone-800">
+                      Showing search result for respondent:{" "}
+                    </div>
+                    <div className="font-bold">
+                      <span className="text-primary-600 text-base">
+                        {getSearchValue()}
+                      </span>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
 
