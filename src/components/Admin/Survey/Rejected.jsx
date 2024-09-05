@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Loader, SideBar } from "../index";
-import { IoTrashOutline } from "react-icons/io5";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
-import { GoTasklist } from "react-icons/go";
 import { MdOutlineRestorePage } from "react-icons/md";
 import { FcDeleteColumn } from "react-icons/fc";
 import { TfiMore } from "react-icons/tfi";
