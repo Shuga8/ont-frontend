@@ -4,7 +4,6 @@ import { GoTasklist } from "react-icons/go";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
-import Skeleton from "../../Skeleton/Skeleton";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
 
 const getSearchValue = () => {
@@ -104,7 +103,7 @@ const Pending = () => {
 
                         <div className="flex items-center p-2 xl:p-5">
                           <p className="font-medium text-gray-800 ">
-                            0{data.respondent.phone}
+                            {data.respondent.phone}
                           </p>
                         </div>
 

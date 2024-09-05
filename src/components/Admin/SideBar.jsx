@@ -14,11 +14,50 @@ import { TbWorldDownload } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import user_icon from "../../assets/user_icon.png";
 import { useLogout } from "../../hooks/useLogout";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const SideBar = () => {
   const { logout } = useLogout();
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const [asideActive, setAsideActive] = useState(false);
+  const { user } = useAuthContext();
+
+  const [stats, setStats] = useState(null);
+  const url = `https://ont-survey-tracker-development.up.railway.app/v1/stats/widgets`;
+
+  useEffect(() => {
+    const getDashboardStats = async (url) => {
+      const cache = await caches.open("my-cache");
+      const cachedResponse = await cache.match(url);
+
+      if (cachedResponse) {
+        const data = await cachedResponse.json();
+        setStats(data.data.stats);
+      }
+
+      const myHeaders = new Headers();
+      myHeaders.append("authorization", `Bearer ${user.token}`);
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: myHeaders,
+        });
+
+        if (response.ok) {
+          cache.put(url, response.clone());
+          const freshData = await response.json();
+          setStats(freshData.data.stats);
+        } else {
+          throw new Error("Network error");
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
+    };
+
+    getDashboardStats(url);
+  }, [user.token]);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -264,7 +303,7 @@ const SideBar = () => {
                   >
                     <span>Completed Surveys</span>
                     <span className="bg-green-500 px-2 text-center text-sm text-white rounded-lg">
-                      100
+                      {stats ? stats.totalCompletedSurvey : 0}
                     </span>
                   </Link>
                 </li>
@@ -280,7 +319,7 @@ const SideBar = () => {
                   >
                     <span>Unfinished Surveys</span>
                     <span className="bg-purple-500 px-2 text-center text-sm text-white rounded-lg">
-                      10
+                      {stats ? stats.totalUnfinishedSurvey : 0}
                     </span>
                   </Link>
                 </li>
@@ -294,7 +333,7 @@ const SideBar = () => {
                   >
                     <span>Pending Surveys</span>
                     <span className="bg-yellow-500 px-2 text-center text-sm text-white rounded-lg">
-                      118
+                      {stats ? stats.totalPendingSurvey : 0}
                     </span>
                   </Link>
                 </li>
@@ -310,7 +349,7 @@ const SideBar = () => {
                   >
                     <span>Rejected Surveys</span>
                     <span className="bg-red-500 px-2 text-center text-sm text-white rounded-lg">
-                      56
+                      {stats ? stats.totalRejectedSurvey : 0}
                     </span>
                   </Link>
                 </li>
@@ -324,7 +363,7 @@ const SideBar = () => {
                   >
                     <span>All Surveys</span>
                     <span className="bg-blue-500 px-2 text-center text-sm text-white rounded-lg">
-                      274
+                      {stats ? stats.totalSurvey : 0}
                     </span>
                   </Link>
                 </li>

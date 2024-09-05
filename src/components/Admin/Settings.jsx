@@ -174,7 +174,7 @@ const Settings = () => {
           <span className="font-bold text-lg text-gray-900">Settings</span>
           <span>
             ONT&nbsp;/&nbsp;
-            <Link to={"/admin/settings"} className="underline text-blue-500">
+            <Link to={"/admin/settings"} className="text-blue-500">
               Settings
             </Link>
           </span>

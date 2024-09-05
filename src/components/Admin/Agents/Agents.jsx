@@ -41,7 +41,7 @@ const Agents = () => {
           <span className="font-bold text-lg text-gray-900">Agents</span>
           <span>
             ONT&nbsp;/&nbsp;
-            <Link to={"/admin/agents"} className="underline text-blue-500">
+            <Link to={"/admin/agents"} className="text-blue-500">
               Agents
             </Link>
           </span>

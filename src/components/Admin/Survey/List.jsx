@@ -107,7 +107,7 @@ const List = () => {
 
                       <div className="flex items-center p-2 xl:p-5 text-sm">
                         <p className="font-medium text-blue-700">
-                          0{data.respondent.phone}
+                          {data.respondent.phone}
                         </p>
                       </div>
 

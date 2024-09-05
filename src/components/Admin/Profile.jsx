@@ -46,7 +46,7 @@ const Profile = () => {
           <span className="font-bold text-lg text-gray-900">Profile</span>
           <span>
             ONT&nbsp;/&nbsp;
-            <Link to={"/admin/profile"} className="underline text-blue-500">
+            <Link to={"/admin/profile"} className="text-blue-500">
               Profile
             </Link>
           </span>

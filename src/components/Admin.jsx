@@ -314,22 +314,20 @@ const Admin = () => {
             ) : (
               <>
                 {Array.from({ length: 11 }).map((_, index) => (
-                  <>
-                    <div
-                      className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
-                      key={index}
-                    >
-                      <Skeleton type="widget-icon" />
+                  <div
+                    className="flow-widget rounded-md border border-stroke bg-white px-7 py-6 shadow-default dark:border-strokedark dark:bg-boxdark block relative shadow-xl"
+                    key={index}
+                  >
+                    <Skeleton type="widget-icon" />
 
-                      <div className="flow-widget-amount text-2xl text-gray-900">
-                        <Skeleton type={"small-text"} />
-                      </div>
-
-                      <div className="flow-widget-title text-sm text-gray-400">
-                        <Skeleton type={"text"} />
-                      </div>
+                    <div className="flow-widget-amount text-2xl text-gray-900">
+                      <Skeleton type={"small-text"} />
                     </div>
-                  </>
+
+                    <div className="flow-widget-title text-sm text-gray-400">
+                      <Skeleton type={"text"} />
+                    </div>
+                  </div>
                 ))}
               </>
             )}

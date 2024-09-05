@@ -136,7 +136,7 @@ const Rejected = () => {
 
                         <div className="flex items-center p-2 xl:p-5">
                           <p className="font-medium text-gray-800 ">
-                            0{data.respondent.phone}
+                            {data.respondent.phone}
                           </p>
                         </div>
 
