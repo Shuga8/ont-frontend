@@ -1,25 +1,55 @@
 import React, { useState, useEffect } from "react";
-import { Loader, SideBar } from "../index";
+import { ErrorToast, Loader, SideBar } from "../index";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { GoTasklist } from "react-icons/go";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
+import useGetRespondentByPhone from "../Api/PhoneRespondent";
+
+const getSearchValue = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("search") || null;
+};
 
 const Unfinished = () => {
   const [respondents, setRespondents] = useState(null);
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [error, setError] = useState(null);
+  const [respondentByPhone, setRespondentByPhone] = useState(null);
   const { loadingGetRespondents, getRespondents } = useGetRespondents();
+  const { loadingPhoneRespondents, errorPhone, getPhoneRespondent } =
+    useGetRespondentByPhone(getSearchValue(), "in-progress");
 
   useEffect(() => {
     const fetchRespondents = async () => {
-      const { pagination, filteredRespondents } = await getRespondents(
-        "in-progress"
-      );
-      setRespondents(filteredRespondents);
+      if (getSearchValue() == null) {
+        setRespondents(null);
+        const { pagination, filteredRespondents } = await getRespondents(
+          "in-progress"
+        );
+        setRespondents(filteredRespondents);
+      } else {
+        setRespondents(null);
+        const { pagination, filteredRespondents } = await getPhoneRespondent();
+        setError(errorPhone);
+        setRespondentByPhone(filteredRespondents);
+      }
     };
     fetchRespondents();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setErrorActive(true);
+      const timer = setTimeout(() => {
+        setErrorActive(false);
+        setError(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
   return (
     <>
       <SideBar />
@@ -73,67 +103,138 @@ const Unfinished = () => {
                 </div>
               </div>
 
-              {respondents && respondents.length > 0 ? (
-                respondents.filter((data) => data !== null).length > 0 ? (
-                  respondents.map((data, index) => {
-                    if (!data) {
-                      return null;
-                    }
-                    const status = data.survey.status;
-                    return (
-                      <div
-                        className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
-                        key={index}
-                      >
-                        <div className="flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {index + 1}
-                          </p>
-                        </div>
+              {!errorPhone &&
+                !respondentByPhone &&
+                !loadingPhoneRespondents && (
+                  <>
+                    {respondents && respondents.length > 0 ? (
+                      respondents.filter((data) => data !== null).length > 0 ? (
+                        respondents.map((data, index) => {
+                          if (!data) {
+                            return null;
+                          }
+                          const status = data.survey.status;
+                          return (
+                            <div
+                              className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                              key={index}
+                            >
+                              <div className="flex items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {index + 1}
+                                </p>
+                              </div>
 
-                        <div className="hidden md:flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {data.respondent.firstname}
-                          </p>
-                        </div>
+                              <div className="hidden md:flex items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {data.respondent.firstname}
+                                </p>
+                              </div>
 
-                        <div className="flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {data.respondent.phone}
-                          </p>
-                        </div>
+                              <div className="flex items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {data.respondent.phone}
+                                </p>
+                              </div>
 
-                        <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {data.respondent.gender}
-                          </p>
-                        </div>
+                              <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {data.respondent.gender}
+                                </p>
+                              </div>
 
-                        <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
-                          <Link
-                            to={`/admin/survey/pending/complete?phone=${data.respondent.phone}`}
-                            className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
-                            title="Complete Unfinished Survey"
-                          >
-                            <span>
-                              <GoTasklist />
-                            </span>
-                          </Link>
+                              <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
+                                <Link
+                                  to={`/admin/survey/pending/complete?phone=${data.respondent.phone}`}
+                                  className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
+                                  title="Complete Unfinished Survey"
+                                >
+                                  <span>
+                                    <GoTasklist />
+                                  </span>
+                                </Link>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                          No Unfinished Respondents Available
                         </div>
+                      )
+                    ) : loadingGetRespondents ? (
+                      <TableSkeleton count={5} />
+                    ) : (
+                      <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                        No Unfinished Respondents Available
                       </div>
-                    );
-                  })
-                ) : (
-                  <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
-                    No Unfinished Respondents Available
-                  </div>
-                )
-              ) : loadingGetRespondents ? (
-                <TableSkeleton count={5} />
-              ) : (
-                <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
-                  No Unfinished Respondents Available
+                    )}
+                  </>
+                )}
+
+              {errorPhone && (
+                <div className="flex flex-row border-b border-stroke dark:border-stone-600 text-red-600 justify-center py-3 text-xs md:text-base">
+                  Phone &nbsp;
+                  <span className="font-bold">{getSearchValue()}</span>&nbsp;not
+                  found in unfinished surveys
                 </div>
+              )}
+
+              {loadingPhoneRespondents && (
+                <>
+                  <TableSkeleton count={2} />
+                </>
+              )}
+
+              {respondentByPhone && (
+                <>
+                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
+                    <div className="flex items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">1.</p>
+                    </div>
+
+                    <div className="hidden md:flex items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.user.firstname}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.user.phone}
+                      </p>
+                    </div>
+
+                    <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.user.gender}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
+                      <Link
+                        to={`/admin/survey/pending/complete?phone=${respondentByPhone.user.phone}`}
+                        className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
+                        title="Complete Unfinished Survey"
+                      >
+                        <span>
+                          <GoTasklist />
+                        </span>
+                      </Link>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
+                    <div className="font-medium text-xs text-stone-800">
+                      Showing search result for respondent:{" "}
+                    </div>
+                    <div className="font-bold">
+                      <span className="text-primary-600 text-base">
+                        {getSearchValue()}
+                      </span>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
 
