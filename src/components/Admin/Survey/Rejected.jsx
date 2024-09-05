@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Loader, SideBar } from "../index";
+import { ErrorToast, Loader, SideBar } from "../index";
 import { MdOutlineRestorePage } from "react-icons/md";
 import { FcDeleteColumn } from "react-icons/fc";
 import { TfiMore } from "react-icons/tfi";
@@ -7,11 +7,22 @@ import { Link } from "react-router-dom";
 import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
+import useGetRespondentByPhone from "../Api/PhoneRespondent";
+
+const getSearchValue = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("search") || null;
+};
 
 const Rejected = () => {
   const [moreContent, setMoreContent] = useState(false);
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [error, setError] = useState(null);
+  const [respondentByPhone, setRespondentByPhone] = useState(null);
   const [respondents, setRespondents] = useState(null);
   const { loadingGetRespondents, getRespondents } = useGetRespondents();
+  const { loadingPhoneRespondents, errorPhone, getPhoneRespondent } =
+    useGetRespondentByPhone(getSearchValue(), "rejected");
 
   const handleMoreContent = (el) => {
     if (moreContent) {
@@ -49,18 +60,38 @@ const Rejected = () => {
 
   useEffect(() => {
     const fetchRespondents = async () => {
-      const { pagination, filteredRespondents } = await getRespondents(
-        "rejected"
-      );
-      setRespondents(filteredRespondents);
+      if (getSearchValue() == null) {
+        setRespondents(null);
+        const { pagination, filteredRespondents } = await getRespondents(
+          "rejected"
+        );
+        setRespondents(filteredRespondents);
+      } else {
+        setRespondents(null);
+        const { pagination, filteredRespondents } = await getPhoneRespondent();
+        setError(errorPhone);
+        setRespondentByPhone(filteredRespondents);
+      }
     };
     fetchRespondents();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setErrorActive(true);
+      const timer = setTimeout(() => {
+        setErrorActive(false);
+        setError(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   return (
     <>
       <SideBar />
       <div className="elements-container mt-14">
+        <ErrorToast isActive={isErrorActive} message={error} />
         <Loader />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between">
           <span className="font-bold text-lg text-gray-900">
@@ -110,80 +141,163 @@ const Rejected = () => {
                 </div>
               </div>
 
-              {respondents && respondents.length > 0 ? (
-                respondents.filter((data) => data !== null).length > 0 ? (
-                  respondents.map((data, index) => {
-                    if (!data) {
-                      return null;
-                    }
-                    const status = data.survey.status;
-                    return (
-                      <div
-                        className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
-                        key={index}
-                      >
-                        <div className="flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {index + 1}
-                          </p>
-                        </div>
+              {!errorPhone &&
+                !respondentByPhone &&
+                !loadingPhoneRespondents && (
+                  <>
+                    {respondents && respondents.length > 0 ? (
+                      respondents.filter((data) => data !== null).length > 0 ? (
+                        respondents.map((data, index) => {
+                          if (!data) {
+                            return null;
+                          }
+                          const status = data.survey.status;
+                          return (
+                            <div
+                              className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                              key={index}
+                            >
+                              <div className="flex items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {index + 1}
+                                </p>
+                              </div>
 
-                        <div className="hidden md:flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {data.respondent.firstname}
-                          </p>
-                        </div>
+                              <div className="hidden md:flex items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {data.respondent.firstname}
+                                </p>
+                              </div>
 
-                        <div className="flex items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {data.respondent.phone}
-                          </p>
-                        </div>
+                              <div className="flex items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {data.respondent.phone}
+                                </p>
+                              </div>
 
-                        <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
-                          <p className="font-medium text-gray-800 ">
-                            {data.respondent.gender}
-                          </p>
-                        </div>
+                              <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 ">
+                                  {data.respondent.gender}
+                                </p>
+                              </div>
 
-                        <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
-                          <button
-                            className="more-btn font-medium text-gray-600 text-lg hover:text-gray-500 px-2 py-1"
-                            title="More"
-                            onClick={(e) => {
-                              setMoreContent(!moreContent);
-                              handleMoreContent(e.currentTarget);
-                            }}
-                          >
-                            <TfiMore />
-                          </button>
+                              <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
+                                <button
+                                  className="more-btn font-medium text-gray-600 text-lg hover:text-gray-500 px-2 py-1"
+                                  title="More"
+                                  onClick={(e) => {
+                                    setMoreContent(!moreContent);
+                                    handleMoreContent(e.currentTarget);
+                                  }}
+                                >
+                                  <TfiMore />
+                                </button>
 
-                          <div className="more-content absolute top-12 left-2 rounded-md shadow-md hidden px-2 py-3 z-10 bg-slate-100 w-auto">
-                            <ul>
-                              <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600">
-                                <MdOutlineRestorePage />{" "}
-                                <button>Restore</button>
-                              </li>
-                              <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-red-500">
-                                <FcDeleteColumn /> <button>Delete</button>
-                              </li>
-                            </ul>
-                          </div>
+                                <div className="more-content absolute top-12 left-2 rounded-md shadow-md hidden px-2 py-3 z-10 bg-slate-100 w-auto">
+                                  <ul>
+                                    <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600">
+                                      <MdOutlineRestorePage />{" "}
+                                      <button>Restore</button>
+                                    </li>
+                                    <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-red-500">
+                                      <FcDeleteColumn /> <button>Delete</button>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                          No Rejected Respondents Available
                         </div>
+                      )
+                    ) : loadingGetRespondents ? (
+                      <TableSkeleton count={5} />
+                    ) : (
+                      <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
+                        No Rejected Respondents Available
                       </div>
-                    );
-                  })
-                ) : (
-                  <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
-                    No Rejected Respondents Available
-                  </div>
-                )
-              ) : loadingGetRespondents ? (
-                <TableSkeleton count={5} />
-              ) : (
-                <div className="flex border-b border-stroke text-red-800 justify-center text-base dark:border-stone-600 py-3">
-                  No Rejected Respondents Available
+                    )}
+                  </>
+                )}
+
+              {errorPhone && (
+                <div className="flex flex-row border-b border-stroke dark:border-stone-600 text-red-600 justify-center py-3 text-xs sm:text-base">
+                  Phone &nbsp;
+                  <span className="font-bold">{getSearchValue()}</span>&nbsp;not
+                  found in rejected surveys
                 </div>
+              )}
+
+              {loadingPhoneRespondents && (
+                <>
+                  <TableSkeleton count={2} />
+                </>
+              )}
+
+              {respondentByPhone && (
+                <>
+                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
+                    <div className="flex items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">1.</p>
+                    </div>
+
+                    <div className="hidden md:flex items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.user.firstname}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.user.phone}
+                      </p>
+                    </div>
+
+                    <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.user.gender}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
+                      <button
+                        className="more-btn font-medium text-gray-600 text-lg hover:text-gray-500 px-2 py-1"
+                        title="More"
+                        onClick={(e) => {
+                          setMoreContent(!moreContent);
+                          handleMoreContent(e.currentTarget);
+                        }}
+                      >
+                        <TfiMore />
+                      </button>
+
+                      <div className="more-content absolute top-12 left-2 rounded-md shadow-md hidden px-2 py-3 z-10 bg-slate-100 w-auto">
+                        <ul>
+                          <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600">
+                            <MdOutlineRestorePage /> <button>Restore</button>
+                          </li>
+                          <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-red-500">
+                            <FcDeleteColumn /> <button>Delete</button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
+                    <div className="font-medium text-xs text-stone-800">
+                      Showing search result for respondent:{" "}
+                    </div>
+                    <div className="font-bold">
+                      <span className="text-primary-600 text-base">
+                        {getSearchValue()}
+                      </span>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
 
