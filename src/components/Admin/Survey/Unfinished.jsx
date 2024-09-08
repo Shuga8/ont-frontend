@@ -29,6 +29,7 @@ const Unfinished = () => {
         const { pagination, filteredRespondents } = await getRespondents(
           "in-progress"
         );
+        console.log(filteredRespondents);
         setRespondents(filteredRespondents);
       } else {
         setRespondents(null);

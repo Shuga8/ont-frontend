@@ -25,6 +25,8 @@ const Search = (page) => {
   const [file, setFile] = useState(null);
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState("english");
+  const [uploadType, setUploadType] = useState("new");
 
   const showNewSurveyForm = (type) => {
     setFromType(type);
@@ -78,15 +80,15 @@ const Search = (page) => {
 
     setLoading(true);
 
-    const inputfile = file; // Get the actual file object from application state
+    const inputfile = file;
 
     const myHeaders = new Headers();
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
     const formData = new FormData();
     formData.append("file", inputfile);
-    formData.append("language", "english");
-    formData.append("uploadType", "new");
+    formData.append("language", language);
+    formData.append("uploadType", uploadType);
 
     setSuccess("please wait while it been uploaded");
     const response = await fetch(
@@ -141,7 +143,7 @@ const Search = (page) => {
       const timer = setTimeout(() => {
         setErrorActive(false);
         setError(null);
-      }, 2000);
+      }, 4000);
       return () => clearTimeout(timer);
     }
 
@@ -157,17 +159,18 @@ const Search = (page) => {
 
   return (
     <>
+      <Preloader isVisible={loading} />
       <div className="flex justify-end p-3 flex-row gap-x-2">
         <ErrorToast isActive={isErrorActive} message={error} />
         <SuccessToast isActive={isSuccessActive} message={success} />
-        <Preloader isVisible={loading} />
+
         <Button
           variant="outlined"
           color="primary"
           className="flex flex-row gap-x-2 "
           onClick={() => showNewSurveyForm("new")}
         >
-          <span className="hidden md:block text-base">New Survey</span>
+          <span className="hidden md:block text-base">Add Survey</span>
           <MdFormatListBulletedAdd className="text-blue-700 text-2xl" />
         </Button>
         {/* <Button
@@ -226,7 +229,7 @@ const Search = (page) => {
           {file ? (
             <>
               <div className="img_layer p-2">
-                <div className="mb-4 mx-auto mt-14">
+                <div className="mb-4 mx-auto mt-6">
                   <img
                     src={coloured_csv}
                     className="w-32 h-32 object-contain mix-blend-multiply block mx-auto"
@@ -243,7 +246,7 @@ const Search = (page) => {
             <>
               <label
                 htmlFor="dropzone-file"
-                className="flex flex-col items-center justify-center w-full h-auto cursor-pointer row-span-2 mt-14"
+                className="flex flex-col items-center justify-center w-full h-auto cursor-pointer row-span-2 mt-6"
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
               >
@@ -275,6 +278,47 @@ const Search = (page) => {
               </label>
             </>
           )}
+
+          <label className="flex flex-col w-full gap-y-2 p-2 outline-none">
+            <label
+              htmlFor="language"
+              className="text-base font-bold text-gray-600"
+            >
+              Language
+            </label>
+            <select
+              name="language"
+              id="language"
+              className="bg-white focus:outline-none border-2 border-blue-400 py-2 px-1 cursor-pointer"
+              onChange={(e) => setLanguage(e.target.value)}
+              value={language}
+            >
+              <option value="english">English</option>
+              <option value="pidgin">Pidgin</option>
+              <option value="yoruba">Yoruba</option>
+              <option value="igbo">Igbo</option>
+              <option value="hausa">Hausa</option>
+            </select>
+          </label>
+
+          <label className="flex flex-col w-full gap-y-2 p-2 outline-none">
+            <label
+              htmlFor="uploadType"
+              className="text-base font-bold text-gray-600"
+            >
+              Upload Type
+            </label>
+            <select
+              name="uploadType"
+              id="uploadType"
+              className="bg-white focus:outline-none border-2 border-blue-400 py-2 px-1 cursor-pointer"
+              value={uploadType}
+              onChange={(e) => setUploadType(e.target.value)}
+            >
+              <option value="new">New</option>
+              <option value="update">Update</option>
+            </select>
+          </label>
 
           <Button
             variant="contained"

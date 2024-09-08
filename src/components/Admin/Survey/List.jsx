@@ -5,7 +5,6 @@ import { TbWorldSearch } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
-import Skeleton from "../../Skeleton/Skeleton";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
 import useGetRespondentByPhone from "../Api/PhoneRespondent";
 
@@ -260,8 +259,10 @@ const List = () => {
               <p className="text-gray-700">
                 {pagination && (
                   <>
-                    Showing {pagination.page} - {pagination.totalResults} of{" "}
-                    {pagination.totalPages}
+                    Page <b>{pagination.page}</b> of{" "}
+                    <b>{pagination.totalPages} </b> in {" ("}
+                    {respondents.length} out of {pagination.totalResults}
+                    {" )"} results
                   </>
                 )}
               </p>
