@@ -216,7 +216,8 @@ const CompletePending = () => {
       }, 1200);
 
       setTimeout(() => {
-        window.location.href = "/admin/survey/rejected";
+        navigate("/admin/survey/rejected");
+        // window.location.href = "/admin/survey/rejected";
       }, 1400);
     }
   };
