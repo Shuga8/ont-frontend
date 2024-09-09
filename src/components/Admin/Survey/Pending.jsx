@@ -197,25 +197,25 @@ const Pending = () => {
 
                     <div className="hidden md:flex items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.user.firstname}
+                        {respondentByPhone.respondent.firstname}
                       </p>
                     </div>
 
                     <div className="flex items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.user.phone}
+                        {respondentByPhone.respondent.phone}
                       </p>
                     </div>
 
                     <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.user.gender}
+                        {respondentByPhone.respondent.gender}
                       </p>
                     </div>
 
                     <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
                       <Link
-                        to={`/admin/survey/pending/complete?phone=${respondentByPhone.user.phone}`}
+                        to={`/admin/survey/pending/complete?phone=${respondentByPhone.respondent.phone}`}
                         className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
                         title="Complete Survey"
                       >

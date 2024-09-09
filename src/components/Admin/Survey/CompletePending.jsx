@@ -69,6 +69,7 @@ const CompletePending = () => {
     );
 
     const data = await response.json();
+    console.log(data);
     return data.data;
   };
 
@@ -149,7 +150,7 @@ const CompletePending = () => {
     setEnterSurveyLoading(true);
     const url = `/survey?language=${selectedLanguage}&phone=${getPhone()}&agent=${
       user.user._id
-    }&respondent=${respondent.user._id}`;
+    }&respondent=${respondent.respondent._id}`;
     navigate(url);
   };
 
@@ -158,7 +159,7 @@ const CompletePending = () => {
 
     const form = e.target;
     const reason = form.reason.value;
-    const survey = respondent.user._id ?? null;
+    const survey = respondent.respondent._id ?? null;
     const status = "reject";
 
     if (survey == null) {
@@ -226,7 +227,7 @@ const CompletePending = () => {
 
   if (respondent == null) return false;
 
-  const entry = respondent.survey.entries[0].responses;
+  const entry = respondent.survey.entries.responses;
 
   if (entry == null) {
     console.log("entries are null");
@@ -280,23 +281,23 @@ const CompletePending = () => {
               <div className="details grid grid-cols-2 gap-x-2 mt-4 gap-y-2 md:gap-y-7 px-2 py-2">
                 <p className="text-black font-semibold">Name:</p>
                 <p className="text-gray-700">
-                  {respondent.user.firstname ?? "Loading..."}
+                  {respondent.respondent.firstname ?? "Loading..."}
                 </p>
                 <p className="text-black font-semibold">Phone Number:</p>
                 <p className="text-gray-700">
-                  {respondent.user.phone ?? "Loading..."}
+                  {respondent.respondent.phone ?? "Loading..."}
                 </p>
                 <p className="text-black font-semibold">Gender:</p>
                 <p className="text-gray-700">
-                  {respondent.user.gender ?? "Loading..."}
+                  {respondent.respondent.gender ?? "Loading..."}
                 </p>
                 <p className="text-black font-semibold">Age:</p>
                 <p className="text-gray-700">
-                  {respondent.user.age ?? "Loading..."}
+                  {respondent.respondent.age ?? "Loading..."}
                 </p>
                 <p className="text-black font-semibold">Location:</p>
                 <p className="text-gray-700">
-                  {respondent.user.location ?? "Loading..."}
+                  {respondent.respondent.location ?? "Loading..."}
                 </p>
               </div>
 
