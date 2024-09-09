@@ -87,7 +87,7 @@ const Search = (page) => {
 
     const formData = new FormData();
     formData.append("file", inputfile);
-    formData.append("language", language);
+    formData.append("language", "english");
     formData.append("uploadType", uploadType);
 
     setSuccess("please wait while it been uploaded");
@@ -279,7 +279,7 @@ const Search = (page) => {
             </>
           )}
 
-          <label className="flex flex-col w-full gap-y-2 p-2 outline-none">
+          {/* <label className="flex flex-col w-full gap-y-2 p-2 outline-none">
             <label
               htmlFor="language"
               className="text-base font-bold text-gray-600"
@@ -299,7 +299,7 @@ const Search = (page) => {
               <option value="igbo">Igbo</option>
               <option value="hausa">Hausa</option>
             </select>
-          </label>
+          </label> */}
 
           <label className="flex flex-col w-full gap-y-2 p-2 outline-none">
             <label

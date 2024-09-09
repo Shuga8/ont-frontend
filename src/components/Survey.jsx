@@ -148,6 +148,7 @@ const Survey = () => {
     if (validateSurvey()) {
       const currentSurvey = surveyList[activeIndex];
       if (currentSurvey) {
+        console.log(currentSurvey);
         const res = {
           respondent: getRespondentIdFromUrl(),
           language: getLanguageFromUrl(),
@@ -157,7 +158,7 @@ const Survey = () => {
         currentSurvey.questions.forEach((q, qIndex) => {
           if (
             q.type === "single-choice" &&
-            selectedOptions[qIndex] === "Others...please specify"
+            selectedOptions[qIndex] === "others"
           ) {
             q.previousResponse = selectedOptions[`${qIndex}_other`];
             response.push({
@@ -212,6 +213,7 @@ const Survey = () => {
 
     const reqBody = JSON.stringify(data);
 
+    console.log(reqBody);
     const response = await fetch(
       "https://ont-survey-tracker-development.up.railway.app/v1/surveys",
       {
