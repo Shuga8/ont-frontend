@@ -258,6 +258,14 @@
   color: #9c9c9c;
   font-weight: 300;
 }
+.surveys-container .questions-container input[type=date],
+.surveys-container .questions-container input[type=datetime-local] {
+  outline: none;
+  border: none;
+  color: #000;
+  background: #eee;
+  font-weight: 300;
+}
 .surveys-container .questions-container label {
   font-size: 14px;
   color: #555;

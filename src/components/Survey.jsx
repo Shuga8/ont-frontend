@@ -4,6 +4,7 @@ import useRespondentList from "../hooks/useRespondentList";
 import { ErrorToast } from "./Admin/index";
 import { SuccessToast } from "./Admin/index";
 import { useAuthContext } from "../hooks/useAuthContext";
+import Preloader from "./Admin/Widgets/Preloader";
 
 const Survey = () => {
   const { user } = useAuthContext();
@@ -187,6 +188,7 @@ const Survey = () => {
         if (nextIncompleteIndex !== -1) {
           setActiveIndex(nextIncompleteIndex);
           setSelectedOptions({});
+          window.scrollTo(0, 0);
           setErrors(false);
         } else {
           setTimeout(() => {
@@ -237,7 +239,7 @@ const Survey = () => {
   };
 
   if (loadingQuestions) {
-    return <div>Loading...</div>;
+    return <Preloader isVisible={true} />;
   }
 
   if (!surveyList || surveyList.length === 0) return null;
@@ -284,7 +286,15 @@ const Survey = () => {
                 <div className="input-group px-4 py-6">
                   {q.type === "open-ended" && (
                     <input
-                      type="text"
+                      type={
+                        q.meta && q.meta.formType
+                          ? q.meta.formType === "date"
+                            ? "date"
+                            : q.meta.formType === "date-time"
+                            ? "datetime-local"
+                            : "text"
+                          : "text"
+                      }
                       className="w-full p-2 border"
                       placeholder="Your answer ..."
                       maxLength={60}

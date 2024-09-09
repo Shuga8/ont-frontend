@@ -264,7 +264,8 @@
     }
 
     input[type="text"],
-    input[type="number"] {
+    input[type="number"]
+    {
       outline: none;
       border: none;
       color: #000;
@@ -276,6 +277,15 @@
         color: #9c9c9c;
         font-weight: 300;
       }
+    }
+
+    input[type="date"],
+    input[type="datetime-local"]{
+      outline: none;
+      border: none;
+      color: #000;
+      background: #eee;
+      font-weight: 300;
     }
 
     label {
