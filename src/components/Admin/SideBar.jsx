@@ -260,18 +260,20 @@ const SideBar = () => {
               </Link>
             </li>
 
-            <li>
-              <Link
-                to={"/admin/agents"}
-                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
-                  pathNameCheck("/admin/agents") ? "bg-gray-700" : ""
-                }`}
-              >
-                <PiUsersFourDuotone color="#fff" />
+            {user.user.type !== "call-center" && (
+              <li>
+                <Link
+                  to={"/admin/agents"}
+                  className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                    pathNameCheck("/admin/agents") ? "bg-gray-700" : ""
+                  }`}
+                >
+                  <PiUsersFourDuotone color="#fff" />
 
-                <span className="ms-3">Agents</span>
-              </Link>
-            </li>
+                  <span className="ms-3">Agents</span>
+                </Link>
+              </li>
+            )}
 
             <div className="dropdown-list">
               <div

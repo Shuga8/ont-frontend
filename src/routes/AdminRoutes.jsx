@@ -26,7 +26,17 @@ function AdminRoutes() {
       />
       <Route
         path="/agents"
-        element={user ? <Agents /> : <Navigate to="/admin/login" replace />}
+        element={
+          user ? (
+            user.user.type !== "call-center" ? (
+              <Agents />
+            ) : (
+              <Navigate to={"/admin/"} replace />
+            )
+          ) : (
+            <Navigate to="/admin/login" replace />
+          )
+        }
       />
       <Route
         path="/settings"
