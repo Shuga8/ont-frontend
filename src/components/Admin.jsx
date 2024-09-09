@@ -172,7 +172,7 @@ const Admin = () => {
 
               <div className="flow-widget-amount text-2xl text-gray-900">
                 {stats ? (
-                  stats.totalUnfinishedSurvey
+                  stats.totalRejectedSurvey
                 ) : (
                   <Skeleton type={"small-text"} />
                 )}

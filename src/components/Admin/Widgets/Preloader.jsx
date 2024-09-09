@@ -10,9 +10,7 @@ const Preloader = ({ isVisible = false }) => {
       <span className="text-blue-500 text-5xl spinner">
         <RiLoader2Line />
       </span>
-      <span className="text-base text-white">
-        Please wait, your data is being processed
-      </span>
+      <span className="text-base text-white">Please wait...</span>
     </div>
   );
 };

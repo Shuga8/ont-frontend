@@ -159,10 +159,10 @@ const CompletePending = () => {
 
     const form = e.target;
     const reason = form.reason.value;
-    const survey = respondent.respondent._id ?? null;
+    const phone = getPhone() ?? null;
     const status = "reject";
 
-    if (survey == null) {
+    if (phone == null) {
       setError("Respondent Identification is invalid!");
       return;
     }
@@ -175,7 +175,7 @@ const CompletePending = () => {
     setSubmittingRejectLoading(true);
 
     const reqBody = JSON.stringify({
-      survey,
+      phone,
       status,
       reason,
     });
@@ -310,7 +310,7 @@ const CompletePending = () => {
                   <div className="preset-q-and-a px-2 py-2" key={index + 1}>
                     <div className="mb-2 py-3">
                       <p className="text-stone-800">
-                        {index + 1}. {data.question}
+                        {index + 1}. {data.questionDetails.question}
                       </p>
                       <div className="px-4 py-1 italic text-gray-500 text-sm">
                         {data.answer}
