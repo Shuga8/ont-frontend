@@ -5,9 +5,11 @@ import { ErrorToast } from "./Admin/index";
 import { SuccessToast } from "./Admin/index";
 import { useAuthContext } from "../hooks/useAuthContext";
 import Preloader from "./Admin/Widgets/Preloader";
+import { useNavigate } from "react-router-dom";
 
 const Survey = () => {
   const { user } = useAuthContext();
+  const navigate = useNavigate();
   const getRespondentIdFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
     return params.get("respondent") || "english";
@@ -397,19 +399,23 @@ const Survey = () => {
         </div>
       </div>
 
-      <div hidden={!questionsVisible}>
+      <div
+        className={`w-full h-screen place-items-center justify-center ${
+          questionsVisible ? "flex" : "hidden"
+        } flex-col gap-y-5`}
+      >
         <h1 className="text-3xl font-semibold text-center py-4 text-yellow-700">
-          Thank you for completing the survey!
+          Survey Completed
         </h1>
         <div className="text-center">
           <Button
             variant="contained"
             color="primary"
             onClick={() => {
-              window.location.href = "/";
+              navigate("/admin/survey/completed");
             }}
           >
-            Back to Home
+            Go to completed surveys
           </Button>
         </div>
       </div>
