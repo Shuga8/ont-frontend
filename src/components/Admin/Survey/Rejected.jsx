@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ErrorToast, Loader, SideBar, SuccessToast } from "../index";
 import { MdOutlineRestorePage } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, Navigate, replace, useNavigate } from "react-router-dom";
 import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
@@ -30,6 +30,7 @@ const Rejected = () => {
   const [reinstateActive, setReinstateActive] = useState(false);
   const [phone, setPhone] = useState("");
   const [restoreLoading, setRestoreLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleRestoreSubmit = async (e) => {
     if (e.target.checkValidity()) {
@@ -95,14 +96,16 @@ const Rejected = () => {
           window.location.reload();
         }, 3000);
       } else {
-        setSuccess(data.message);
+        setSuccess(`Survey for respondent ${phone} restored successfully`);
         form.reason.value = "";
         setTimeout(() => {
           setRestoreLoading(false);
         }, 700);
 
         setTimeout(() => {
-          window.location.href = "/admin/survey/pending"; // Navigate and refresh
+          navigate("/admin/survey/pending", {
+            replace: true,
+          });
         }, 1000);
       }
     }
