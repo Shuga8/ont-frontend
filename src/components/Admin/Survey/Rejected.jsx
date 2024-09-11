@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { ErrorToast, Loader, SideBar } from "../index";
+import { ErrorToast, Loader, SideBar, SuccessToast } from "../index";
 import { MdOutlineRestorePage } from "react-icons/md";
-import { FcDeleteColumn } from "react-icons/fc";
-import { TfiMore } from "react-icons/tfi";
+import { IoMdCloseCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
 import useGetRespondentByPhone from "../Api/PhoneRespondent";
 import { Button } from "@mui/material";
+import { useAuthContext } from "../../../hooks/useAuthContext";
+import Preloader from "../Widgets/Preloader";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -16,42 +17,111 @@ const getSearchValue = () => {
 };
 
 const Rejected = () => {
-  const [moreContent, setMoreContent] = useState(false);
+  const { user } = useAuthContext();
   const [isErrorActive, setErrorActive] = useState(false);
+  const [isSuccessActive, setSuccessActive] = useState(false);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [respondentByPhone, setRespondentByPhone] = useState(null);
   const [respondents, setRespondents] = useState(null);
   const { loadingGetRespondents, getRespondents } = useGetRespondents();
   const { loadingPhoneRespondents, errorPhone, getPhoneRespondent } =
     useGetRespondentByPhone(getSearchValue(), "rejected");
-  const [reinstateActive, setReinstateActive] = useState(null);
+  const [reinstateActive, setReinstateActive] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [restoreLoading, setRestoreLoading] = useState(false);
 
-  const handleMoreContent = (el) => {
-    if (moreContent) {
-      el.nextElementSibling.classList.replace("block", "hidden");
-    } else {
-      el.nextElementSibling.classList.replace("hidden", "block");
+  const handleRestoreSubmit = async (e) => {
+    if (e.target.checkValidity()) {
+      e.preventDefault();
+
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Authorization", `Bearer ${user.token}`);
+
+      const form = e.target;
+      const reason = form.reason.value;
+      const status = "approve";
+
+      if (phone == "" || phone == null) {
+        setError("Phone is  invalid");
+        return;
+      }
+
+      if (reason == "" || reason == null) {
+        setError("Please give a reason");
+        return;
+      }
+
+      setRestoreLoading(true);
+
+      const reqBody = JSON.stringify({
+        phone,
+        status,
+        reason,
+      });
+
+      const response = await fetch(
+        "https://ont-survey-tracker-development.up.railway.app/v1/surveys/status",
+        {
+          method: "PATCH",
+          headers: myHeaders,
+          body: reqBody,
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.error?.message) {
+          setRestoreLoading(false);
+          setError(data.error.message);
+        } else {
+          setRestoreLoading(false);
+          setError(data.message);
+        }
+      } else if (data.data?.surveyResponse) {
+        const errors = data.data.surveyResponse
+          .flat()
+          .map((res) => res.error)
+          .join(", ");
+        setError(errors);
+
+        setTimeout(() => {
+          setRestoreLoading(false);
+        }, 2800);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      } else {
+        setSuccess(data.message);
+        form.reason.value = "";
+        setTimeout(() => {
+          setRestoreLoading(false);
+        }, 700);
+
+        setTimeout(() => {
+          window.location.href = "/admin/survey/pending"; // Navigate and refresh
+        }, 1000);
+      }
     }
   };
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      const moreBtns = document.querySelectorAll(".more-btn");
-      const moreContent = document.querySelectorAll(".more-content");
+    function handleClickOutside(e) {
+      const reinstateForm = document.querySelector(".reinstate-form");
+      const restoreBtns = document.querySelectorAll(".restore-btn");
 
-      moreBtns.forEach((btn) => {
-        const content = btn.nextElementSibling;
-        if (
-          btn &&
-          !btn.contains(event.target) &&
-          content.classList.contains("block") &&
-          !content.contains(event.target)
-        ) {
-          setMoreContent(false);
+      const isClickOutsideForm =
+        reinstateForm && !reinstateForm.contains(e.target);
+      const isClickOutsideBtns = [...restoreBtns].every(
+        (btn) => !btn.contains(e.target)
+      );
 
-          content.classList.replace("block", "hidden");
-        }
-      });
+      if (isClickOutsideForm && isClickOutsideBtns) {
+        setReinstateActive(false);
+      }
     }
 
     window.addEventListener("click", handleClickOutside);
@@ -84,37 +154,45 @@ const Rejected = () => {
       const timer = setTimeout(() => {
         setErrorActive(false);
         setError(null);
-      }, 2000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
 
-  window.addEventListener("click", function (e) {
-    const reinstateForm = document.querySelector(".reinstate-form");
-    const restoreBtns = document.querySelectorAll(".restore-btn");
-
-    // Check if e.target is the form or any of the restore buttons
-    if (
-      e.target !== reinstateForm &&
-      ![...restoreBtns].includes(e.target) // Convert NodeList to array and check if e.target is one of them
-    ) {
-      setReinstateActive(false);
+    if (success) {
+      setSuccessActive(true);
+      const timer = setTimeout(() => {
+        setSuccessActive(false);
+        setSuccess(null);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  });
+  }, [error, success]);
 
   return (
     <>
+      <Preloader isVisible={restoreLoading} />
       <SideBar />
       <div
         className={`reinstate-form-container ${
           reinstateActive ? "flex" : "hidden"
         }`}
       >
-        <form action="" name="reinstate-form" className="px-9 py-7">
+        <form
+          name="reinstate-form"
+          className="px-9 py-12 rounded-md"
+          onSubmit={handleRestoreSubmit}
+        >
+          <span
+            className="cursor-pointer absolute top-4 right-2 p-2 text-red-800 font-semibold text-2xl"
+            onClick={() => setReinstateActive(false)}
+          >
+            <IoMdCloseCircle />
+          </span>
+
           <label className="flex flex-col gap-y-7">
             <label
               htmlFor="reason"
-              className="text-gray-700 uppercase font-bold text-lg"
+              className="text-gray-700 uppercase font-bold text-lg text-center"
             >
               Give a Reason
             </label>
@@ -123,18 +201,26 @@ const Rejected = () => {
               id="reason"
               placeholder="write here..."
               className="bg-transparent outline-none border-2 border-blue-400 focus:outline-blue-600 focus:border-none"
+              required={true}
             ></textarea>
           </label>
 
-          <div className="mt-7">
-            <Button variant="contained" color="success">
-              Re-instate
+          <div className="mt-7 float-right">
+            <Button
+              variant="contained"
+              color="success"
+              className="flex flex-row gap-x-1 place-items-center"
+              type="submit"
+            >
+              <MdOutlineRestorePage />
+              Restore
             </Button>
           </div>
         </form>
       </div>
       <div className="elements-container mt-14">
         <ErrorToast isActive={isErrorActive} message={error} />
+        <SuccessToast isActive={isSuccessActive} message={success} />
         <Loader />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between">
           <span className="font-bold text-lg text-gray-900">
@@ -225,31 +311,18 @@ const Rejected = () => {
                               </div>
 
                               <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
-                                <button
-                                  className="more-btn font-medium text-gray-600 text-lg hover:text-gray-500 px-2 py-1"
-                                  title="More"
-                                  onClick={(e) => {
-                                    setMoreContent(!moreContent);
-                                    handleMoreContent(e.currentTarget);
-                                  }}
-                                >
-                                  <TfiMore />
-                                </button>
-
-                                <div className="more-content absolute top-12 left-2 rounded-md shadow-md hidden px-2 py-3 z-10 bg-slate-100 w-auto cursor-pointer">
-                                  <ul>
-                                    <li
-                                      className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
-                                      onClick={() => setReinstateActive(true)}
-                                    >
-                                      <MdOutlineRestorePage />{" "}
-                                      <button>Restore</button>
-                                    </li>
-                                    <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-red-500">
-                                      <FcDeleteColumn /> <button>Delete</button>
-                                    </li>
-                                  </ul>
-                                </div>
+                                <ul>
+                                  <li
+                                    className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
+                                    onClick={() => {
+                                      setReinstateActive(true);
+                                      setPhone(`${data.respondent.phone}`);
+                                    }}
+                                  >
+                                    <MdOutlineRestorePage />{" "}
+                                    <button>Restore</button>
+                                  </li>
+                                </ul>
                               </div>
                             </div>
                           );
@@ -309,30 +382,15 @@ const Rejected = () => {
                     </div>
 
                     <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
-                      <button
-                        className="more-btn font-medium text-gray-600 text-lg hover:text-gray-500 px-2 py-1"
-                        title="More"
-                        onClick={(e) => {
-                          setMoreContent(!moreContent);
-                          handleMoreContent(e.currentTarget);
-                        }}
-                      >
-                        <TfiMore />
-                      </button>
-
-                      <div className="more-content absolute top-12 left-2 rounded-md shadow-md hidden px-2 py-3 z-10 bg-slate-100 w-auto cursor-pointer">
-                        <ul>
-                          <li
-                            className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
-                            onClick={() => setReinstateActive(true)}
-                          >
-                            <MdOutlineRestorePage /> <button>Restore</button>
-                          </li>
-                          <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-red-500">
-                            <FcDeleteColumn /> <button>Delete</button>
-                          </li>
-                        </ul>
-                      </div>
+                      <ul>
+                        <li
+                          className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
+                          onClick={() => {
+                            setReinstateActive(true);
+                            setPhone(`${data.respondent.phone}`);
+                          }}
+                        ></li>
+                      </ul>
                     </div>
                   </div>
 
