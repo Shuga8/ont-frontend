@@ -292,6 +292,8 @@ const Survey = () => {
                             ? "date"
                             : q.meta.formType === "date-time"
                             ? "datetime-local"
+                            : q.meta.formType === "number"
+                            ? "number"
                             : "text"
                           : "text"
                       }

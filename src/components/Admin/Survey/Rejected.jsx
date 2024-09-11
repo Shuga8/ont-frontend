@@ -8,6 +8,7 @@ import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
 import useGetRespondentByPhone from "../Api/PhoneRespondent";
+import { Button } from "@mui/material";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -23,6 +24,7 @@ const Rejected = () => {
   const { loadingGetRespondents, getRespondents } = useGetRespondents();
   const { loadingPhoneRespondents, errorPhone, getPhoneRespondent } =
     useGetRespondentByPhone(getSearchValue(), "rejected");
+  const [reinstateActive, setReinstateActive] = useState(null);
 
   const handleMoreContent = (el) => {
     if (moreContent) {
@@ -87,9 +89,50 @@ const Rejected = () => {
     }
   }, [error]);
 
+  window.addEventListener("click", function (e) {
+    const reinstateForm = document.querySelector(".reinstate-form");
+    const restoreBtns = document.querySelectorAll(".restore-btn");
+
+    // Check if e.target is the form or any of the restore buttons
+    if (
+      e.target !== reinstateForm &&
+      ![...restoreBtns].includes(e.target) // Convert NodeList to array and check if e.target is one of them
+    ) {
+      setReinstateActive(false);
+    }
+  });
+
   return (
     <>
       <SideBar />
+      <div
+        className={`reinstate-form-container ${
+          reinstateActive ? "flex" : "hidden"
+        }`}
+      >
+        <form action="" name="reinstate-form" className="px-9 py-7">
+          <label className="flex flex-col gap-y-7">
+            <label
+              htmlFor="reason"
+              className="text-gray-700 uppercase font-bold text-lg"
+            >
+              Give a Reason
+            </label>
+            <textarea
+              name="reason"
+              id="reason"
+              placeholder="write here..."
+              className="bg-transparent outline-none border-2 border-blue-400 focus:outline-blue-600 focus:border-none"
+            ></textarea>
+          </label>
+
+          <div className="mt-7">
+            <Button variant="contained" color="success">
+              Re-instate
+            </Button>
+          </div>
+        </form>
+      </div>
       <div className="elements-container mt-14">
         <ErrorToast isActive={isErrorActive} message={error} />
         <Loader />
@@ -193,9 +236,12 @@ const Rejected = () => {
                                   <TfiMore />
                                 </button>
 
-                                <div className="more-content absolute top-12 left-2 rounded-md shadow-md hidden px-2 py-3 z-10 bg-slate-100 w-auto">
+                                <div className="more-content absolute top-12 left-2 rounded-md shadow-md hidden px-2 py-3 z-10 bg-slate-100 w-auto cursor-pointer">
                                   <ul>
-                                    <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600">
+                                    <li
+                                      className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
+                                      onClick={() => setReinstateActive(true)}
+                                    >
                                       <MdOutlineRestorePage />{" "}
                                       <button>Restore</button>
                                     </li>
@@ -233,7 +279,7 @@ const Rejected = () => {
 
               {loadingPhoneRespondents && (
                 <>
-                  <TableSkeleton count={2} />
+                  <TableSkeleton count={10} />
                 </>
               )}
 
@@ -246,19 +292,19 @@ const Rejected = () => {
 
                     <div className="hidden md:flex items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.user.firstname}
+                        {respondentByPhone.respondent.firstname}
                       </p>
                     </div>
 
                     <div className="flex items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.user.phone}
+                        {respondentByPhone.respondent.phone}
                       </p>
                     </div>
 
                     <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.user.gender}
+                        {respondentByPhone.respondent.gender}
                       </p>
                     </div>
 
@@ -274,9 +320,12 @@ const Rejected = () => {
                         <TfiMore />
                       </button>
 
-                      <div className="more-content absolute top-12 left-2 rounded-md shadow-md hidden px-2 py-3 z-10 bg-slate-100 w-auto">
+                      <div className="more-content absolute top-12 left-2 rounded-md shadow-md hidden px-2 py-3 z-10 bg-slate-100 w-auto cursor-pointer">
                         <ul>
-                          <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600">
+                          <li
+                            className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
+                            onClick={() => setReinstateActive(true)}
+                          >
                             <MdOutlineRestorePage /> <button>Restore</button>
                           </li>
                           <li className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-red-500">
