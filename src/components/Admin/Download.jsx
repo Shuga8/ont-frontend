@@ -72,8 +72,6 @@ const Download = () => {
     const status = form.status.value;
     const region = form.region.value;
 
-    console.log(status);
-
     if (
       (status === "none" || !status) &&
       (region === "none" || !region || selectedStations.length === 0)
