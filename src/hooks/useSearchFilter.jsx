@@ -1,7 +1,9 @@
-export const useSearchFilter = async (type) => {
+export const useSearchFilter = async (type, page = null) => {
+  const baseUrl = `https://ont-survey-tracker-development.up.railway.app/v1/respondents`;
+
   if (type === "all") {
-    return "https://ont-survey-tracker-development.up.railway.app/v1/respondents";
+    return `${baseUrl}${page ? `?page=${page}` : ""}`;
   } else {
-    return `https://ont-survey-tracker-development.up.railway.app/v1/respondents?status=${type}`;
+    return `${baseUrl}?status=${type}${page ? `&page=${page}` : ""}`;
   }
 };
