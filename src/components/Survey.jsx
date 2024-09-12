@@ -6,9 +6,12 @@ import { SuccessToast } from "./Admin/index";
 import { useAuthContext } from "../hooks/useAuthContext";
 import Preloader from "./Admin/Widgets/Preloader";
 import { useNavigate } from "react-router-dom";
+import Message from "./Admin/Widgets/Message";
+import { TiInputCheckedOutline } from "react-icons/ti";
 
 const Survey = () => {
   const { user } = useAuthContext();
+  const { goodbye } = Message();
   const navigate = useNavigate();
   const getRespondentIdFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
@@ -404,9 +407,16 @@ const Survey = () => {
           questionsVisible ? "flex" : "hidden"
         } flex-col gap-y-5`}
       >
-        <h1 className="text-3xl font-semibold text-center py-4 text-yellow-700">
-          Survey Completed
+        <h1 className="text-3xl font-semibold text-center py-4 text-yellow-700 flex flex-row gap-x-2">
+          Survey Completed{" "}
+          <span className="text-green-600 text-4xl">
+            <TiInputCheckedOutline />
+          </span>
         </h1>
+
+        <div className="message-container bg-slate-600 text-white py-4 px-2">
+          {goodbye[getLanguageFromUrl()]}
+        </div>
         <div className="text-center">
           <Button
             variant="contained"
