@@ -175,6 +175,7 @@ const Rejected = () => {
     <>
       <Preloader isVisible={restoreLoading} />
       <SideBar />
+
       <div
         className={`reinstate-form-container ${
           reinstateActive ? "flex" : "hidden"

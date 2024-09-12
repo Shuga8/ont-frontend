@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
-import { BiLoaderAlt } from "react-icons/bi";
+import { TbLoader3 } from "react-icons/tb";
 
-const Loader = () => {
-  useEffect(() => {
-    setTimeout(() => {
-      document.querySelector(".preloader").style.display = "none";
-    }, 800);
-  }, []);
+const Loader = ({ leave = true }) => {
+  if (leave) {
+    useEffect(() => {
+      setTimeout(() => {
+        document.querySelector(".preloader").style.display = "none";
+      }, 800);
+    }, []);
+  }
   return (
     <div className="preloader">
       <span className="">
-        <BiLoaderAlt />
+        <TbLoader3 />
       </span>
     </div>
   );

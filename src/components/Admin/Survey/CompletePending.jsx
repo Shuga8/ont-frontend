@@ -5,9 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { TbLoader3 } from "react-icons/tb";
 import Preloader from "../Widgets/Preloader";
+import Message from "../Widgets/Message";
 
 const CompletePending = () => {
   const { user } = useAuthContext();
+  const { welcome } = Message();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [info, setInfo] = useState(null);
@@ -20,6 +22,9 @@ const CompletePending = () => {
   const [rejectButtonLoading, setRejectButtonLoading] = useState(false);
   const [isContinuing, setIsContinuing] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("english");
+  const [displayMessage, setDisplayMessage] = useState(
+    welcome[selectedLanguage]
+  );
   const [enterSurveyLoading, setEnterSurveyLoading] = useState(false);
   const [isSubmittingRejectLoading, setSubmittingRejectLoading] =
     useState(false);
@@ -114,6 +119,7 @@ const CompletePending = () => {
 
   const handleChange = (event) => {
     setSelectedLanguage(event.target.value);
+    setDisplayMessage(welcome[event.target.value]);
   };
 
   const handleRejectButtonClick = () => {
@@ -138,11 +144,11 @@ const CompletePending = () => {
     }, 990);
 
     setTimeout(() => {
-      document.querySelector(".screen-1").classList.remove("block");
-      document.querySelector(".screen-1").classList.add("hidden");
+      document.querySelector(".screen-2").classList.remove("block");
+      document.querySelector(".screen-2").classList.add("hidden");
 
-      document.querySelector(".screen-2").classList.add("block");
-      document.querySelector(".screen-2").classList.remove("hidden");
+      document.querySelector(".screen-1").classList.add("block");
+      document.querySelector(".screen-1").classList.remove("hidden");
     }, 1000);
   };
 
@@ -226,18 +232,34 @@ const CompletePending = () => {
     navigate(-1);
   };
 
-  if (respondent == null) return false;
+  if (respondent == null) {
+    return (
+      <>
+        <SideBar />
+        <div className="elements-container mt-14">
+          <Loader leave={false} />
+        </div>
+      </>
+    );
+  }
 
-  const entry = respondent.survey.entries.responses;
+  const entry = respondent.survey.entries.responses ?? null;
 
   if (entry == null) {
-    console.log("entries are null");
-    return false;
+    return (
+      <>
+        <SideBar />
+        <div className="elements-container mt-14">
+          <Loader leave={false} />
+        </div>
+      </>
+    );
   }
 
   return (
     <>
       <SideBar />
+
       <div className="elements-container mt-14">
         <Loader />
         <Preloader isVisible={isSubmittingRejectLoading} />
@@ -250,9 +272,9 @@ const CompletePending = () => {
           </span>
         </div>
 
-        <div className="container-content  px-1 py-2 md:px-6 md:py-5">
+        <div className="container-content  px-1 py-2 md:px-6 md:py-5 h-full">
           <div className="screens w-full py-6 px-3 md:px-8 bg-white rounded-lg">
-            <div className="consent-screen w-full min-h-96 flex flex-col gap-y-4 place-items-center justify-center">
+            {/* <div className="consent-screen w-full min-h-96 flex flex-col gap-y-4 place-items-center justify-center">
               <h3 className="text-sm md:text-base text-blue-600 font-semibold">
                 Does the Respondent Agree to Continue?
               </h3>
@@ -273,7 +295,7 @@ const CompletePending = () => {
                   Yes
                 </Button>
               </div>
-            </div>
+            </div> */}
 
             <div className="screen-1 hidden">
               <h2 className="text-stone-700 font-bold text-xl">
@@ -306,22 +328,23 @@ const CompletePending = () => {
                 Previous Q&A
               </h2>
 
-              {entry.map((data, index) => {
-                return (
-                  <div className="preset-q-and-a px-2 py-2" key={index + 1}>
-                    <div className="mb-2 py-3">
-                      <p className="text-stone-800">
-                        {index + 1}. {data.questionDetails.question}
-                      </p>
-                      <div className="px-4 py-1 italic text-gray-500 text-sm">
-                        {data.answer}
+              {entry &&
+                entry.map((data, index) => {
+                  return (
+                    <div className="preset-q-and-a px-2 py-2" key={index + 1}>
+                      <div className="mb-2 py-3">
+                        <p className="text-stone-800">
+                          {index + 1}. {data.questionDetails.question}
+                        </p>
+                        <div className="px-4 py-1 italic text-gray-500 text-sm">
+                          {data.answer}
+                        </div>
                       </div>
-                    </div>
 
-                    <hr className="text-cyan-600" />
-                  </div>
-                );
-              })}
+                      <hr className="text-cyan-600" />
+                    </div>
+                  );
+                })}
 
               <div className="screen-1-action-buttons flex flex-row gap-x-4 justify-end">
                 <Button
@@ -345,15 +368,15 @@ const CompletePending = () => {
                   color="success"
                   disabled={isRejecting || isContinuing}
                   onClick={() => {
-                    handleContinueButtonClick();
+                    handleEnterSurveyButtonClick();
                   }}
                 >
-                  {!isContinuing ? (
-                    "Continue"
-                  ) : (
-                    <span className=" spinner text-white text-lg">
-                      <TbLoader3 />
+                  {enterSurveyLoading ? (
+                    <span className="material-symbols-outlined spinner">
+                      progress_activity
                     </span>
+                  ) : (
+                    "Enter Survey"
                   )}
                 </Button>
               </div>
@@ -391,10 +414,19 @@ const CompletePending = () => {
               )}
             </div>
 
-            <div className="screen-2 hidden">
-              <h2 className="text-stone-700 font-bold text-lg">
+            <div className="screen-2 h-full">
+              <div className="mb-6">
+                <h2 className="text-black font-semibold text-lg">
+                  Respondent Phone Number:
+                </h2>
+                <p className="text-gray-700 px-2">
+                  {respondent.respondent.phone ?? "Loading..."}
+                </p>
+              </div>
+
+              <h3 className="text-stone-700 font-bold text-lg">
                 Select Language to complete survey in...
-              </h2>
+              </h3>
 
               <div className="languages px-4 py-6">
                 {languages &&
@@ -419,21 +451,41 @@ const CompletePending = () => {
                   ))}
               </div>
 
+              <div className="message-container leading-8 text-gray-900 px-2 py-3 mb-6">
+                <div className="bg-slate-600 text-white py-1 px-2">
+                  {displayMessage}
+                </div>
+                <div className="static-message text-stone-600 mt-5 text-sm">
+                  May I ask you a few short questions? The survey will take
+                  about 15 minutes and you may stop at any time?
+                </div>
+              </div>
+
               <div className="screen-2-action-buttons flex flex-row gap-x-4 justify-end">
                 <Button
                   variant="contained"
-                  color="success"
-                  disabled={enterSurveyLoading}
+                  color="error"
+                  disabled={isContinuing}
                   onClick={() => {
-                    handleEnterSurveyButtonClick();
+                    navigate(-1);
                   }}
                 >
-                  {enterSurveyLoading ? (
-                    <span className="material-symbols-outlined spinner">
-                      progress_activity
-                    </span>
+                  Decline
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  disabled={isContinuing}
+                  onClick={() => {
+                    handleContinueButtonClick();
+                  }}
+                >
+                  {!isContinuing ? (
+                    "Continue"
                   ) : (
-                    "Enter Survey"
+                    <span className=" spinner text-white text-lg">
+                      <TbLoader3 />
+                    </span>
                   )}
                 </Button>
               </div>

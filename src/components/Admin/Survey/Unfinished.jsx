@@ -54,6 +54,7 @@ const Unfinished = () => {
   return (
     <>
       <SideBar />
+
       <div className="elements-container mt-14">
         <Loader />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between">

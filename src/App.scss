@@ -42,7 +42,6 @@
     position: relative;
     background:#fff;
 
-
     textarea{
       width: 100%;
       height: 185px;
@@ -207,10 +206,10 @@
 .preloader {
   background: #eee;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   position: fixed;
   top: 0;
-  z-index: 15;
+  z-index: 40;
   display: flex;
   place-items: center;
   justify-content: center;
@@ -222,6 +221,7 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     font-size: 3rem;
+    font-weight: 300;
   }
 }
 
@@ -384,6 +384,7 @@
         animation-iteration-count: infinite;
         animation-timing-function: linear;
         font-size: 3rem;
+        font-weight: 300;
       }
     }
 
