@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ErrorToast, Loader, SideBar } from "../index";
+import { ErrorToast, Loader, SideBar, SuccessToast } from "../index";
 import { HiDownload } from "react-icons/hi";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
@@ -8,6 +8,8 @@ import Skeleton from "../../Skeleton/Skeleton";
 import useGetRespondents from "../Api/Respondents";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
 import useGetRespondentByPhone from "../Api/PhoneRespondent";
+import Preloader from "../Widgets/Preloader";
+import { useAuthContext } from "../../../hooks/useAuthContext";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -15,13 +17,67 @@ const getSearchValue = () => {
 };
 
 const Completed = () => {
-  const [respondents, setRespondents] = useState(null);
-  const [isErrorActive, setErrorActive] = useState(false);
+  const { user } = useAuthContext();
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [info, setInfo] = useState(null);
+  const [isErrorActive, setErrorActive] = useState(false);
+  const [isSuccessActive, setSuccessActive] = useState(false);
+  const [isInfoActive, setInfoActive] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [respondents, setRespondents] = useState(null);
   const [respondentByPhone, setRespondentByPhone] = useState(null);
   const { loadingGetRespondents, getRespondents } = useGetRespondents();
   const { loadingPhoneRespondents, errorPhone, getPhoneRespondent } =
     useGetRespondentByPhone(getSearchValue(), "completed");
+
+  const handleDownload = async (phone) => {
+    if (phone == null || phone === "") {
+      setError("Invalid Respondent for download");
+      return false;
+    }
+
+    setLoading(true);
+    const myHeader = new Headers();
+    myHeader.append("Authorization", `Bearer ${user.token}`);
+
+    try {
+      const response = await fetch(
+        `https://ont-survey-tracker-development.up.railway.app/v1/surveys/download?phone=["${phone}"]`,
+        {
+          headers: myHeader,
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.message);
+      } else {
+        const disposition = response.headers.get("Content-Disposition");
+        const fileName = disposition
+          ? disposition.split("filename=")[1].replace(/['"]/g, "")
+          : `survey_${phone}.xlsx`;
+        const blob = await response.blob();
+
+        const downloadLink = document.createElement("a");
+        const url = window.URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = fileName;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        window.URL.revokeObjectURL(url);
+
+        setSuccess("Download successful");
+      }
+    } catch (error) {
+      setError("An error occurred while downloading the file");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchRespondents = async () => {
@@ -50,13 +106,31 @@ const Completed = () => {
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
+    if (success) {
+      setSuccessActive(true);
+      const timer = setTimeout(() => {
+        setSuccessActive(false);
+        setSuccess(null);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+    if (info) {
+      setInfoActive(true);
+      const timer = setTimeout(() => {
+        setInfoActive(false);
+        setInfo(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error, success, info]);
 
   return (
     <>
       <SideBar />
       <div className="elements-container mt-14">
+        <Preloader isVisible={loading} />
         <ErrorToast isActive={isErrorActive} message={error} />
+        <SuccessToast isActive={isSuccessActive} message={success} />
         <Loader />
         <div className="w-full h-10 px-4 py-8 text-gray-700   border-b-2 border-gray-300 flex flex-row items-center place-items-center justify-between">
           <span className="font-bold text-lg text-gray-900">
@@ -116,7 +190,6 @@ const Completed = () => {
                           if (!data) {
                             return null;
                           }
-                          const status = data.survey.status;
                           return (
                             <div
                               className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
@@ -148,12 +221,13 @@ const Completed = () => {
 
                               <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
                                 <span
-                                  className="font-medium text-blue-600 text-base"
+                                  className="font-medium text-blue-600 text-base cursor-pointer"
                                   title="Download Survey"
+                                  onClick={() =>
+                                    handleDownload(`${data.respondent.phone}`)
+                                  }
                                 >
-                                  <Link>
-                                    <HiDownload />
-                                  </Link>
+                                  <HiDownload />
                                 </span>
                               </div>
                             </div>
@@ -197,13 +271,13 @@ const Completed = () => {
 
                     <div className="hidden md:flex items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.user.firstname}
+                        {respondentByPhone.respondent.firstname}
                       </p>
                     </div>
 
                     <div className="flex items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.user.phone}
+                        {respondentByPhone.respondent.phone}
                       </p>
                     </div>
 
@@ -215,12 +289,15 @@ const Completed = () => {
 
                     <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
                       <span
-                        className="font-medium text-blue-600 text-base"
+                        className="font-medium text-blue-600 text-base cursor-pointer"
                         title="Download Survey"
+                        onClick={() =>
+                          handleDownload(
+                            `${respondentByPhone.respondent.phone}`
+                          )
+                        }
                       >
-                        <Link>
-                          <HiDownload />
-                        </Link>
+                        <HiDownload />
                       </span>
                     </div>
                   </div>

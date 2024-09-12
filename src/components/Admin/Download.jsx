@@ -7,8 +7,10 @@ import { CgSpinner } from "react-icons/cg";
 import SuccessToast from "../Alerts/SuccessToast";
 import InfoToast from "../Alerts/InfoToast";
 import Preloader from "./Widgets/Preloader";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const Download = () => {
+  const { user } = useAuthContext();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [info, setInfo] = useState(null);
@@ -83,6 +85,8 @@ const Download = () => {
 
     let message = "";
 
+    let url = `https://ont-survey-tracker-development.up.railway.app/v1/surveys/download`;
+
     if (status === "all" && region === "none") {
       message = `Downloading All Surveys`;
     } else if (status === "all" && region !== "none") {
@@ -90,34 +94,80 @@ const Download = () => {
         message = `Downloading All Surveys for the following stations: ${selectedStations.join(
           ", "
         )}`;
+        url += `?localGovernment=["${region.toUpperCase()}"]&localStation=["${selectedStations.join(
+          '","'
+        )}"]`;
       } else {
         message = `Downloading All Surveys of Region "${region}"`;
+        url += `?localGovernment=["${region.toUpperCase()}"]`;
       }
     } else if (status !== "none" && region === "none" && status !== "all") {
       message = `Downloading Surveys of Status "${status}"`;
+      url += `?status=["${status}"]`;
     } else if (status === "none" && region !== "none") {
       if (selectedStations.length > 0) {
         message = `Downloading Surveys for the following stations: ${selectedStations.join(
           ", "
         )}`;
+        url += `?localGovernment=["${region.toUpperCase()}"]&localStation=["${selectedStations.join(
+          '","'
+        )}"]`;
       } else {
         message = `Downloading Surveys of Region "${region}"`;
+        url += `?localGovernment=["${region.toUpperCase()}"]`;
       }
     } else if (status !== "none" && region !== "none") {
       if (selectedStations.length > 0) {
         message = `Downloading all ${status} Surveys for ${region} stations: ${selectedStations.join(
           ", "
         )}`;
+        url += `?status=["${status}"]&localGovernment=["${region.toUpperCase()}"]&localStation=["${selectedStations.join(
+          '","'
+        )}"]`;
       } else {
         message = `Downloading all ${status} Surveys of Region "${region}"`;
+        url += `?status=["${status}"]&localGovernment=["${region.toUpperCase()}"]`;
       }
     }
 
-    setInfo(message);
+    const myHeader = new Headers();
+    myHeader.append("Authorization", `Bearer ${user.token}`);
 
-    setTimeout(() => {
+    try {
+      const response = await fetch(url, {
+        headers: myHeader,
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.message);
+      } else {
+        const disposition = response.headers.get("Content-Disposition");
+        const rand = Math.floor(Math.random() * 443930120);
+        const now = new Date().getTime();
+        const fileName = disposition
+          ? disposition.split("filename=")[1].replace(/['"]/g, "")
+          : `${rand}_${now}.xlsx`;
+        const blob = await response.blob();
+
+        const downloadLink = document.createElement("a");
+        const url = window.URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = fileName;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        window.URL.revokeObjectURL(url);
+
+        setSuccess("Download successful");
+      }
+    } catch (error) {
+      setError("An error occurred while downloading the file");
+    } finally {
       setLoading(false);
-    }, 1200);
+    }
   };
 
   useEffect(() => {
