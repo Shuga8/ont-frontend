@@ -338,12 +338,6 @@ const Admin = () => {
               <LineGraph />
             </div>
 
-            <div className="graph-widget p-2 h-96 bg-white rounded-md shadow-xl">
-              <BarGraph />
-            </div>
-          </div>
-
-          <div className="graph-widgets mt-10 w-full grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 xl:grid-cols-3 gap-x-8 gap-y-6">
             <div className="graph-widget h-96 p-2 bg-white rounded-md shadow-xl">
               <h3 className="text-xl text-gray-700 px-5 font-semibold py-2">
                 LGA's
@@ -352,11 +346,6 @@ const Admin = () => {
               <div className="graph w-full px-5 py-1 h-full">
                 <Donut />
               </div>
-            </div>
-            <div className="graph-widget h-96 p-2 bg-white rounded-md col-span-1 xl:col-span-2  shadow-xl">
-              <h3 className="text-xl text-gray-700 px-5 font-semibold py-2">
-                Region Labels
-              </h3>
             </div>
           </div>
         </div>

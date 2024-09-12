@@ -1,48 +1,74 @@
-import React, { Component } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
+import { useQuery } from "@tanstack/react-query";
+import { useAuthContext } from "../../../hooks/useAuthContext";
 
-class Donut extends Component {
-  constructor(props) {
-    super(props);
+const Donut = () => {
+  const { user } = useAuthContext();
 
-    this.state = {
-      options: {
-        chart: {
-          type: "donut",
-        },
-        colors: ["#22C55E", "#A855F7", "#EF4444"],
-        labels: ["Completed LGA's", "Uncompleted LGA's", "Rejected LGA's"],
-        legend: {
-          show: true,
-          position: "bottom",
-        },
-        plotOptions: {
-          pie: {
-            donut: {
-              size: "65%",
-              background: "#fff",
-            },
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["Donut"],
+    queryFn: () =>
+      fetch(
+        "https://ont-survey-tracker-development.up.railway.app/v1/stats/charts",
+        {
+          headers: {
+            authorization: `Bearer ${user.token}`,
           },
-        },
-        dataLabels: {
-          enabled: true,
+        }
+      ).then((res) => res.json()),
+  });
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error loading chart data</p>;
+
+  const options = {
+    chart: {
+      type: "donut",
+    },
+    colors: ["#22C55E", "#EAB308", "#A855F7", "#EF4444"],
+    labels: [
+      "Completed LGA's",
+      "Pending LGA's",
+      "Unfinished LGA's",
+      "Rejected LGA's",
+    ],
+    legend: {
+      show: true,
+      position: "bottom",
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: "65%",
+          background: "#fff",
         },
       },
-      series: [40, 149, 11],
-    };
-  }
+    },
+    dataLabels: {
+      enabled: true,
+    },
+  };
 
-  render() {
-    return (
-      <Chart
-        options={this.state.options}
-        series={this.state.series}
-        type="donut"
-        width="100%"
-        height="100%"
-      />
-    );
-  }
-}
+  const donutData = data.data.lgasSurveyStats;
+  const series = data
+    ? [
+        donutData.completedSurveysPercentage,
+        donutData.pendingSurveysPercentage,
+        donutData.inProgressSurveysPercentage,
+        donutData.rejectedSurveysPercentage,
+      ]
+    : [40, 149, 11];
+
+  return (
+    <Chart
+      options={options}
+      series={series}
+      type="donut"
+      width="100%"
+      height="100%"
+    />
+  );
+};
 
 export default Donut;
