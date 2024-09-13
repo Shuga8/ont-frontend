@@ -30,8 +30,8 @@ export const useGetRespondents = () => {
         totalResults: data.data.totalResults,
         nextPage: currentPage < totalPages ? `?page=${currentPage + 1}` : null,
         prevPage: currentPage > 1 ? `?page=${currentPage - 1}` : null,
-        next: currentPage + 1 ?? 1,
-        prev: currentPage - 1 ?? 1,
+        next: currentPage + 1,
+        prev: currentPage - 1,
       };
 
       return { pagination, filteredRespondents };
