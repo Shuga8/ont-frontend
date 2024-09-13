@@ -411,10 +411,6 @@ const Admin = () => {
             </div>
 
             <div className="graph-widget h-96 p-2 bg-white rounded-md shadow-xl">
-              <h3 className="text-xl text-gray-700 px-5 font-semibold py-2">
-                LGA's
-              </h3>
-
               <div className="graph w-full px-5 py-1 h-full">
                 <Donut />
               </div>

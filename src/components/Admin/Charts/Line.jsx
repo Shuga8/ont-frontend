@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import Chart from "react-apexcharts";
 import { useAuthContext } from "../../../hooks/useAuthContext";
+import Skeleton from "../../Skeleton/Skeleton";
 
 const LineGraph = () => {
   const { user } = useAuthContext();
@@ -21,7 +22,23 @@ const LineGraph = () => {
       }),
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 gap-y-3">
+        <Skeleton type={"graph-chart"} />
+
+        <Skeleton type={"graph-chart"} />
+
+        <Skeleton type={"graph-chart"} />
+
+        <Skeleton type={"graph-chart"} />
+
+        <Skeleton type={"graph-chart"} />
+
+        <Skeleton type={"graph-chart"} />
+      </div>
+    );
+  }
   if (error) return <div>Error fetching data</div>;
 
   const yearly = data.data.yearlySurveyStats;

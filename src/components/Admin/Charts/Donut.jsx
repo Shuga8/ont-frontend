@@ -2,6 +2,7 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../../../hooks/useAuthContext";
+import Skeleton from "../../Skeleton/Skeleton";
 
 const Donut = () => {
   const { user } = useAuthContext();
@@ -19,7 +20,9 @@ const Donut = () => {
       ).then((res) => res.json()),
   });
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return <Skeleton type={"donut-chart"} />;
+  }
   if (error) return <p>Error loading chart data</p>;
 
   const options = {
