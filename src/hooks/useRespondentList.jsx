@@ -24,9 +24,20 @@ export const useRespondentList = (id, language) => {
       if (response.ok) {
         await response.json().then((data) => {
           const categories = data.data.categories;
-          setSurveyList(categories.slice(1)); // Skip the first category
+          let details = data.data.surveyDetails;
+
+          setSurveyList(categories.slice(1));
+
+          // if (details.status == "in-progress") {
+          //   setSurveyList(
+          //     categories.filter((category, index) => {
+          //       return category._id != details.completedSurveyCategories[index];
+          //     })
+          //   );
+          // } else {
+          //   setSurveyList(categories.slice(1));
+          // }
           setRespondent(data.data.respondent);
-          console.log(surveyList);
         });
       } else {
         console.error("Failed to fetch data");

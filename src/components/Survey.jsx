@@ -82,7 +82,8 @@ const Survey = () => {
           initialOptions[qIndex] = q.previousResponse || "";
           if (
             q.content.responseOptions &&
-            q.content.responseOptions[0] === "Others...please specify"
+            q.content.responseOptions[0] ===
+              "Others…………………. Please specify (Text box - 50 Characters)"
           ) {
             initialOptions[`${qIndex}_other`] = "";
           }
@@ -140,7 +141,7 @@ const Survey = () => {
           } else if (q.type === "single-choice") {
             return answer && answer !== "";
           } else if (q.type === "open-ended") {
-            return answer && answer.trim() !== "";
+            return answer && answer !== "";
           }
         }
         return true;
@@ -154,7 +155,6 @@ const Survey = () => {
     if (validateSurvey()) {
       const currentSurvey = surveyList[activeIndex];
       if (currentSurvey) {
-        console.log(currentSurvey);
         const res = {
           respondent: getRespondentIdFromUrl(),
           language: getLanguageFromUrl(),
@@ -164,7 +164,8 @@ const Survey = () => {
         currentSurvey.questions.forEach((q, qIndex) => {
           if (
             q.type === "single-choice" &&
-            selectedOptions[qIndex] === "others"
+            selectedOptions[qIndex] ===
+              "Others…………………. Please specify (Text box - 50 Characters)"
           ) {
             q.previousResponse = selectedOptions[`${qIndex}_other`];
             response.push({
@@ -199,7 +200,6 @@ const Survey = () => {
           setTimeout(() => {
             setQuestionsVisible(true);
           }, 1600);
-          console.log(surveyList);
         }
       } else {
         console.error("Current survey not found.");
@@ -219,8 +219,6 @@ const Survey = () => {
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
     const reqBody = JSON.stringify(data);
-
-    console.log(reqBody);
     const response = await fetch(
       "https://ont-survey-tracker-development.up.railway.app/v1/surveys",
       {
@@ -305,7 +303,13 @@ const Survey = () => {
                       className="w-full p-2 border"
                       placeholder="Your answer ..."
                       maxLength={60}
-                      value={selectedOptions[qIndex] || ""}
+                      value={
+                        q.meta && q.meta.formType === "date"
+                          ? (selectedOptions[qIndex] || "").slice(0, 10) // Format for date input
+                          : q.meta && q.meta.formType === "date-time"
+                          ? (selectedOptions[qIndex] || "").slice(0, 16) // Format for datetime-local input
+                          : selectedOptions[qIndex] || ""
+                      }
                       onChange={(e) =>
                         handleInputChange(qIndex, e.target.value)
                       }
@@ -315,44 +319,63 @@ const Survey = () => {
 
                   {q.type === "single-choice" && (
                     <div>
-                      {q.content.responseOptions.map((option, oIndex) => (
-                        <div key={oIndex} className="flex items-center mb-2">
+                      {q.content.responseOptions.map((option, oIndex) => {
+                        return (
+                          <div key={oIndex} className="flex items-center mb-2">
+                            <input
+                              type="radio"
+                              id={`q${qIndex}-o${oIndex}`}
+                              name={q._id}
+                              value={option}
+                              className="custom-radio mr-2"
+                              checked={
+                                !q.content.responseOptions.includes(
+                                  q.previousResponse
+                                ) &&
+                                q.content.responseOptions.includes(
+                                  "Others…………………. Please specify (Text box - 50 Characters)"
+                                )
+                                  ? "Others…………………. Please specify (Text box - 50 Characters)"
+                                  : q.previousResponse
+                                  ? q.previousResponse.toLowerCase() ===
+                                    option.toLowerCase()
+                                  : selectedOptions[qIndex] === option
+                              }
+                              onChange={(e) => {
+                                handleSingleChoiceChange(
+                                  qIndex,
+                                  e.target.value
+                                );
+                              }}
+                              disabled={!!q.previousResponse}
+                            />
+                            <label htmlFor={`q${qIndex}-o${oIndex}`}>
+                              {option}
+                            </label>
+                          </div>
+                        );
+                      })}
+                      {!q.content.responseOptions.includes(
+                        q.previousResponse
+                      ) &&
+                        q.content.responseOptions.includes(
+                          "Others…………………. Please specify (Text box - 50 Characters)"
+                        ) && (
                           <input
-                            type="radio"
-                            id={`q${qIndex}-o${oIndex}`}
-                            name={q._id}
-                            value={option}
-                            className="custom-radio mr-2"
-                            checked={
-                              q.previousResponse
-                                ? q.previousResponse.toLowerCase() ===
-                                  option.toLowerCase()
-                                : selectedOptions[qIndex] === option
-                            }
+                            type="text"
+                            className="w-full p-2 border"
+                            placeholder="Please specify"
+                            value={q.previousResponse}
                             onChange={(e) =>
-                              handleSingleChoiceChange(qIndex, e.target.value)
+                              handleOtherOptionChange(qIndex, e.target.value)
                             }
+                            maxLength={50}
                             disabled={!!q.previousResponse}
                           />
-                          <label htmlFor={`q${qIndex}-o${oIndex}`}>
-                            {option}
-                          </label>
-                        </div>
-                      ))}
-                      {selectedOptions[qIndex] ===
-                        "Others...please specify" && (
-                        <input
-                          type="text"
-                          className="w-full p-2 border"
-                          placeholder="Please specify"
-                          value={selectedOptions[`${qIndex}_other`] || ""}
-                          onChange={(e) =>
-                            handleOtherOptionChange(qIndex, e.target.value)
-                          }
-                        />
-                      )}
+                        )}
                     </div>
                   )}
+
                   {q.type === "multiple-choice" && (
                     <div>
                       {q.content.responseOptions.map((option, oIndex) => (
