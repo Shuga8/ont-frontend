@@ -10,6 +10,11 @@ import ErrorToast from "../../Alerts/ErrorToast";
 import SuccessToast from "../../Alerts/SuccessToast";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 
+const getSearchValue = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("email") || null;
+};
+
 const Actions = () => {
   const { user } = useAuthContext();
   const showAgentForm = (e) => {
@@ -142,6 +147,8 @@ const Actions = () => {
                 id="default-search"
                 className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
                 placeholder="Search by email"
+                name="email"
+                defaultValue={getSearchValue() ?? ""}
                 required
               />
               <button
@@ -185,7 +192,7 @@ const Actions = () => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
                   required
-                  autoComplete="new-password" // Added this line
+                  autoComplete="off"
                 />
               </div>
               <div>
@@ -202,7 +209,7 @@ const Actions = () => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="firstname"
                   required
-                  autoComplete="new-password" // Added this line
+                  autoComplete="off"
                 />
               </div>
               <div>
@@ -219,7 +226,7 @@ const Actions = () => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="lastname"
                   required
-                  autoComplete="new-password" // Added this line
+                  autoComplete="off" // Added this line
                 />
               </div>
               <div>
@@ -255,7 +262,7 @@ const Actions = () => {
                       id="password"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="password"
-                      autoComplete="new-password" // Modified this line
+                      autoComplete="new-password"
                       required
                     />
                     <span

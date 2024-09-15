@@ -8,22 +8,35 @@ import Actions from "./Actions";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
 
+const getSearchValue = () => {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("email") || null;
+};
+
 const Agents = () => {
   const [userList, setUserList] = useState(null);
   const { user } = useAuthContext();
+  const [searchEmail, setSearchEmail] = useState(getSearchValue());
+
+  let id = 1;
 
   useEffect(() => {
     const getList = async () => {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("authorization", `Bearer ${user.token}`);
-      const response = await fetch(
-        `https://ont-survey-tracker-development.up.railway.app/v1/admins`,
-        {
-          method: "GET",
-          headers: myHeaders,
-        }
-      );
+
+      let url = "";
+
+      if (searchEmail != null) {
+        url = `https://ont-survey-tracker-development.up.railway.app/v1/admins?email=${searchEmail}`;
+      } else {
+        url = `https://ont-survey-tracker-development.up.railway.app/v1/admins`;
+      }
+      const response = await fetch(url, {
+        method: "GET",
+        headers: myHeaders,
+      });
 
       await response.json().then((data) => {
         setUserList(data.data.admins);
@@ -70,15 +83,15 @@ const Agents = () => {
                   </h5>
                 </div>
 
-                <div className="p-2 xl:p-5 hidden md:block">
+                <div className="p-2 xl:p-5 ">
                   <h5 className="text-sm font-medium text-center uppercase sm:text-base text-stone-900">
-                    Role
+                    Email
                   </h5>
                 </div>
 
-                <div className="p-2 xl:p-5">
+                <div className="p-2 xl:p-5 hidden md:block">
                   <h5 className="text-sm font-medium text-center uppercase sm:text-base text-stone-900">
-                    Action
+                    Role
                   </h5>
                 </div>
               </div>
@@ -86,15 +99,14 @@ const Agents = () => {
               {userList ? (
                 userList.map((user, index) => {
                   if (user.type == "respondent") return false;
+
                   return (
                     <div
                       className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
-                      key={index + 1}
+                      key={index}
                     >
                       <div className="flex items-center p-2 xl:p-5">
-                        <p className="font-medium text-gray-800 ">
-                          {index + 1}.
-                        </p>
+                        <p className="font-medium text-gray-800 ">{id++}.</p>
                       </div>
 
                       <div className="hidden md:flex  items-center p-2 xl:p-5">
@@ -109,13 +121,19 @@ const Agents = () => {
                         </p>
                       </div>
 
+                      <div className="items-center justify-center p-2 xl:p-5 flex">
+                        <p className="font-medium text-gray-800 text-xs">
+                          {user.email}
+                        </p>
+                      </div>
+
                       <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
                         <p className="font-medium text-gray-600 text-sm capitalize">
                           {user.type.replace("-", " ")}
                         </p>
                       </div>
 
-                      <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
+                      {/* <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
                         <Link
                           className="text-red-700 p-2 bg-slate-200 rounded-full text-base md:text-lg"
                           title="go to survey"
@@ -128,12 +146,19 @@ const Agents = () => {
                         >
                           <TbPencilCog />
                         </Link>
-                      </div>
+                      </div> */}
                     </div>
                   );
                 })
               ) : (
                 <TableSkeleton count={5} />
+              )}
+
+              {userList && searchEmail && (
+                <div className="w-full p-2 text-xs flex place-self-center">
+                  Showing search results for email:&nbsp;
+                  <span className="text-blue-700">{searchEmail}</span>
+                </div>
               )}
             </div>
           </div>
