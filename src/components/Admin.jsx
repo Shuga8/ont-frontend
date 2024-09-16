@@ -11,6 +11,7 @@ import Info from "./Admin/Widgets/Info";
 import { useAuthContext } from "../hooks/useAuthContext";
 import Donut from "./Admin/Charts/Donut";
 import Skeleton from "./Skeleton/Skeleton";
+import BarGraph from "./Admin/Charts/Bar";
 
 const Admin = () => {
   const { user } = useAuthContext();
@@ -414,6 +415,12 @@ const Admin = () => {
               <div className="graph w-full px-5 py-1 h-full">
                 <Donut />
               </div>
+            </div>
+          </div>
+
+          <div className="graph-widgets mt-10 w-full grid grid-cols-1 gap-x-8 gap-y-6 ">
+            <div className="graph-widget p-2 h-96 bg-white rounded-md shadow-xl">
+              <BarGraph />
             </div>
           </div>
         </div>

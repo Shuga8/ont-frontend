@@ -2,6 +2,7 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../../../hooks/useAuthContext";
+import Skeleton from "../../Skeleton/Skeleton";
 
 const BarGraph = () => {
   const { user } = useAuthContext();
@@ -20,7 +21,23 @@ const BarGraph = () => {
       ).then((res) => res.json()),
   });
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-6 gap-x-3 place-content-center">
+        <Skeleton type={"bar-chart"} />
+
+        <Skeleton type={"bar-chart"} />
+
+        <Skeleton type={"bar-chart"} />
+
+        <Skeleton type={"bar-chart"} />
+
+        <Skeleton type={"bar-chart"} />
+
+        <Skeleton type={"bar-chart"} />
+      </div>
+    );
+  }
   if (error) return <p>Error loading chart data</p>;
 
   const agStats = data.data.adminSurveyStats;
@@ -38,20 +55,9 @@ const BarGraph = () => {
         enabled: false,
       },
     },
-    colors: ["#22C55E", "#EF4444"],
+    colors: ["#22C55E", "#EF4444", "#EAB308", "#A855F7"],
     xaxis: {
-      categories: [
-        "Ag1",
-        "Ag2",
-        "Ag3",
-        "Ag4",
-        "Ag5",
-        "Ag6",
-        "A7g",
-        "Ag8",
-        "Ag9",
-        "Ag10",
-      ],
+      categories: [...agStats.admin],
     },
     legend: {
       position: "top",
@@ -67,28 +73,24 @@ const BarGraph = () => {
     },
   };
 
-  // Series data example (this would typically come from API data)
-  const series = data
-    ? [
-        {
-          name: "Completed Surveys",
-          data: data.completedSurveys || [30, 40, 45, 50, 49, 60, 70, 91, 15],
-        },
-        {
-          name: "Rejected Surveys",
-          data: data.rejectedSurveys || [44, 55, 41, 67, 22, 43, 65, 60],
-        },
-      ]
-    : [
-        {
-          name: "Completed Surveys",
-          data: [30, 40, 45, 50, 49, 60, 70, 91, 15],
-        },
-        {
-          name: "Rejected Surveys",
-          data: [44, 55, 41, 67, 22, 43, 65, 60],
-        },
-      ];
+  const series = [
+    {
+      name: "Completed Surveys",
+      data: [...agStats.stats[0].data],
+    },
+    {
+      name: "Rejected Surveys",
+      data: [...agStats.stats[1].data],
+    },
+    {
+      name: "Pending Surveys",
+      data: [...agStats.stats[2].data],
+    },
+    {
+      name: "Unfinished Surveys",
+      data: [...agStats.stats[3].data],
+    },
+  ];
 
   return (
     <Chart

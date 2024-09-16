@@ -108,18 +108,28 @@ const Survey = () => {
   };
 
   const handleMultipleChoiceChange = (qIndex, option) => {
-    setSelectedOptions((prevOptions) => {
-      const updatedOptions = [...(prevOptions[qIndex] || [])];
-      if (updatedOptions.includes(option)) {
-        updatedOptions.splice(updatedOptions.indexOf(option), 1);
-      } else {
-        updatedOptions.push(option);
-      }
-      return {
-        ...prevOptions,
-        [qIndex]: updatedOptions,
-      };
-    });
+    if (option === "Others…………………. Please specify (Text box - 50 Characters)") {
+      setSelectedOptions((prevOptions) => {
+        return {
+          ...prevOptions,
+          [qIndex]: [option],
+          [`${qIndex}_other`]: "",
+        };
+      });
+    } else {
+      setSelectedOptions((prevOptions) => {
+        const updatedOptions = [...(prevOptions[qIndex] || [])];
+        if (updatedOptions.includes(option)) {
+          updatedOptions.splice(updatedOptions.indexOf(option), 1);
+        } else {
+          updatedOptions.push(option);
+        }
+        return {
+          ...prevOptions,
+          [qIndex]: updatedOptions,
+        };
+      });
+    }
   };
 
   const handleOtherOptionChange = (qIndex, value) => {
@@ -329,23 +339,27 @@ const Survey = () => {
                               value={option}
                               className="custom-radio mr-2"
                               checked={
-                                !q.content.responseOptions.includes(
-                                  q.previousResponse
-                                ) &&
-                                q.content.responseOptions.includes(
-                                  "Others…………………. Please specify (Text box - 50 Characters)"
-                                )
-                                  ? "Others…………………. Please specify (Text box - 50 Characters)"
-                                  : q.previousResponse
-                                  ? q.previousResponse.toLowerCase() ===
-                                    option.toLowerCase()
-                                  : selectedOptions[qIndex] === option
+                                selectedOptions[qIndex] === option ||
+                                (option ===
+                                  "Others…………………. Please specify (Text box - 50 Characters)" &&
+                                  selectedOptions[`${qIndex}_other`])
                               }
                               onChange={(e) => {
-                                handleSingleChoiceChange(
-                                  qIndex,
-                                  e.target.value
-                                );
+                                if (
+                                  e.target.value ===
+                                  "Others…………………. Please specify (Text box - 50 Characters)"
+                                ) {
+                                  setSelectedOptions((prevOptions) => ({
+                                    ...prevOptions,
+                                    [qIndex]: e.target.value,
+                                    [`${qIndex}_other`]: "",
+                                  }));
+                                } else {
+                                  handleSingleChoiceChange(
+                                    qIndex,
+                                    e.target.value
+                                  );
+                                }
                               }}
                               disabled={!!q.previousResponse}
                             />
@@ -355,24 +369,20 @@ const Survey = () => {
                           </div>
                         );
                       })}
-                      {!q.content.responseOptions.includes(
-                        q.previousResponse
-                      ) &&
-                        q.content.responseOptions.includes(
-                          "Others…………………. Please specify (Text box - 50 Characters)"
-                        ) && (
-                          <input
-                            type="text"
-                            className="w-full p-2 border"
-                            placeholder="Please specify"
-                            value={q.previousResponse}
-                            onChange={(e) =>
-                              handleOtherOptionChange(qIndex, e.target.value)
-                            }
-                            maxLength={50}
-                            disabled={!!q.previousResponse}
-                          />
-                        )}
+                      {selectedOptions[qIndex] ===
+                        "Others…………………. Please specify (Text box - 50 Characters)" && (
+                        <input
+                          type="text"
+                          className="w-full p-2 border"
+                          placeholder="Please specify"
+                          value={selectedOptions[`${qIndex}_other`]}
+                          onChange={(e) =>
+                            handleOtherOptionChange(qIndex, e.target.value)
+                          }
+                          maxLength={50}
+                          disabled={!!q.previousResponse}
+                        />
+                      )}
                     </div>
                   )}
 
@@ -399,6 +409,22 @@ const Survey = () => {
                           </label>
                         </div>
                       ))}
+                      {selectedOptions[qIndex] &&
+                        selectedOptions[qIndex].includes(
+                          "Others…………………. Please specify (Text box - 50 Characters)"
+                        ) && (
+                          <input
+                            type="text"
+                            className="w-full p-2 border"
+                            placeholder="Please specify"
+                            value={selectedOptions[`${qIndex}_other`]}
+                            onChange={(e) =>
+                              handleOtherOptionChange(qIndex, e.target.value)
+                            }
+                            maxLength={50}
+                            disabled={!!q.previousResponse}
+                          />
+                        )}
                     </div>
                   )}
                 </div>

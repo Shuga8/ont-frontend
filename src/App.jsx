@@ -30,7 +30,11 @@ function App() {
             <Route
               path="/"
               element={
-                user ? <Admin /> : <Navigate to="/admin/login" replace />
+                user ? (
+                  <Navigate to="/admin/" replace />
+                ) : (
+                  <Navigate to="/admin/login" replace />
+                )
               }
             />
 
