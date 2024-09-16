@@ -190,7 +190,10 @@ const List = () => {
                           return null;
                         }
 
-                        const status = data.survey.status;
+                        const status =
+                          data.survey.status == "in-progress"
+                            ? "unfinished"
+                            : data.survey.status;
                         const statusClasses = {
                           pending: "text-yellow-600",
                           completed: "text-green-600",
@@ -275,7 +278,10 @@ const List = () => {
 
               {respondentByPhone
                 ? (() => {
-                    const status = respondentByPhone.survey.status;
+                    const status =
+                      respondentByPhone.survey.status == "in-progress"
+                        ? "unfinished"
+                        : respondentByPhone.survey.status;
                     const statusClasses = {
                       pending: "text-yellow-600",
                       completed: "text-green-600",
