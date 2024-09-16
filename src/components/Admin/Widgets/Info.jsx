@@ -7,7 +7,7 @@ import { BiSolidSkipNextCircle } from "react-icons/bi";
 const Info = () => {
   const [isLeaving, setIsLeaving] = useState(false);
   const [hasLeft, setHasLeft] = useState(false);
-  const justLoggedIn = localStorage.getItem("justLoggedIn");
+  const justLoggedIn = localStorage.getItem("justLoggedIn") ?? false;
 
   useEffect(() => {
     if (justLoggedIn == "false") {

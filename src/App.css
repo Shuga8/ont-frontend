@@ -81,15 +81,17 @@
 }
 
 .info-widget-container {
-  position: fixed;
-  width: 100%;
-  height: 100% !important;
-  z-index: 14;
   background: rgba(170, 170, 170, 0.99);
-  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
   place-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
   padding: 0px 10px;
-  overflow-y: hidden;
 }
 .info-widget-container .wrapper .info-widget {
   max-width: 600px;
@@ -100,7 +102,6 @@
 .info-widget-container .wrapper .info-widget.move_down {
   animation: appear_down;
   animation-duration: 1s;
-  animation-delay: 500ms;
   margin: 0px 0px 0px 0px;
   opacity: 1;
 }
@@ -184,7 +185,7 @@
   width: 650px;
   max-width: 650px;
   position: relative;
-  background: #1F2937;
+  background: #1f2937;
 }
 
 .preloader {
@@ -358,9 +359,6 @@
     animation-timing-function: linear;
     font-size: 3rem;
     font-weight: 300;
-  }
-  .elements-container .info-widget-container {
-    width: calc(100% - 16rem);
   }
   .elements-container > .container-content {
     height: -moz-fit-content !important;
