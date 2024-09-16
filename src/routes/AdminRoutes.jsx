@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Admin, ErrorPage } from "../components";
+import { Admin, ErrorPage, Unauthorized } from "../components";
 import {
   Completed,
   Pending,
@@ -71,7 +71,15 @@ function AdminRoutes() {
       <Route
         path="/survey/pending/complete"
         element={
-          user ? <CompletePending /> : <Navigate to="/admin/login" replace />
+          user ? (
+            user.user.type !== "admin" ? (
+              <CompletePending />
+            ) : (
+              <Navigate to="/401" replace />
+            )
+          ) : (
+            <Navigate to="/admin/login" replace />
+          )
         }
       />
       <Route

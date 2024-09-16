@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Survey, ErrorPage, Admin } from "./components";
+import { Survey, ErrorPage, Admin, Unauthorized } from "./components";
 import { AdminRoutes } from "./routes";
 import "./App.css";
 import { useAuthContext } from "./hooks/useAuthContext";
@@ -38,6 +38,13 @@ function App() {
               path="/survey"
               element={
                 user ? <Survey /> : <Navigate to="/admin/login" replace />
+              }
+            />
+
+            <Route
+              path="/401"
+              element={
+                user ? <Unauthorized /> : <Navigate to="/admin/login" replace />
               }
             />
 
