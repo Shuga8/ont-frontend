@@ -26,17 +26,15 @@ export const useRespondentList = (id, language) => {
           const categories = data.data.categories;
           let details = data.data.surveyDetails;
 
-          setSurveyList(categories.slice(1));
-
-          // if (details.status == "in-progress") {
-          //   setSurveyList(
-          //     categories.filter((category, index) => {
-          //       return category._id != details.completedSurveyCategories[index];
-          //     })
-          //   );
-          // } else {
-          //   setSurveyList(categories.slice(1));
-          // }
+          if (details.status == "in-progress") {
+            setSurveyList(
+              categories.filter((category, index) => {
+                return category._id != details.completedSurveyCategories[index];
+              })
+            );
+          } else {
+            setSurveyList(categories.slice(1));
+          }
           setRespondent(data.data.respondent);
         });
       } else {
