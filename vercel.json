@@ -1,25 +1,24 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/admin/login",
-      "dest": "/admin/login"
+      "source": "/admin/login",
+      "destination": "/admin/login"
     },
     {
-      "src": "/admin/(.*)",
-      "dest": "/admin/$1"
+      "source": "/admin/:path*",
+      "destination": "/admin/:path*"
     },
     {
-      "src": "/survey",
-      "dest": "/survey"
+      "source": "/survey",
+      "destination": "/survey"
     },
     {
-      "src": "/401",
-      "dest": "/401"
+      "source": "/401",
+      "destination": "/401"
     },
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/:path*",
+      "destination": "/index.html"
     }
   ]
-  
 }
