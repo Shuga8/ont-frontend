@@ -7,6 +7,7 @@ import Search from "./Search";
 import useGetRespondents from "../Api/Respondents";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
 import useGetRespondentByPhone from "../Api/PhoneRespondent";
+import { useAuthContext } from "../../../hooks/useAuthContext";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -19,6 +20,7 @@ const getPageValue = () => {
 };
 
 const Unfinished = () => {
+  const { user } = useAuthContext();
   const [respondents, setRespondents] = useState(null);
   const [error, setError] = useState(null);
   const [respondentByPhone, setRespondentByPhone] = useState(null);
@@ -215,9 +217,10 @@ const Unfinished = () => {
 
                               <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
                                 <Link
-                                  to={`/admin/survey/pending/complete?phone=${data.respondent.phone}`}
+                                  to={`/survey?language=${data.survey.language}&phone=${data.respondent.phone}&agent=${user.user._id}&respondent=${data.respondent._id}`}
                                   className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
                                   title="Complete Unfinished Survey"
+                                  target="_blank"
                                 >
                                   <span>
                                     <GoTasklist />
@@ -283,9 +286,10 @@ const Unfinished = () => {
 
                     <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
                       <Link
-                        to={`/admin/survey/pending/complete?phone=${respondentByPhone.respondent.phone}`}
+                        to={`/survey?language=${respondentByPhone.survey.language}&phone=${respondentByPhone.respondent.phone}&agent=${user.user._id}&respondent=${respondentByPhone.respondent._id}`}
                         className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
                         title="Complete Unfinished Survey"
+                        target="_blank"
                       >
                         <span>
                           <GoTasklist />
