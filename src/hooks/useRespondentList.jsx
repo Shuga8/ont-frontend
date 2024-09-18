@@ -25,16 +25,16 @@ export const useRespondentList = (id, language) => {
         await response.json().then((data) => {
           const categories = data.data.categories;
           let details = data.data.surveyDetails;
-          // if (details.status == "in-progress") {
-          //   setSurveyList(
-          //     categories.filter((category, index) => {
-          //       return category._id != details.completedSurveyCategories[index];
-          //     })
-          //   );
-          // } else {
-          //   setSurveyList(categories.slice(1));
-          // }
-          setSurveyList(categories.slice(1));
+          if (details.status == "in-progress") {
+            setSurveyList(
+              categories.filter((category, index) => {
+                return category._id != details.completedSurveyCategories[index];
+              })
+            );
+          } else {
+            setSurveyList(categories.slice(1));
+          }
+          // setSurveyList(categories.slice(1));
           setRespondent(data.data.respondent);
         });
       } else {
