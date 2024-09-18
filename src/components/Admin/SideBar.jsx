@@ -369,18 +369,20 @@ const SideBar = () => {
               </div>
             </div>
 
-            <li>
-              <Link
-                to={"/admin/download"}
-                className={`flex items-center p-2  rounded-lg text-white  hover:bg-gray-700 group ${
-                  pathNameCheck("/admin/download") ? "bg-gray-600" : ""
-                }`}
-              >
-                <TbWorldDownload color="#fff" />
+            {user.user.type !== "call-center" && (
+              <li>
+                <Link
+                  to={"/admin/download"}
+                  className={`flex items-center p-2  rounded-lg text-white  hover:bg-gray-700 group ${
+                    pathNameCheck("/admin/download") ? "bg-gray-600" : ""
+                  }`}
+                >
+                  <TbWorldDownload color="#fff" />
 
-                <span className="ms-3">Download</span>
-              </Link>
-            </li>
+                  <span className="ms-3">Download</span>
+                </Link>
+              </li>
+            )}
 
             <li>
               <Link

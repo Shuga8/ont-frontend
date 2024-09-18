@@ -44,7 +44,17 @@ function AdminRoutes() {
       />
       <Route
         path="/download"
-        element={user ? <Download /> : <Navigate to="/admin/login" replace />}
+        element={
+          user ? (
+            user.user.type !== "call-center" ? (
+              <Download />
+            ) : (
+              <Navigate to="/401" replace />
+            )
+          ) : (
+            <Navigate to="/admin/login" replace />
+          )
+        }
       />
 
       <Route
