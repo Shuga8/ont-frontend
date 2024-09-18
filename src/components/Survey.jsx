@@ -326,6 +326,9 @@ const Survey = () => {
                             max: q.meta.numberRange.max,
                           }
                         : {})}
+                      {...(q.meta && q.meta.charLength
+                        ? { maxLength: q.meta.charLength }
+                        : {})}
                       value={
                         q.meta && q.meta.formType === "date"
                           ? (selectedOptions[qIndex] || "").slice(0, 10) // Format for date input
@@ -365,8 +368,8 @@ const Survey = () => {
                               }
                               onChange={(e) => {
                                 if (
-                                  e.target.value ===
-                                  "Others…………………. Please specify (Text box - 50 Characters)"
+                                  e.target.value.toLowerCase() ===
+                                  others_text.toLowerCase()
                                 ) {
                                   setSelectedOptions((prevOptions) => ({
                                     ...prevOptions,
@@ -388,8 +391,8 @@ const Survey = () => {
                           </div>
                         );
                       })}
-                      {selectedOptions[qIndex] ===
-                        "Others…………………. Please specify (Text box - 50 Characters)" && (
+                      {selectedOptions[qIndex]?.toLowerCase() ===
+                        others_text.toLowerCase() && (
                         <input
                           type="text"
                           className="w-full p-2 border"
@@ -418,9 +421,30 @@ const Survey = () => {
                               selectedOptions[qIndex] &&
                               selectedOptions[qIndex].includes(option)
                             }
-                            onChange={() =>
-                              handleMultipleChoiceChange(qIndex, option)
-                            }
+                            onChange={() => {
+                              if (
+                                option ===
+                                "Others…………………. Please specify (Text box - 50 Characters)"
+                              ) {
+                                if (selectedOptions[qIndex].includes(option)) {
+                                  // Remove "Others" from the selected options
+                                  handleMultipleChoiceChange(
+                                    qIndex,
+                                    option,
+                                    false
+                                  );
+                                } else {
+                                  // Add "Others" to the selected options
+                                  handleMultipleChoiceChange(
+                                    qIndex,
+                                    option,
+                                    true
+                                  );
+                                }
+                              } else {
+                                handleMultipleChoiceChange(qIndex, option);
+                              }
+                            }}
                             disabled={!!q.previousResponse}
                           />
                           <label htmlFor={`q${qIndex}-o${oIndex}`}>
