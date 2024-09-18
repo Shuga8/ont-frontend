@@ -100,10 +100,14 @@ const Survey = () => {
     }));
   };
 
-  const handleSingleChoiceChange = (qIndex, value) => {
+  const handleSingleChoiceChange = (qIndex, option) => {
+    if (option === undefined) {
+      console.error("Option value is undefined");
+      return;
+    }
     setSelectedOptions((prevOptions) => ({
       ...prevOptions,
-      [qIndex]: value,
+      [qIndex]: option.toLowerCase(),
     }));
   };
 
@@ -259,6 +263,8 @@ const Survey = () => {
 
   const currentSurvey = surveyList[activeIndex] || {};
   const questions = currentSurvey.questions || [];
+  const others_text =
+    "Others…………………. Please specify (Text box - 50 Characters)";
 
   return (
     <>
@@ -311,8 +317,15 @@ const Survey = () => {
                           : "text"
                       }
                       className="w-full p-2 border"
-                      placeholder="Your answer ..."
-                      maxLength={60}
+                      placeholder="Your answer"
+                      {...(q.meta &&
+                      q.meta.formType === "number" &&
+                      q.meta.numberRange
+                        ? {
+                            min: q.meta.numberRange.min,
+                            max: q.meta.numberRange.max,
+                          }
+                        : {})}
                       value={
                         q.meta && q.meta.formType === "date"
                           ? (selectedOptions[qIndex] || "").slice(0, 10) // Format for date input
@@ -336,13 +349,19 @@ const Survey = () => {
                               type="radio"
                               id={`q${qIndex}-o${oIndex}`}
                               name={q._id}
-                              value={option}
+                              value={option.toLowerCase()}
                               className="custom-radio mr-2"
                               checked={
-                                selectedOptions[qIndex] === option ||
-                                (option ===
-                                  "Others…………………. Please specify (Text box - 50 Characters)" &&
-                                  selectedOptions[`${qIndex}_other`])
+                                selectedOptions[qIndex] !== undefined &&
+                                (selectedOptions[qIndex].toLowerCase() ===
+                                  option.toLowerCase() ||
+                                  (option.toLowerCase() ===
+                                    others_text.toLowerCase() &&
+                                    selectedOptions[`${qIndex}_other`] !==
+                                      undefined &&
+                                    selectedOptions[
+                                      `${qIndex}_other`
+                                    ].toLowerCase()))
                               }
                               onChange={(e) => {
                                 if (
