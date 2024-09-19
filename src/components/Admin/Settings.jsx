@@ -263,97 +263,102 @@ const Settings = () => {
                     )}
                   </Button>
 
-                  <Button
-                    type="button"
-                    variant="outlined"
-                    color="info"
-                    onClick={() => {
-                      setOtherFormVisible(true);
-                    }}
-                  >
-                    Change Password
-                  </Button>
+                  {user.user.type !== "call-center" && (
+                    <Button
+                      type="button"
+                      variant="outlined"
+                      color="info"
+                      onClick={() => {
+                        setOtherFormVisible(true);
+                      }}
+                    >
+                      Change Password
+                    </Button>
+                  )}
                 </div>
               </form>
             </div>
 
-            <div
-              className={`password-form ${
-                isOtherFormVIsible ? "block" : "hidden"
-              }`}
-            >
-              <form
-                action=""
-                method=""
-                onSubmit={handlePasswordSubmit}
-                className="w-full"
-                name="passForm"
+            {user.user.type !== "call-center" && (
+              <div
+                className={`password-form ${
+                  isOtherFormVIsible ? "block" : "hidden"
+                }`}
               >
-                <label className="block">
-                  <label htmlFor="password" className="text-gray-900">
-                    Old Password{" "}
+                <form
+                  action=""
+                  method=""
+                  onSubmit={handlePasswordSubmit}
+                  className="w-full"
+                  name="passForm"
+                >
+                  <label className="block">
+                    <label htmlFor="password" className="text-gray-900">
+                      Old Password{" "}
+                    </label>
+                    <input
+                      className="w-full my-2 py-3 px-3 rounded-md bg-transparent text-gray-900 border-2 border-blue-300"
+                      type="password"
+                      name="password"
+                      id="password"
+                      placeholder="***********"
+                      autoComplete="current-pasword"
+                      required={true}
+                    />
                   </label>
-                  <input
-                    className="w-full my-2 py-3 px-3 rounded-md bg-transparent text-gray-900 border-2 border-blue-300"
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="***********"
-                    autoComplete="current-pasword"
-                    required={true}
-                  />
-                </label>
-                <label className="block">
-                  <label
-                    htmlFor="password_confirmation"
-                    className="text-gray-900"
-                  >
-                    New Password{" "}
+                  <label className="block">
+                    <label
+                      htmlFor="password_confirmation"
+                      className="text-gray-900"
+                    >
+                      New Password{" "}
+                    </label>
+                    <input
+                      className="w-full my-2 py-3 px-3 rounded-md bg-transparent text-gray-900 border-2 border-blue-300"
+                      type="password"
+                      name="password_confirmation"
+                      id="password_confirmation"
+                      placeholder="***********"
+                      autoComplete="current-pasword"
+                      required={true}
+                    />
                   </label>
-                  <input
-                    className="w-full my-2 py-3 px-3 rounded-md bg-transparent text-gray-900 border-2 border-blue-300"
-                    type="password"
-                    name="password_confirmation"
-                    id="password_confirmation"
-                    placeholder="***********"
-                    autoComplete="current-pasword"
-                    required={true}
-                  />
-                </label>
 
-                <div className="actions my-3 flex flex-row gap-x-3">
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="success"
-                    disabled={isPassLoading}
-                    className="text-xs"
-                  >
-                    {isPassLoading ? (
-                      <span className="px-3 py-1 md:px-4  spinner text-white">
-                        <CgSpinner />
-                      </span>
-                    ) : (
-                      <span className="flex flex-row gap-x-2 text-xs place-items-center">
-                        <RiSave3Line className="text-white" /> <span>Save</span>
-                      </span>
-                    )}
-                  </Button>
+                  <div className="actions my-3 flex flex-row gap-x-3">
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="success"
+                      disabled={isPassLoading}
+                      className="text-xs"
+                    >
+                      {isPassLoading ? (
+                        <span className="px-3 py-1 md:px-4  spinner text-white">
+                          <CgSpinner />
+                        </span>
+                      ) : (
+                        <span className="flex flex-row gap-x-2 text-xs place-items-center">
+                          <RiSave3Line className="text-white" />{" "}
+                          <span>Save</span>
+                        </span>
+                      )}
+                    </Button>
 
-                  <Button
-                    type="button"
-                    variant="outlined"
-                    color="info"
-                    onClick={() => {
-                      setOtherFormVisible(false);
-                    }}
-                    className="text-sm"
-                  >
-                    Change User Details
-                  </Button>
-                </div>
-              </form>
-            </div>
+                    <Button
+                      type="button"
+                      variant="outlined"
+                      color="info"
+                      onClick={() => {
+                        setOtherFormVisible(false);
+                      }}
+                      className="text-sm"
+                    >
+                      Change User Details
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            )}
           </div>
         </div>
       </div>
