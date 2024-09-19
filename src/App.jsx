@@ -1,12 +1,47 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import { Survey, ErrorPage, Admin, Unauthorized } from "./components";
 import { AdminRoutes } from "./routes";
 import "./App.css";
 import { useAuthContext } from "./hooks/useAuthContext";
 import { Login } from "./components/Admin/index";
+import { useEffect } from "react";
+import { useLogout } from "./hooks/useLogout";
 
 function App() {
   const { user, dispatch } = useAuthContext();
+  const { logout } = useLogout();
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // Check if the page is being refreshed
+      const isRefresh = performance.navigation.type === 1 || event.persisted;
+      if (!isRefresh) {
+        logout();
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    };
+
+    const polling = () => {
+      if (!user && window.location.pathname != "/admin/login") {
+        window.location.href = "/admin/login";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      polling();
+    };
+  }, [logout, user]);
+
   return (
     <>
       <div className="App">

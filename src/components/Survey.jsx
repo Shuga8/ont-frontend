@@ -182,20 +182,56 @@ const Survey = () => {
               "Others…………………. Please specify (Text box - 50 Characters)"
           ) {
             q.previousResponse = selectedOptions[`${qIndex}_other`];
-            response.push({
-              question: q._id,
-              answer: selectedOptions[`${qIndex}_other`],
-            });
+
+            if (q?.meta?.conditions?.respondToIfEquals) {
+              const nestedQuestion =
+                q?.meta?.conditions?.respondToIfEquals?.question;
+
+              response.push({
+                question: q._id,
+                answer: selectedOptions[`${qIndex}_other`],
+                nested: {
+                  slug: nestedQuestion.slug,
+                  answer: selectedOptions[`${nestedQuestion.slug}_other`],
+                },
+              });
+            } else {
+              response.push({
+                question: q._id,
+                answer: selectedOptions[`${qIndex}_other`],
+              });
+            }
           } else {
-            q.previousResponse = selectedOptions[qIndex];
-            response.push({
-              question: q._id,
-              answer: selectedOptions[qIndex],
-            });
+            if (q?.meta?.conditions?.respondToIfEquals) {
+              const nestedQuestion =
+                q?.meta?.conditions?.respondToIfEquals?.question;
+              q.previousResponse = selectedOptions[qIndex];
+              response.push({
+                question: q._id,
+                answer: selectedOptions[qIndex],
+                nested: {
+                  slug: nestedQuestion.slug,
+                  answer: selectedOptions[`${nestedQuestion.slug}`],
+                },
+              });
+            } else {
+              q.previousResponse = selectedOptions[qIndex];
+              response.push({
+                question: q._id,
+                answer: selectedOptions[qIndex],
+              });
+            }
           }
         });
 
         res.responses = response;
+
+        console.log(res);
+        setTimeout(() => {
+          setCategoryLoading(false);
+        }, 1500);
+
+        return;
 
         await submitResponse(res);
 
@@ -255,6 +291,395 @@ const Survey = () => {
     }
   };
 
+  const call_multiple_nested = (q, qIndex) => {
+    const nested = q.meta.conditions.respondToIfEquals;
+    const nestedQuestion = nested?.question;
+    if (
+      (selectedOptions[qIndex].includes(nested.ifValueEquals) &&
+        selectedOptions[qIndex].length > 1) ||
+      !selectedOptions[qIndex].includes(nested.ifValueEquals)
+    )
+      return;
+    return (
+      <div className="px-2 py-2">
+        <div className="my-2 text-gray-500 text-xs font-medium">
+          {nestedQuestion.question}{" "}
+          {nestedQuestion.isRequired == true ? (
+            <span className="text-red-500 text-base font-bold"> *</span>
+          ) : (
+            <span className="text-green-500 text-xs font-bold">
+              {" "}
+              (optional)
+            </span>
+          )}
+        </div>
+
+        <div className="input-group px-2">
+          {nestedQuestion.type === "multiple-choice" && (
+            <div>
+              {nestedQuestion.responseOptions.map((option, oIndex) => (
+                <div key={oIndex} className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    id={`q${nestedQuestion.slug}-o${oIndex}`}
+                    value={option}
+                    className="custom-checkbox mr-2"
+                    checked={
+                      (selectedOptions[nestedQuestion.slug] &&
+                        selectedOptions[nestedQuestion.slug].includes(
+                          option
+                        )) ||
+                      (selectedOptions[qIndex] &&
+                      selectedOptions[qIndex].toLowerCase() ===
+                        nested.ifValueEquals?.toLowerCase()
+                        ? option === nestedQuestion.responseOptions[0]
+                        : false)
+                    }
+                    onChange={() => {
+                      if (
+                        option ===
+                        "Others…………………. Please specify (Text box - 50 Characters)"
+                      ) {
+                        if (
+                          selectedOptions[nestedQuestion.slug].includes(option)
+                        ) {
+                          // Remove "Others" from the selected options
+                          handleMultipleChoiceChange(
+                            nestedQuestion.slug,
+                            option,
+                            false
+                          );
+                        } else {
+                          // Add "Others" to the selected options
+                          handleMultipleChoiceChange(
+                            nestedQuestion.slug,
+                            option,
+                            true
+                          );
+                        }
+                      } else {
+                        handleMultipleChoiceChange(nestedQuestion.slug, option);
+                      }
+                    }}
+                    // disabled={!!q.previousResponse}
+                  />
+                  <label htmlFor={`q${nestedQuestion.slug}-o${oIndex}`}>
+                    {option}
+                  </label>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {nestedQuestion.type === "single-choice" && (
+            <div>
+              {nestedQuestion.responseOptions.map((option, oIndex) => {
+                console.log(selectedOptions[nestedQuestion.slug]);
+
+                return (
+                  <div key={oIndex} className="flex items-center mb-2">
+                    <input
+                      type="radio"
+                      id={`q${nestedQuestion.slug}-o${oIndex}`}
+                      name={nestedQuestion.slug}
+                      value={option.toLowerCase()}
+                      className="custom-radio mr-2"
+                      checked={
+                        selectedOptions[nestedQuestion.slug] ===
+                        option.toLowerCase()
+                      }
+                      onChange={(e) => {
+                        // console.log(e.target.value);
+                        if (
+                          e.target.value.toLowerCase() ===
+                          others_text.toLowerCase()
+                        ) {
+                          setSelectedOptions((prevOptions) => ({
+                            ...prevOptions,
+                            [nestedQuestion.slug]: e.target.value,
+                            [`${nestedQuestion.slug}_other`]: "",
+                          }));
+                        } else {
+                          handleSingleChoiceChange(
+                            nestedQuestion.slug,
+                            e.target.value
+                          );
+                        }
+                      }}
+                      // disabled={!!q.previousResponse}
+                    />
+                    <label htmlFor={`q${nestedQuestion.slug}-o${oIndex}`}>
+                      {option}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {nestedQuestion.type === "open-ended" && (
+            <input
+              type={
+                nestedQuestion.meta && nestedQuestion.meta.formType
+                  ? nestedQuestion.meta.formType === "date"
+                    ? "date"
+                    : nestedQuestion.meta.formType === "date-time"
+                    ? "datetime-local"
+                    : nestedQuestion.meta.formType === "number"
+                    ? "number"
+                    : "text"
+                  : "text"
+              }
+              className="w-full p-2 border"
+              placeholder="Your answer"
+              {...(nestedQuestion.meta &&
+              nestedQuestion.meta.formType === "number" &&
+              nestedQuestion.meta.numberRange
+                ? {
+                    min: nestedQuestion.meta.numberRange?.min,
+                    max: nestedQuestion.meta.numberRange?.max,
+                  }
+                : {})}
+              {...(nestedQuestion.meta && nestedQuestion.meta.charLength
+                ? {
+                    maxLength: nestedQuestion.meta.charLength,
+                  }
+                : {})}
+              value={
+                nestedQuestion.meta && nestedQuestion.meta.formType === "date"
+                  ? (selectedOptions[nestedQuestion.slug] || "").slice(0, 10)
+                  : nestedQuestion.meta &&
+                    nestedQuestion.meta?.formType === "date-time"
+                  ? (selectedOptions[nestedQuestion.slug] || "").slice(0, 16)
+                  : selectedOptions[nestedQuestion.slug] || ""
+              }
+              onChange={(e) => {
+                handleInputChange(qIndex, e.target.value);
+              }}
+              onKeyUp={(e) => {
+                if (
+                  nestedQuestion?.meta &&
+                  nestedQuestion?.meta?.numberRange &&
+                  nestedQuestion?.meta?.numberRange?.min
+                ) {
+                  let min = nestedQuestion?.meta?.numberRange?.min;
+                  let max = nestedQuestion?.meta?.numberRange?.min;
+                  if (nestedQuestion?.meta?.numberRange) {
+                    let value = parseInt(e.target.value);
+                    if (value < min || value > max) {
+                      e.target.value = value < min ? min : max;
+                    }
+                  }
+                }
+              }}
+              {...((q.meta && q.meta.formType === "date") ||
+              q.meta.formType === "date-time"
+                ? {
+                    max: new Date().toISOString().slice(0, 10),
+                  }
+                : {})}
+              // disabled={!!q.previousResponse}
+            />
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const call_single_nested = (q, qIndex) => {
+    const nested = q.meta.conditions.respondToIfEquals;
+    const nestedQuestion = nested?.question;
+
+    return (
+      <div className="px-2 py-2">
+        <div className="my-2 text-gray-500 text-xs font-medium">
+          {nestedQuestion.question}{" "}
+          {nestedQuestion.isRequired == true ? (
+            <span className="text-red-500 text-base font-bold"> *</span>
+          ) : (
+            <span className="text-green-500 text-xs font-bold">
+              {" "}
+              (optional)
+            </span>
+          )}
+        </div>
+
+        <div className="input-group px-2">
+          {nestedQuestion.type === "multiple-choice" && (
+            <div>
+              {nestedQuestion.responseOptions.map((option, oIndex) => (
+                <div key={oIndex} className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    id={`q${nestedQuestion.slug}-o${oIndex}`}
+                    value={option}
+                    className="custom-checkbox mr-2"
+                    checked={
+                      (selectedOptions[nestedQuestion.slug] &&
+                        selectedOptions[nestedQuestion.slug].includes(
+                          option
+                        )) ||
+                      (selectedOptions[qIndex] &&
+                      selectedOptions[qIndex].toLowerCase() ===
+                        nested.ifValueEquals?.toLowerCase()
+                        ? option === nestedQuestion.responseOptions[0]
+                        : false)
+                    }
+                    onChange={() => {
+                      if (
+                        option ===
+                        "Others…………………. Please specify (Text box - 50 Characters)"
+                      ) {
+                        if (
+                          selectedOptions[nestedQuestion.slug].includes(option)
+                        ) {
+                          // Remove "Others" from the selected options
+                          handleMultipleChoiceChange(
+                            nestedQuestion.slug,
+                            option,
+                            false
+                          );
+                        } else {
+                          // Add "Others" to the selected options
+                          handleMultipleChoiceChange(
+                            nestedQuestion.slug,
+                            option,
+                            true
+                          );
+                        }
+                      } else {
+                        handleMultipleChoiceChange(nestedQuestion.slug, option);
+                      }
+                    }}
+                    // disabled={!!q.previousResponse}
+                  />
+                  <label htmlFor={`q${nestedQuestion.slug}-o${oIndex}`}>
+                    {option}
+                  </label>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {nestedQuestion.type === "single-choice" && (
+            <div>
+              {nestedQuestion.responseOptions.map((option, oIndex) => {
+                return (
+                  <div key={oIndex} className="flex items-center mb-2">
+                    <input
+                      type="radio"
+                      id={`q${nestedQuestion.slug}-o${oIndex}`}
+                      name={nestedQuestion.slug}
+                      value={option.toLowerCase()}
+                      className="custom-radio mr-2"
+                      checked={
+                        selectedOptions[nestedQuestion.slug] !== undefined &&
+                        (selectedOptions[qIndex].toLowerCase() ===
+                          nested.ifValueEquals ||
+                          (option.toLowerCase() === others_text.toLowerCase() &&
+                            selectedOptions[`${nestedQuestion.slug}_other`] !==
+                              undefined &&
+                            selectedOptions[
+                              `${nestedQuestion.slug}_other`
+                            ].toLowerCase()))
+                      }
+                      onChange={(e) => {
+                        if (
+                          e.target.value.toLowerCase() ===
+                          others_text.toLowerCase()
+                        ) {
+                          setSelectedOptions((prevOptions) => ({
+                            ...prevOptions,
+                            [nestedQuestion.slug]: e.target.value,
+                            [`${nestedQuestion.slug}_other`]: "",
+                          }));
+                        } else {
+                          handleSingleChoiceChange(
+                            nestedQuestion.slug,
+                            e.target.value
+                          );
+                        }
+                      }}
+                      // disabled={!!q.previousResponse}
+                    />
+                    <label htmlFor={`q${nestedQuestion.slug}-o${oIndex}`}>
+                      {option}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {nestedQuestion.type === "open-ended" && (
+            <input
+              type={
+                nestedQuestion.meta && nestedQuestion.meta.formType
+                  ? nestedQuestion.meta.formType === "date"
+                    ? "date"
+                    : nestedQuestion.meta.formType === "date-time"
+                    ? "datetime-local"
+                    : nestedQuestion.meta.formType === "number"
+                    ? "number"
+                    : "text"
+                  : "text"
+              }
+              className="w-full p-2 border"
+              placeholder="Your answer"
+              {...(nestedQuestion.meta &&
+              nestedQuestion.meta.formType === "number" &&
+              nestedQuestion.meta.numberRange
+                ? {
+                    min: nestedQuestion.meta.numberRange?.min,
+                    max: nestedQuestion.meta.numberRange?.max,
+                  }
+                : {})}
+              {...(nestedQuestion.meta && nestedQuestion.meta.charLength
+                ? {
+                    maxLength: nestedQuestion.meta.charLength,
+                  }
+                : {})}
+              value={
+                nestedQuestion.meta && nestedQuestion.meta.formType === "date"
+                  ? (selectedOptions[nestedQuestion.slug] || "").slice(0, 10)
+                  : nestedQuestion.meta &&
+                    nestedQuestion.meta?.formType === "date-time"
+                  ? (selectedOptions[nestedQuestion.slug] || "").slice(0, 16)
+                  : selectedOptions[nestedQuestion.slug] || ""
+              }
+              onChange={(e) => {
+                handleInputChange(qIndex, e.target.value);
+              }}
+              onKeyUp={(e) => {
+                if (
+                  nestedQuestion?.meta &&
+                  nestedQuestion?.meta?.numberRange &&
+                  nestedQuestion?.meta?.numberRange?.min
+                ) {
+                  let min = nestedQuestion?.meta?.numberRange?.min;
+                  let max = nestedQuestion?.meta?.numberRange?.min;
+                  if (nestedQuestion?.meta?.numberRange) {
+                    let value = parseInt(e.target.value);
+                    if (value < min || value > max) {
+                      e.target.value = value < min ? min : max;
+                    }
+                  }
+                }
+              }}
+              {...((q.meta && q.meta.formType === "date") ||
+              q.meta.formType === "date-time"
+                ? {
+                    max: new Date().toISOString().slice(0, 10),
+                  }
+                : {})}
+              // disabled={!!q.previousResponse}
+            />
+          )}
+        </div>
+      </div>
+    );
+  };
+
   if (loadingQuestions) {
     return <Preloader isVisible={true} />;
   }
@@ -300,6 +725,14 @@ const Survey = () => {
                     {`${qIndex + 1}.`}
                   </span>{" "}
                   {q.content.question}
+                  {q.isRequired == true ? (
+                    <span className="text-red-500 text-base font-bold"> *</span>
+                  ) : (
+                    <span className="text-green-500 text-xs font-bold">
+                      {" "}
+                      (optional)
+                    </span>
+                  )}
                 </p>
 
                 <div className="input-group px-4 py-6">
@@ -331,15 +764,35 @@ const Survey = () => {
                         : {})}
                       value={
                         q.meta && q.meta.formType === "date"
-                          ? (selectedOptions[qIndex] || "").slice(0, 10) // Format for date input
+                          ? (selectedOptions[qIndex] || "").slice(0, 10)
                           : q.meta && q.meta.formType === "date-time"
-                          ? (selectedOptions[qIndex] || "").slice(0, 16) // Format for datetime-local input
+                          ? (selectedOptions[qIndex] || "").slice(0, 16)
                           : selectedOptions[qIndex] || ""
                       }
-                      onChange={(e) =>
-                        handleInputChange(qIndex, e.target.value)
-                      }
-                      disabled={!!q.previousResponse}
+                      onChange={(e) => {
+                        handleInputChange(qIndex, e.target.value);
+                      }}
+                      onKeyUp={(e) => {
+                        if (
+                          q.meta &&
+                          q.meta.numberRange &&
+                          q.meta.numberRange.min
+                        ) {
+                          let min = q.meta.numberRange.min;
+                          let max = q.meta.numberRange.max;
+                          if (q.meta.numberRange) {
+                            let value = parseInt(e.target.value);
+                            if (value < min || value > max) {
+                              e.target.value = value < min ? min : max;
+                            }
+                          }
+                        }
+                      }}
+                      {...((q.meta && q.meta.formType === "date") ||
+                      q.meta.formType === "date-time"
+                        ? { max: new Date().toISOString().slice(0, 10) }
+                        : {})}
+                      // disabled={!!q.previousResponse}
                     />
                   )}
 
@@ -383,7 +836,7 @@ const Survey = () => {
                                   );
                                 }
                               }}
-                              disabled={!!q.previousResponse}
+                              // disabled={!!q.previousResponse}
                             />
                             <label htmlFor={`q${qIndex}-o${oIndex}`}>
                               {option}
@@ -405,6 +858,10 @@ const Survey = () => {
                           disabled={!!q.previousResponse}
                         />
                       )}
+
+                      {selectedOptions[qIndex] &&
+                        q?.meta?.conditions?.respondToIfEquals &&
+                        call_single_nested(q, qIndex)}
                     </div>
                   )}
 
@@ -423,8 +880,8 @@ const Survey = () => {
                             }
                             onChange={() => {
                               if (
-                                option ===
-                                "Others…………………. Please specify (Text box - 50 Characters)"
+                                option.toLowerCase() ===
+                                others_text.toLowerCase()
                               ) {
                                 if (selectedOptions[qIndex].includes(option)) {
                                   // Remove "Others" from the selected options
@@ -445,7 +902,7 @@ const Survey = () => {
                                 handleMultipleChoiceChange(qIndex, option);
                               }
                             }}
-                            disabled={!!q.previousResponse}
+                            // disabled={!!q.previousResponse}
                           />
                           <label htmlFor={`q${qIndex}-o${oIndex}`}>
                             {option}
@@ -465,9 +922,17 @@ const Survey = () => {
                               handleOtherOptionChange(qIndex, e.target.value)
                             }
                             maxLength={50}
-                            disabled={!!q.previousResponse}
+                            // disabled={!!q.previousResponse}
                           />
                         )}
+
+                      {selectedOptions[qIndex] &&
+                        selectedOptions[qIndex].length > 0 &&
+                        !selectedOptions[qIndex].includes(
+                          "Others…………………. Please specify (Text box - 50 Characters)"
+                        ) &&
+                        q?.meta?.conditions?.respondToIfEquals &&
+                        call_multiple_nested(q, qIndex)}
                     </div>
                   )}
                 </div>
@@ -477,7 +942,7 @@ const Survey = () => {
 
           {errors && (
             <p className="text-red-500 text-center">
-              Please answer all questions in the current category.
+              Please answer all required questions (*) in this current category.
             </p>
           )}
 
