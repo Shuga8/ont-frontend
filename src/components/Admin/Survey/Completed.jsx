@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { ErrorToast, Loader, SideBar, SuccessToast } from "../index";
 import { HiDownload } from "react-icons/hi";
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { GrFormNext, GrFormPrevious, GrDocumentVerified } from "react-icons/gr";
 import { Link, useNavigate } from "react-router-dom";
 import Search from "./Search";
-import Skeleton from "../../Skeleton/Skeleton";
 import useGetRespondents from "../Api/Respondents";
 import TableSkeleton from "../../Skeleton/TableSkeleton";
 import useGetRespondentByPhone from "../Api/PhoneRespondent";
@@ -162,7 +161,13 @@ const Completed = () => {
             <Search page="completed" />
             <div className="rounded-sm border border-stroke bg-white px-5 pb-6 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7 xl:pb-6">
               <div className="flex flex-col">
-                <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5 bg-slate-200">
+                <div
+                  className={`grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 ${
+                    user.user.type !== "call-center"
+                      ? "sm:grid-cols-5"
+                      : "sm:grid-cols-4"
+                  }   bg-slate-200`}
+                >
                   <div className="p-2 xl:p-5">
                     <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
                       ID
@@ -187,11 +192,13 @@ const Completed = () => {
                     </h5>
                   </div>
 
-                  <div className="p-2 xl:p-5">
-                    <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
-                      Actions
-                    </h5>
-                  </div>
+                  {user && user.user.type !== "call-center" && (
+                    <div className="p-2 xl:p-5">
+                      <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
+                        Actions
+                      </h5>
+                    </div>
+                  )}
                 </div>
 
                 <TableSkeleton count={6} />
@@ -226,7 +233,13 @@ const Completed = () => {
           <Search page="completed" />
           <div className="rounded-sm border border-stroke bg-white px-5 pb-6 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7 xl:pb-6">
             <div className="flex flex-col">
-              <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5 bg-slate-200">
+              <div
+                className={`grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 ${
+                  user.user.type !== "call-center"
+                    ? "sm:grid-cols-5"
+                    : "sm:grid-cols-4"
+                }   bg-slate-200`}
+              >
                 <div className="p-2 xl:p-5">
                   <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
                     ID
@@ -251,11 +264,13 @@ const Completed = () => {
                   </h5>
                 </div>
 
-                <div className="p-2 xl:p-5">
-                  <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
-                    Actions
-                  </h5>
-                </div>
+                {user && user.user.type !== "call-center" && (
+                  <div className="p-2 xl:p-5">
+                    <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
+                      Actions
+                    </h5>
+                  </div>
+                )}
               </div>
 
               {!errorPhone &&
@@ -270,7 +285,11 @@ const Completed = () => {
                           }
                           return (
                             <div
-                              className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                              className={`grid grid-cols-3 border-b border-stroke dark:border-stone-600 ${
+                                user.user.type !== "call-center"
+                                  ? "sm:grid-cols-5"
+                                  : "sm:grid-cols-4"
+                              }   py-3 md:py-0`}
                               key={index}
                             >
                               <div className="flex items-center p-2 xl:p-5">
@@ -297,17 +316,19 @@ const Completed = () => {
                                 </p>
                               </div>
 
-                              <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
-                                <span
-                                  className="font-medium text-blue-600 text-base cursor-pointer"
-                                  title="Download Survey"
-                                  onClick={() =>
-                                    handleDownload(`${data.respondent.phone}`)
-                                  }
-                                >
-                                  <HiDownload />
-                                </span>
-                              </div>
+                              {user && user.user.type !== "call-center" && (
+                                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
+                                  <span
+                                    className="font-medium text-blue-600 text-base cursor-pointer"
+                                    title="Download Survey"
+                                    onClick={() =>
+                                      handleDownload(`${data.respondent.phone}`)
+                                    }
+                                  >
+                                    <HiDownload />
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           );
                         })
@@ -342,7 +363,13 @@ const Completed = () => {
 
               {respondentByPhone && (
                 <>
-                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
+                  <div
+                    className={`grid grid-cols-3 border-b border-stroke dark:border-stone-600 ${
+                      user.user.type !== "call-center"
+                        ? "sm:grid-cols-5"
+                        : "sm:grid-cols-4"
+                    }    py-3 md:py-0`}
+                  >
                     <div className="flex items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">1</p>
                     </div>
@@ -365,19 +392,21 @@ const Completed = () => {
                       </p>
                     </div>
 
-                    <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
-                      <span
-                        className="font-medium text-blue-600 text-base cursor-pointer"
-                        title="Download Survey"
-                        onClick={() =>
-                          handleDownload(
-                            `${respondentByPhone.respondent.phone}`
-                          )
-                        }
-                      >
-                        <HiDownload />
-                      </span>
-                    </div>
+                    {user && user.user.type !== "call-center" && (
+                      <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
+                        <span
+                          className="font-medium text-blue-600 text-base cursor-pointer"
+                          title="Download Survey"
+                          onClick={() =>
+                            handleDownload(
+                              `${respondentByPhone.respondent.phone}`
+                            )
+                          }
+                        >
+                          <HiDownload />
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
                     <div className="font-medium text-xs text-stone-800">
