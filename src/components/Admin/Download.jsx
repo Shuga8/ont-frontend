@@ -39,7 +39,7 @@ const Download = () => {
 
   const handleLGAChange = async (e) => {
     setSelectedStations([]);
-    if (e.target.value === "none") {
+    if (e.target.value === "none" || e.target.value === "all") {
       setStation(null);
       return;
     }
@@ -74,9 +74,21 @@ const Download = () => {
 
     if (
       (status === "none" || !status) &&
-      (region === "none" || !region || selectedStations.length === 0)
+      (region === "none" || !region || selectedStations.length === 0) &&
+      region !== "all" &&
+      region !== "none"
     ) {
-      setError("At least one export type or station must be selected.");
+      setError("Please select correct download format, lga cannot be none");
+      setLoading(false);
+      return;
+    }
+
+    if (
+      region !== "all" &&
+      region !== "none" &&
+      selectedStations.length === 0
+    ) {
+      setError("Please select local government stations");
       setLoading(false);
       return;
     }
@@ -85,9 +97,9 @@ const Download = () => {
 
     let url = `https://ont-survey-tracker-development.up.railway.app/v1/surveys/download`;
 
-    if (status === "all" && region === "none") {
+    if (status === "all" && region === "all") {
       message = `Downloading All Surveys`;
-    } else if (status === "all" && region !== "none") {
+    } else if (status === "all" && region !== "all") {
       if (selectedStations.length > 0) {
         message = `Downloading All Surveys for the following stations: ${selectedStations.join(
           ", "
@@ -99,10 +111,10 @@ const Download = () => {
         message = `Downloading All Surveys of Region "${region}"`;
         url += `?localGovernment=["${region.toUpperCase()}"]`;
       }
-    } else if (status !== "none" && region === "none" && status !== "all") {
+    } else if (status !== "none" && region === "all" && status !== "all") {
       message = `Downloading Surveys of Status "${status}"`;
       url += `?status=["${status}"]`;
-    } else if (status === "none" && region !== "none") {
+    } else if (status === "none" && region !== "all") {
       if (selectedStations.length > 0) {
         message = `Downloading Surveys for the following stations: ${selectedStations.join(
           ", "
@@ -114,7 +126,7 @@ const Download = () => {
         message = `Downloading Surveys of Region "${region}"`;
         url += `?localGovernment=["${region.toUpperCase()}"]`;
       }
-    } else if (status !== "none" && region !== "none") {
+    } else if (status !== "none" && region !== "all") {
       if (selectedStations.length > 0) {
         message = `Downloading all ${status} Surveys for ${region} stations: ${selectedStations.join(
           ", "
@@ -258,6 +270,7 @@ const Download = () => {
                   onChange={handleLGAChange}
                 >
                   <option value="none">None</option>
+                  <option value="all">All</option>
                   <option value="alimosho">ALIMOSHO</option>
                   <option value="ikorodu">IKORODU</option>
                 </select>
