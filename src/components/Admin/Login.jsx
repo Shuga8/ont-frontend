@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { Button } from "@mui/material";
 import { ImSpinner9 } from "react-icons/im";
-import glo_logo from "../../assets/glo.png";
+import unicef_logo from "../../assets/unicef.png";
 import oxford_logo from "../../assets/oxford.png";
 import { useLogin } from "../../hooks/useLogin";
 import ErrorToast from "../Alerts/ErrorToast";
@@ -53,7 +53,7 @@ const Login = () => {
                 className="flex items-center mb-6 text-2xl font-semibold text-gray-900 "
               >
                 <img className="w-8 h-8 mr-2" src={logo} alt="logo" />
-                UNICEF SURVEY
+                ONT SURVEY
               </Link>
               <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  mb-3">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -140,7 +140,7 @@ const Login = () => {
                 Partners
               </h4>
               <div className="partners py-3 flex flex-row justify-center gap-x-4">
-                <img className="w-20 h-20 mr-2" src={glo_logo} alt="GLO" />
+                <img className="w-20 h-20 mr-2" src={unicef_logo} alt="GLO" />
                 <img
                   className="w-20 h-20 mr-2 object-contain mix-blend-multiply"
                   src={oxford_logo}
