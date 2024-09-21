@@ -111,11 +111,6 @@
   margin: -500px 0px 0px 0px;
   opacity: 0;
 }
-.info-widget-container .wrapper .developer {
-  position: absolute;
-  bottom: 80px;
-  right: 15px;
-}
 
 #dropdown-user {
   top: 42px;
