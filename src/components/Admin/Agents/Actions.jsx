@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 import { PiUserCirclePlusDuotone } from "react-icons/pi";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { IoMdCloseCircle } from "react-icons/io";
 import { BsSend } from "react-icons/bs";
 import { ImSpinner3 } from "react-icons/im";
 import ErrorToast from "../../Alerts/ErrorToast";
@@ -23,6 +24,8 @@ const Actions = () => {
   window.addEventListener("click", function (e) {
     if (e.target == document.querySelector(".new-agent-form")) {
       document.querySelector(".new-agent-form").classList.add("hidden");
+      const password = document.forms["invite_form"]["password"];
+      password.value = "";
     }
   });
 
@@ -162,13 +165,26 @@ const Actions = () => {
         </div>
       </div>
       <div className="new-agent-form  hidden">
-        <div className="new-agent  px-3 py-1 my-4">
+        <div className="new-agent  px-3 py-1 my-4 relative">
           <div className="">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Create an account for agent
               </h1>
             </div>
+
+            <span
+              className="absolute top-1 p-2 right-1 text-red-600 text-xl cursor-pointer"
+              onClick={() => {
+                document
+                  .querySelector(".new-agent-form")
+                  .classList.add("hidden");
+                const password = document.forms["invite_form"]["password"];
+                password.value = "";
+              }}
+            >
+              <IoMdCloseCircle />
+            </span>
 
             <form
               className="space-y-4 md:space-y-6 p-3"

@@ -9,6 +9,7 @@ import { useAuthContext } from "../../../hooks/useAuthContext";
 import ErrorToast from "../../Alerts/ErrorToast";
 import SuccessToast from "../../Alerts/SuccessToast";
 import Preloader from "../Widgets/Preloader";
+import { IoMdCloseCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
 const getSearchValue = () => {
@@ -222,10 +223,21 @@ const Search = (page) => {
         <form
           method="POST"
           encType="multipart/formdata "
-          className="bg-white px-3 "
+          className="bg-white px-3 relative"
           onSubmit={handleSubmit}
           name="csv-form"
         >
+          <span
+            className="absolute top-1 p-2 right-1 text-red-600 text-xl cursor-pointer"
+            onClick={() => {
+              document
+                .querySelector(".new-survey-form")
+                .classList.add("hidden");
+              setFile(null);
+            }}
+          >
+            <IoMdCloseCircle />
+          </span>
           {file ? (
             <>
               <div className="img_layer p-2">
