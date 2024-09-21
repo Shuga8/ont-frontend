@@ -220,7 +220,6 @@ const Unfinished = () => {
                                   to={`/survey?language=${data.survey.language}&phone=${data.respondent.phone}&agent=${user.user._id}&respondent=${data.respondent._id}`}
                                   className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
                                   title="Complete Unfinished Survey"
-                                  target="_blank"
                                 >
                                   <span>
                                     <GoTasklist />
@@ -289,7 +288,6 @@ const Unfinished = () => {
                         to={`/survey?language=${respondentByPhone.survey.language}&phone=${respondentByPhone.respondent.phone}&agent=${user.user._id}&respondent=${respondentByPhone.respondent._id}`}
                         className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
                         title="Complete Unfinished Survey"
-                        target="_blank"
                       >
                         <span>
                           <GoTasklist />

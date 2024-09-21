@@ -157,6 +157,36 @@ const Survey = () => {
           } else if (q.type === "open-ended") {
             return answer && answer !== "";
           }
+
+          if (q?.meta?.conditions?.respondToIfEquals) {
+            const nested = q.meta.conditions.respondToIfEquals;
+            const nestedQuestion =
+              q.meta.conditions.respondToIfEquals?.question;
+
+            if (
+              nestedQuestion.isRequired &&
+              selectedOptions[qIndex] == nested?.ifValueEquals
+            ) {
+              const answer = selectedOptions[nestedQuestion.slug];
+              if (nestedQuestion.type === "multiple-choice") {
+                return answer && answer.length > 0;
+              } else if (nestedQuestion.type === "single-choice") {
+                return answer && answer !== "";
+              } else if (nestedQuestion.type === "open-ended") {
+                return answer && answer !== "";
+              }
+
+              if (nestedQuestion?.meta?.conditions?.respondToIfEquals) {
+                const inner =
+                  nestedQuestion?.meta?.conditions?.respondToIfEquals;
+                const innerQ = inner.question;
+                const answer = selectedOptions[innerQ.slug];
+                if (nestedQuestion.type === "open-ended") {
+                  return answer && answer !== "";
+                }
+              }
+            }
+          }
         }
         return true;
       });
@@ -190,10 +220,10 @@ const Survey = () => {
               response.push({
                 question: q._id,
                 answer: selectedOptions[`${qIndex}_other`],
-                nested: {
-                  slug: nestedQuestion.slug,
-                  answer: selectedOptions[`${nestedQuestion.slug}_other`],
-                },
+              });
+              response.push({
+                question: nestedQuestion._id,
+                answer: selectedOptions[`${nestedQuestion.slug}`],
               });
             } else {
               response.push({
@@ -209,11 +239,22 @@ const Survey = () => {
               response.push({
                 question: q._id,
                 answer: selectedOptions[qIndex],
-                nested: {
-                  slug: nestedQuestion.slug,
-                  answer: selectedOptions[`${nestedQuestion.slug}`],
-                },
               });
+              response.push({
+                question: nestedQuestion._id,
+                answer: selectedOptions[`${nestedQuestion.slug}`],
+              });
+
+              if (nestedQuestion?.meta?.conditions?.respondToIfEquals) {
+                const inner =
+                  nestedQuestion?.meta?.conditions?.respondToIfEquals;
+                const innerQ = inner.question;
+
+                response.push({
+                  question: innerQ._id,
+                  answer: selectedOptions[`${innerQ.slug}`],
+                });
+              }
             } else {
               q.previousResponse = selectedOptions[qIndex];
               response.push({
@@ -294,6 +335,8 @@ const Survey = () => {
   const call_multiple_nested = (q, qIndex) => {
     const nested = q.meta.conditions.respondToIfEquals;
     const nestedQuestion = nested?.question;
+
+    // console.log(nested);
     if (
       (selectedOptions[qIndex].includes(nested.ifValueEquals) &&
         selectedOptions[qIndex].length > 1) ||
@@ -374,7 +417,7 @@ const Survey = () => {
           {nestedQuestion.type === "single-choice" && (
             <div>
               {nestedQuestion.responseOptions.map((option, oIndex) => {
-                console.log(selectedOptions[nestedQuestion.slug]);
+                // console.log(selectedOptions[nestedQuestion.slug]);
 
                 return (
                   <div key={oIndex} className="flex items-center mb-2">
@@ -463,7 +506,7 @@ const Survey = () => {
                   nestedQuestion?.meta?.numberRange?.min
                 ) {
                   let min = nestedQuestion?.meta?.numberRange?.min;
-                  let max = nestedQuestion?.meta?.numberRange?.min;
+                  let max = nestedQuestion?.meta?.numberRange?.max;
                   if (nestedQuestion?.meta?.numberRange) {
                     let value = parseInt(e.target.value);
                     if (value < min || value > max) {
@@ -481,6 +524,102 @@ const Survey = () => {
               // disabled={!!q.previousResponse}
             />
           )}
+
+          {nestedQuestion &&
+            selectedOptions[nestedQuestion.slug] &&
+            nestedQuestion?.meta?.conditions?.respondToIfEquals &&
+            (() => {
+              const inner = nestedQuestion?.meta?.conditions?.respondToIfEquals;
+              const innerQ = inner.question;
+
+              function callOpen(nestedQuestion) {
+                return (
+                  <input
+                    type={
+                      nestedQuestion.meta && nestedQuestion.meta.formType
+                        ? nestedQuestion.meta.formType === "date"
+                          ? "date"
+                          : nestedQuestion.meta.formType === "date-time"
+                          ? "datetime-local"
+                          : nestedQuestion.meta.formType === "number"
+                          ? "number"
+                          : "text"
+                        : "text"
+                    }
+                    className="w-full p-2 border"
+                    placeholder="Your answer"
+                    {...(nestedQuestion.meta &&
+                    nestedQuestion.meta.formType === "number" &&
+                    nestedQuestion.meta.numberRange
+                      ? {
+                          min: nestedQuestion.meta.numberRange?.min,
+                          max: nestedQuestion.meta.numberRange?.max,
+                        }
+                      : {})}
+                    {...(nestedQuestion.meta && nestedQuestion.meta.charLength
+                      ? {
+                          maxLength: nestedQuestion.meta.charLength,
+                        }
+                      : {})}
+                    value={
+                      nestedQuestion.meta &&
+                      nestedQuestion.meta.formType === "date"
+                        ? (selectedOptions[nestedQuestion.slug] || "").slice(
+                            0,
+                            10
+                          )
+                        : nestedQuestion.meta &&
+                          nestedQuestion.meta?.formType === "date-time"
+                        ? (selectedOptions[nestedQuestion.slug] || "").slice(
+                            0,
+                            16
+                          )
+                        : selectedOptions[nestedQuestion.slug] || ""
+                    }
+                    onChange={(e) => {
+                      handleInputChange(nestedQuestion.slug, e.target.value);
+                    }}
+                    onKeyUp={(e) => {
+                      let min = nestedQuestion?.meta?.numberRange?.min;
+                      let max = nestedQuestion?.meta?.numberRange?.max;
+
+                      let value = parseInt(e.target.value);
+                      if (value < min || value > max) {
+                        e.target.value = value < min ? min : max;
+                      }
+                    }}
+                    {...((q.meta && q.meta.formType === "date") ||
+                    q.meta.formType === "date-time"
+                      ? {
+                          max: new Date().toISOString().slice(0, 10),
+                        }
+                      : {})}
+                    // disabled={!!q.previousResponse}
+                  />
+                );
+              }
+
+              return (
+                <div className="px-2 py-2">
+                  <div className="my-2 text-gray-500 text-xs font-medium">
+                    {innerQ.question}{" "}
+                    {innerQ.isRequired == true ? (
+                      <span className="text-red-500 text-base font-bold">
+                        {" "}
+                        *
+                      </span>
+                    ) : (
+                      <span className="text-green-500 text-xs font-bold">
+                        {" "}
+                        (optional)
+                      </span>
+                    )}
+                  </div>
+
+                  {callOpen(innerQ)}
+                </div>
+              );
+            })()}
         </div>
       </div>
     );
@@ -564,6 +703,8 @@ const Survey = () => {
           {nestedQuestion.type === "single-choice" && (
             <div>
               {nestedQuestion.responseOptions.map((option, oIndex) => {
+                // console.log(selectedOptions[nestedQuestion.slug]);
+
                 return (
                   <div key={oIndex} className="flex items-center mb-2">
                     <input
@@ -573,17 +714,11 @@ const Survey = () => {
                       value={option.toLowerCase()}
                       className="custom-radio mr-2"
                       checked={
-                        selectedOptions[nestedQuestion.slug] !== undefined &&
-                        (selectedOptions[qIndex].toLowerCase() ===
-                          nested.ifValueEquals ||
-                          (option.toLowerCase() === others_text.toLowerCase() &&
-                            selectedOptions[`${nestedQuestion.slug}_other`] !==
-                              undefined &&
-                            selectedOptions[
-                              `${nestedQuestion.slug}_other`
-                            ].toLowerCase()))
+                        selectedOptions[nestedQuestion.slug] ===
+                        option.toLowerCase()
                       }
                       onChange={(e) => {
+                        // console.log(e.target.value);
                         if (
                           e.target.value.toLowerCase() ===
                           others_text.toLowerCase()
@@ -657,7 +792,7 @@ const Survey = () => {
                   nestedQuestion?.meta?.numberRange?.min
                 ) {
                   let min = nestedQuestion?.meta?.numberRange?.min;
-                  let max = nestedQuestion?.meta?.numberRange?.min;
+                  let max = nestedQuestion?.meta?.numberRange?.max;
                   if (nestedQuestion?.meta?.numberRange) {
                     let value = parseInt(e.target.value);
                     if (value < min || value > max) {
