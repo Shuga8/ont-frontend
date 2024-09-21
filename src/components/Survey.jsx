@@ -267,12 +267,12 @@ const Survey = () => {
 
         res.responses = response;
 
-        console.log(res);
-        setTimeout(() => {
-          setCategoryLoading(false);
-        }, 1500);
+        // console.log(res);
+        // setTimeout(() => {
+        //   setCategoryLoading(false);
+        // }, 1500);
 
-        return;
+        // return;
 
         await submitResponse(res);
 
@@ -532,7 +532,7 @@ const Survey = () => {
               const inner = nestedQuestion?.meta?.conditions?.respondToIfEquals;
               const innerQ = inner.question;
 
-              function callOpen(nestedQuestion) {
+              function callOpen(parentQ, nested, nestedQuestion) {
                 return (
                   <input
                     type={
@@ -616,7 +616,7 @@ const Survey = () => {
                     )}
                   </div>
 
-                  {callOpen(innerQ)}
+                  {callOpen(nestedQuestion, inner, innerQ)}
                 </div>
               );
             })()}
