@@ -130,6 +130,35 @@
   right: 0px;
 }
 
+.passwordChange-container {
+  background: rgba($color: #000000, $alpha: 0.7);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  display: flex;
+  place-items: center;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+  padding: 0px 10px;
+
+  form {
+    min-width: 300px;
+    width: 650px;
+    max-width: 650px;
+    min-height: 350px;
+    position: relative;
+
+    input[type="password"] {
+      background: transparent;
+      border: 1px solid #333;
+    }
+  }
+}
+
 .new-survey-form {
   background: rgba($color: #000000, $alpha: 0.7);
   width: 100%;

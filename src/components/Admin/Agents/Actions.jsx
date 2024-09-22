@@ -10,6 +10,7 @@ import { ImSpinner3 } from "react-icons/im";
 import ErrorToast from "../../Alerts/ErrorToast";
 import SuccessToast from "../../Alerts/SuccessToast";
 import { useAuthContext } from "../../../hooks/useAuthContext";
+import Preloader from "../Widgets/Preloader";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -121,13 +122,14 @@ const Actions = () => {
 
   return (
     <>
+      <Preloader isVisible={isLoading} />
       <div className="flex justify-end p-3 flex-row gap-x-2">
         <ErrorToast isActive={isErrorActive} message={error} />
         <SuccessToast message={success} isActive={isSuccessActive} />
         <Button
           variant="outlined"
           color="primary"
-          className="flex flex-row gap-x-2 p-1"
+          className="flex flex-row gap-x-2"
           onClick={showAgentForm}
         >
           <span className="hidden md:block text-base">New Agent</span>
