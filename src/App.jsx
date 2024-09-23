@@ -47,18 +47,18 @@ function App() {
       <div className="App">
         <BrowserRouter>
           <Routes>
-            {/* Public Routes */}
-            <Route
-              path="/admin/login"
-              element={!user ? <Login /> : <Navigate to="/admin/" replace />}
-            />
-
             {/* Protected Routes */}
             <Route
               path="/admin/*"
               element={
                 user ? <AdminRoutes /> : <Navigate to="/admin/login" replace />
               }
+            />
+
+            {/* Public Routes */}
+            <Route
+              path="/admin/login"
+              element={!user ? <Login /> : <Navigate to="/admin/" replace />}
             />
 
             {/* Default Route */}
