@@ -49,6 +49,7 @@ function App() {
           <Routes>
             <Route
               path="/admin/"
+              exact
               element={
                 user ? <Admin /> : <Navigate to="/admin/login" replace />
               }
