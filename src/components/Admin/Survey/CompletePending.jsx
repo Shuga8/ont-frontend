@@ -156,7 +156,9 @@ const CompletePending = () => {
     setEnterSurveyLoading(true);
     const url = `/survey?language=${selectedLanguage}&phone=${getPhone()}&agent=${
       user.user._id
-    }&respondent=${respondent.respondent._id}`;
+    }&respondent=${respondent.respondent._id}&researcherCode=${
+      user.user.researcherCode
+    }`;
     navigate(url);
   };
 

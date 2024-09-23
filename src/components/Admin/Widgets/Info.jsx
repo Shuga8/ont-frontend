@@ -64,11 +64,11 @@ const Info = () => {
             <img
               src={one_thought}
               alt=""
-              className="w-10 h-10 rounded-full mx-auto"
+              className="block my-5 w-16 h-16 rounded-full mx-auto"
             />
 
-            <p className="text-teal-600 text-lg italic my-2 font-bold text-center">
-              ONE THOUGHT TECHNOLOGIES
+            <p className="text-teal-600 text-lg italic my-2 font-bold text-center uppercase">
+              ONETHOUGHT TECHNOLOGY LIMITED
             </p>
           </div>
 

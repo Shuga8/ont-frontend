@@ -217,7 +217,7 @@ const Unfinished = () => {
 
                               <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
                                 <Link
-                                  to={`/survey?language=${data.survey.language}&phone=${data.respondent.phone}&agent=${user.user._id}&respondent=${data.respondent._id}`}
+                                  to={`/survey?language=${data.survey.language}&phone=${data.respondent.phone}&agent=${user.user._id}&respondent=${data.respondent._id}&researcherCode=${user.user.researcherCode}`}
                                   className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
                                   title="Complete Unfinished Survey"
                                 >
@@ -285,7 +285,7 @@ const Unfinished = () => {
 
                     <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
                       <Link
-                        to={`/survey?language=${respondentByPhone.survey.language}&phone=${respondentByPhone.respondent.phone}&agent=${user.user._id}&respondent=${respondentByPhone.respondent._id}`}
+                        to={`/survey?language=${respondentByPhone.survey.language}&phone=${respondentByPhone.respondent.phone}&agent=${user.user._id}&respondent=${respondentByPhone.respondent._id}&researcherCode=${user.user.researcherCode}`}
                         className="font-medium text-blue-600 text-lg p-3 bg-gray-200 rounded-full hover:bg-slate-100"
                         title="Complete Unfinished Survey"
                       >

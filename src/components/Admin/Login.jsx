@@ -59,7 +59,7 @@ const Login = () => {
                 to="#"
                 className="flex items-center mb-6 text-2xl font-semibold text-gray-900 "
               >
-                <img className="w-8 h-8 mr-2" src={logo} alt="logo" />
+                <img className="w-20 h-20 mr-2" src={logo} alt="logo" />
                 ONT SURVEY
               </Link>
               <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  mb-3">
