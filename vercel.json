@@ -1,14 +1,13 @@
 {
   "rewrites": [
     {
-      "source": "/admin/:path*",
-      "destination": "/admin/:path*"
-    },
-    {
       "source": "/admin/login",
       "destination": "/admin/login"
     },
-    
+    {
+      "source": "/admin/:path*",
+      "destination": "/admin/:path*"
+    },
     {
       "source": "/survey",
       "destination": "/survey"

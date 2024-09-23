@@ -47,6 +47,12 @@ function App() {
       <div className="App">
         <BrowserRouter>
           <Routes>
+            <Route
+              path="/admin/"
+              element={
+                user ? <Admin /> : <Navigate to="/admin/login" replace />
+              }
+            />
             {/* Protected Routes */}
             <Route
               path="/admin/*"
