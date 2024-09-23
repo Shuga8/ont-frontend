@@ -21,12 +21,10 @@ function App() {
     const handleBeforeUnload = (event) => {
       // Check if the page is being refreshed
       const isRefresh = performance.navigation.type === 1 || event.persisted;
-      event.preventDefault();
-      if (!isRefresh) {
-        event.returnValue = "";
 
-        console.log(event.returnValue);
-        // logout();
+      if (!isRefresh) {
+        event.preventDefault();
+        logout();
       }
     };
 
