@@ -17,30 +17,30 @@ function App() {
   const { user, dispatch } = useAuthContext();
   const { logout } = useLogout();
 
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      // Check if the page is being refreshed
-      const isRefresh = performance.navigation.type === 1 || event.persisted;
-      if (!isRefresh) {
-        logout();
-        event.preventDefault();
-        event.returnValue = "";
-      }
-    };
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     // Check if the page is being refreshed
+  //     const isRefresh = performance.navigation.type === 1 || event.persisted;
+  //     if (!isRefresh) {
+  //       logout();
+  //       event.preventDefault();
+  //       event.returnValue = "";
+  //     }
+  //   };
 
-    const polling = () => {
-      if (!user && window.location.pathname != "/admin/login") {
-        window.location.href = "/admin/login";
-      }
-    };
+  //   const polling = () => {
+  //     if (!user && window.location.pathname != "/admin/login") {
+  //       window.location.href = "/admin/login";
+  //     }
+  //   };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      polling();
-    };
-  }, [logout, user]);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //     polling();
+  //   };
+  // }, [logout, user]);
 
   return (
     <>
