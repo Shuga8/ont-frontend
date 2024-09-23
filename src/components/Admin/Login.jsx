@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { Button } from "@mui/material";
 import { ImSpinner9 } from "react-icons/im";
@@ -13,6 +13,7 @@ const Login = () => {
   const { login, isLoading, error, success } = useLogin();
   const [isErrorActive, setErrorActive] = useState(false);
   const [isSuccessActive, setSuccessActive] = useState(false);
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -36,7 +37,13 @@ const Login = () => {
       const timer = setTimeout(() => {
         setSuccessActive(false);
       }, 2000);
-      return () => clearTimeout(timer);
+      const redirect = setTimeout(() => {
+        navigate("/admin/dashboard");
+      }, 2002);
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(redirect);
+      };
     }
   }, [error, success]);
 

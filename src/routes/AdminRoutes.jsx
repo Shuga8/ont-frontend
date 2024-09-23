@@ -21,13 +21,27 @@ function AdminRoutes() {
   return (
     <Routes>
       <Route
+        path="/"
+        element={
+          user ? (
+            <Navigate to="/admin/dashboard" replace />
+          ) : (
+            <Navigate to="/admin/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={user ? <Admin /> : <Navigate to="/admin/login" replace />}
+      />
+      <Route
         path="/agents"
         element={
           user ? (
             user.user.type !== "call-center" ? (
               <Agents />
             ) : (
-              <Navigate to={"/admin/"} replace />
+              <Navigate to={"/admin/dashboard"} replace />
             )
           ) : (
             <Navigate to="/admin/login" replace />

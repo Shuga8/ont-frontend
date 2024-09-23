@@ -17,42 +17,42 @@ function App() {
   const { user, dispatch } = useAuthContext();
   const { logout } = useLogout();
 
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event) => {
-  //     // Check if the page is being refreshed
-  //     const isRefresh = performance.navigation.type === 1 || event.persisted;
-  //     if (!isRefresh) {
-  //       logout();
-  //       event.preventDefault();
-  //       event.returnValue = "";
-  //     }
-  //   };
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // Check if the page is being refreshed
+      const isRefresh = performance.navigation.type === 1 || event.persisted;
+      event.preventDefault();
+      if (!isRefresh) {
+        event.returnValue = "";
 
-  //   const polling = () => {
-  //     if (!user && window.location.pathname != "/admin/login") {
-  //       window.location.href = "/admin/login";
-  //     }
-  //   };
+        console.log(event.returnValue);
+        // logout();
+      }
+    };
 
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
+    const polling = () => {
+      if (!user && window.location.pathname != "/admin/login") {
+        window.location.href = "/admin/login";
+      }
+    };
 
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //     polling();
-  //   };
-  // }, [logout, user]);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      polling();
+    };
+  }, [logout, user]);
 
   return (
     <>
       <div className="App">
         <BrowserRouter>
           <Routes>
+            {/* Public Routes */}
             <Route
-              path="/admin/"
-              exact
-              element={
-                user ? <Admin /> : <Navigate to="/admin/login" replace />
-              }
+              path="/admin/login"
+              element={!user ? <Login /> : <Navigate to="/admin/" replace />}
             />
             {/* Protected Routes */}
             <Route
@@ -61,19 +61,12 @@ function App() {
                 user ? <AdminRoutes /> : <Navigate to="/admin/login" replace />
               }
             />
-
-            {/* Public Routes */}
-            <Route
-              path="/admin/login"
-              element={!user ? <Login /> : <Navigate to="/admin/" replace />}
-            />
-
             {/* Default Route */}
             <Route
               path="/"
               element={
                 user ? (
-                  <Navigate to="/admin/" replace />
+                  <Navigate to="/admin/dashboard" replace />
                 ) : (
                   <Navigate to="/admin/login" replace />
                 )

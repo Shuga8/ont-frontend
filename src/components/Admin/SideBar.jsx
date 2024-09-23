@@ -232,9 +232,9 @@ const SideBar = () => {
           <ul className="space-y-2 font-medium">
             <li>
               <Link
-                to={"/admin/"}
+                to={"/admin/dashboard"}
                 className={`flex items-center p-2  rounded-lg text-white  hover:bg-gray-700 group ${
-                  pathNameCheck("/admin/") ? "bg-gray-700" : ""
+                  pathNameCheck("/admin/dashboard") ? "bg-gray-700" : ""
                 }`}
               >
                 <RiSpeedUpLine color="#fff" />
@@ -249,7 +249,6 @@ const SideBar = () => {
                 className={`flex items-center p-2  rounded-lg text-white  hover:bg-gray-700 group ${
                   pathNameCheck("/admin/profile") ? "bg-gray-700" : ""
                 }`}
-                aria-hidden="true"
               >
                 <CgProfile color="#fff" />
 
