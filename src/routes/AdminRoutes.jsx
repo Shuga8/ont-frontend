@@ -21,10 +21,6 @@ function AdminRoutes() {
   return (
     <Routes>
       <Route
-        path="/"
-        element={user ? <Admin /> : <Navigate to="/admin/login" replace />}
-      />
-      <Route
         path="/agents"
         element={
           user ? (
