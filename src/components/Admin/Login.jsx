@@ -136,7 +136,7 @@ const Login = () => {
                   </form>
                 </div>
               </div>
-              <h4 className="text-gray-300 font-extrabold text-xl uppercase">
+              {/* <h4 className="text-gray-300 font-extrabold text-xl uppercase">
                 Partners
               </h4>
               <div className="partners py-3 flex flex-row justify-center gap-x-4">
@@ -146,7 +146,7 @@ const Login = () => {
                   src={oxford_logo}
                   alt="Oxford"
                 />
-              </div>
+              </div> */}
             </div>
           </section>
         </div>
