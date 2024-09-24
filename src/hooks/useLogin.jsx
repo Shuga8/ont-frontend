@@ -38,6 +38,7 @@ export const useLogin = () => {
         localStorage.setItem("user", JSON.stringify(response.data));
         dispatch({ type: "LOGIN", payload: response.data });
         localStorage.setItem("justLoggedIn", true);
+        localStorage.setItem("loginTime", new Date());
       }, 1500);
     }
 

@@ -7,6 +7,7 @@ export const useLogout = () => {
     localStorage.removeItem("user");
     dispatch({ type: "LOGOUT" });
     localStorage.setItem("justLoggedIn", false);
+    localStorage.removeItem("loginTime");
   };
 
   return { logout };
