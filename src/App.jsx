@@ -18,14 +18,20 @@ function App() {
   const { logout } = useLogout();
 
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      const isRefresh = event.persisted || event.navigation.type === 1;
-
-      if (!isRefresh) {
-        event.preventDefault();
-        logout();
+    const handleAuthTimeout = () => {
+      const loginTime = localStorage.getItem("loginTime");
+      if (loginTime) {
+        const currentTime = new Date();
+        const loginTimeDate = new Date(loginTime);
+        const timeDiff = currentTime - loginTimeDate;
+        const oneDay = 24 * 60 * 60 * 1000;
+        if (timeDiff > oneDay) {
+          logout();
+        }
       }
     };
+
+    handleAuthTimeout();
 
     const polling = () => {
       if (!user && window.location.pathname != "/admin/login") {
@@ -33,11 +39,11 @@ function App() {
       }
     };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    polling();
 
+    const intervalId = setInterval(handleAuthTimeout, 1000 * 60);
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      polling();
+      clearInterval(intervalId);
     };
   }, [logout, user]);
 
