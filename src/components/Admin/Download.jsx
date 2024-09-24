@@ -66,7 +66,7 @@ const Download = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // setLoading(true);
+    setLoading(true);
 
     const form = e.target;
     const status = form.status.value;
