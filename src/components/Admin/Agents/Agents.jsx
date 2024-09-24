@@ -3,6 +3,7 @@ import { ErrorToast, Loader, SideBar, SuccessToast } from "../index";
 import { Link } from "react-router-dom";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { IoTrashOutline } from "react-icons/io5";
+import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import { TbPencilCog } from "react-icons/tb";
 import Actions from "./Actions";
 import { useAuthContext } from "../../../hooks/useAuthContext";
@@ -27,6 +28,7 @@ const Agents = () => {
   const [success, setSuccess] = useState(null);
   const [isErrorActive, setErrorActive] = useState(false);
   const [isSuccessActive, setSuccessActive] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
   let id = 1;
 
@@ -218,22 +220,38 @@ const Agents = () => {
 
               <label className="flex flex-col gap-y-2 px-4 my-4">
                 <label htmlFor="password">New Password</label>
-                <input
-                  type="password"
-                  className="focus:outline-none outline-none  p-2"
-                  name="password"
-                  autoComplete="new-password"
-                />
+                <div className="relative w-full">
+                  <input
+                    type={showPass ? "text" : "password"}
+                    className="focus:outline-none outline-none  p-2 w-full"
+                    name="password"
+                    autoComplete="new-password"
+                  />
+                  <span
+                    className="absolute px-3 top-3 right-0 text-blue-600 cursor-pointer text-lg"
+                    onClick={() => setShowPass(!showPass)}
+                  >
+                    {!showPass ? <FaRegEye /> : <FaEyeSlash />}
+                  </span>
+                </div>
               </label>
 
               <label className="flex flex-col gap-y-2 px-4 my-4">
                 <label htmlFor="password_confirmation">Confirm Password</label>
-                <input
-                  type="password"
-                  className="focus:outline-none outline-none  p-2"
-                  name="password_confirmation"
-                  autoComplete="new-password"
-                />
+                <div className="relative w-full">
+                  <input
+                    type={showPass ? "text" : "password"}
+                    className="focus:outline-none outline-none  p-2 w-full"
+                    name="password_confirmation"
+                    autoComplete="new-password"
+                  />
+                  <span
+                    className="absolute px-3 top-3 right-0 text-blue-600 cursor-pointer text-lg"
+                    onClick={() => setShowPass(!showPass)}
+                  >
+                    {!showPass ? <FaRegEye /> : <FaEyeSlash />}
+                  </span>
+                </div>
               </label>
 
               <div className="w-full py-2 px-4 block">
