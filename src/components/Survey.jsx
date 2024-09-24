@@ -203,6 +203,7 @@ const Survey = () => {
           respondent: getRespondentIdFromUrl(),
           language: getLanguageFromUrl(),
           category: currentSurvey._id,
+          researchersCode: user.user.researcherCode,
         };
         const response = [];
         currentSurvey.questions.forEach((q, qIndex) => {
@@ -266,7 +267,6 @@ const Survey = () => {
         });
 
         res.responses = response;
-
         // console.log(res);
         // setTimeout(() => {
         //   setCategoryLoading(false);

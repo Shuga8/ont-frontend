@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import { ImSpinner9 } from "react-icons/im";
 import unicef_logo from "../../assets/unicef.png";
 import oxford_logo from "../../assets/oxford.png";
+import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import { useLogin } from "../../hooks/useLogin";
 import ErrorToast from "../Alerts/ErrorToast";
 import SuccessToast from "../Alerts/SuccessToast";
@@ -13,6 +14,7 @@ const Login = () => {
   const { login, isLoading, error, success } = useLogin();
   const [isErrorActive, setErrorActive] = useState(false);
   const [isSuccessActive, setSuccessActive] = useState(false);
+  const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,19 +95,27 @@ const Login = () => {
                     <div>
                       <label
                         htmlFor="password"
-                        className="block mb-2 text-sm font-medium text-gray-900 "
+                        className="block mb-2 text-sm font-medium text-gray-900"
                       >
                         Password
                       </label>
-                      <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        placeholder="••••••••"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 "
-                        autoComplete="current-password"
-                        required=""
-                      />
+                      <div className="w-full relative">
+                        <input
+                          type={showPass ? "text" : "password"}
+                          name="password"
+                          id="password"
+                          placeholder="••••••••"
+                          className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+                          autoComplete="current-password"
+                          required=""
+                        />
+                        <span
+                          className="absolute px-3 top-3 right-0 text-blue-600 cursor-pointer text-lg"
+                          onClick={() => setShowPass(!showPass)}
+                        >
+                          {!showPass ? <FaRegEye /> : <FaEyeSlash />}
+                        </span>
+                      </div>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-start">

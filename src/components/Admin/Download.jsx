@@ -66,11 +66,17 @@ const Download = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // setLoading(true);
 
     const form = e.target;
     const status = form.status.value;
     const region = form.region.value;
+
+    if (status == "none") {
+      setError("Please select a status or all statuses");
+      setLoading(false);
+      return;
+    }
 
     if (
       (status === "none" || !status) &&
@@ -97,9 +103,9 @@ const Download = () => {
 
     let url = `https://ont-survey-tracker-development.up.railway.app/v1/surveys/download`;
 
-    if (status === "all" && region === "all") {
+    if (status === "all" && (region === "all" || region === "none")) {
       message = `Downloading All Surveys`;
-    } else if (status === "all" && region !== "all") {
+    } else if (status === "all" && region !== "all" && region !== "none") {
       if (selectedStations.length > 0) {
         message = `Downloading All Surveys for the following stations: ${selectedStations.join(
           ", "
@@ -111,10 +117,14 @@ const Download = () => {
         message = `Downloading All Surveys of Region "${region}"`;
         url += `?localGovernment=["${region.toUpperCase()}"]`;
       }
-    } else if (status !== "none" && region === "all" && status !== "all") {
+    } else if (
+      status !== "none" &&
+      status !== "all" &&
+      (region == "all" || region === "none")
+    ) {
       message = `Downloading Surveys of Status "${status}"`;
       url += `?status=["${status}"]`;
-    } else if (status === "none" && region !== "all") {
+    } else if (status === "none" && region !== "all" && region !== "none") {
       if (selectedStations.length > 0) {
         message = `Downloading Surveys for the following stations: ${selectedStations.join(
           ", "
@@ -126,7 +136,7 @@ const Download = () => {
         message = `Downloading Surveys of Region "${region}"`;
         url += `?localGovernment=["${region.toUpperCase()}"]`;
       }
-    } else if (status !== "none" && region !== "all") {
+    } else if (status !== "none" && region !== "all" && region !== "none") {
       if (selectedStations.length > 0) {
         message = `Downloading all ${status} Surveys for ${region} stations: ${selectedStations.join(
           ", "
@@ -139,6 +149,8 @@ const Download = () => {
         url += `?status=["${status}"]&localGovernment=["${region.toUpperCase()}"]`;
       }
     }
+
+    setInfo(message);
 
     const myHeader = new Headers();
     myHeader.append("Authorization", `Bearer ${user.token}`);

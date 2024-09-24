@@ -19,10 +19,9 @@ function App() {
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
-      // Check if the page is being refreshed
-      const isRefresh = performance.navigation.type === 1 || event.persisted;
+      const isRefresh = event.persisted;
 
-      if (!isRefresh) {
+      if (isRefresh) {
         event.preventDefault();
         logout();
       }

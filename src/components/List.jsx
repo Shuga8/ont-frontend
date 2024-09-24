@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-export const useRespondentList = (id) => {
+export const useRespondentList = (id, code) => {
   const [loadingQuestions, setLoadingQuestion] = useState(false);
   const { user } = useAuthContext();
 
