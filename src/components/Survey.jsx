@@ -203,7 +203,6 @@ const Survey = () => {
           respondent: getRespondentIdFromUrl(),
           language: getLanguageFromUrl(),
           category: currentSurvey._id,
-          researchersCode: user.user.researcherCode,
         };
         const response = [];
         currentSurvey.questions.forEach((q, qIndex) => {
@@ -927,7 +926,7 @@ const Survey = () => {
                       q.meta.formType === "date-time"
                         ? { max: new Date().toISOString().slice(0, 10) }
                         : {})}
-                      disabled={!!q.previousResponse}
+                      // disabled={!!q.previousResponse}
                     />
                   )}
 
@@ -971,7 +970,7 @@ const Survey = () => {
                                   );
                                 }
                               }}
-                              disabled={!!q.previousResponse}
+                              // disabled={!!q.previousResponse}
                             />
                             <label htmlFor={`q${qIndex}-o${oIndex}`}>
                               {option}
@@ -990,7 +989,7 @@ const Survey = () => {
                             handleOtherOptionChange(qIndex, e.target.value)
                           }
                           maxLength={50}
-                          disabled={!!q.previousResponse}
+                          // disabled={!!q.previousResponse}
                         />
                       )}
 
@@ -1037,7 +1036,7 @@ const Survey = () => {
                                 handleMultipleChoiceChange(qIndex, option);
                               }
                             }}
-                            disabled={!!q.previousResponse}
+                            // disabled={!!q.previousResponse}
                           />
                           <label htmlFor={`q${qIndex}-o${oIndex}`}>
                             {option}
@@ -1057,7 +1056,7 @@ const Survey = () => {
                               handleOtherOptionChange(qIndex, e.target.value)
                             }
                             maxLength={50}
-                            disabled={!!q.previousResponse}
+                            // disabled={!!q.previousResponse}
                           />
                         )}
 
