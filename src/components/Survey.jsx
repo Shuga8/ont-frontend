@@ -321,7 +321,7 @@ const Survey = () => {
         res.responses = response;
         // console.log(res);
         // setTimeout(() => {
-        //   setCategoryLoading(false);
+        // setCategoryLoading(false);
         // }, 1500);
         // return;
 
