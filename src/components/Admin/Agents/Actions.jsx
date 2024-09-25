@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 import { Button } from "@mui/material";
-import { MdFormatListBulletedAdd } from "react-icons/md";
 import { PiUserCirclePlusDuotone } from "react-icons/pi";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { IoMdCloseCircle } from "react-icons/io";
-import { BsSend } from "react-icons/bs";
 import { ImSpinner3 } from "react-icons/im";
 import ErrorToast from "../../Alerts/ErrorToast";
 import SuccessToast from "../../Alerts/SuccessToast";
@@ -315,7 +313,7 @@ const Actions = () => {
               >
                 {!isLoading ? (
                   <span className="flex flex-row gap-x-2 place-items-center">
-                    Send Invite <BsSend color="#fff" />
+                    Create Account
                   </span>
                 ) : (
                   <span className="spinner py-3">

@@ -55,7 +55,8 @@ const BarGraph = () => {
         enabled: false,
       },
     },
-    colors: ["#22C55E", "#EF4444", "#EAB308", "#A855F7"],
+    // colors: ["#22C55E", "#EF4444", "#EAB308", "#A855F7"],
+    colors: ["#22C55E", "#EF4444", "#A855F7"],
     xaxis: {
       categories: [...agStats.admin],
     },
@@ -82,10 +83,10 @@ const BarGraph = () => {
       name: "Rejected Surveys",
       data: [...agStats.stats[1].data],
     },
-    {
-      name: "Pending Surveys",
-      data: [...agStats.stats[2].data],
-    },
+    // {
+    //   name: "Pending Surveys",
+    //   data: [...agStats.stats[2].data],
+    // },
     {
       name: "Unfinished Surveys",
       data: [...agStats.stats[3].data],

@@ -113,7 +113,6 @@ const Survey = () => {
 
   const handleMultipleChoiceChange = (qIndex, option) => {
     if (option === others_text) {
-      // If "Others" is selected, check if it's already in the selected options
       if (selectedOptions[qIndex].includes(option)) {
         // Remove "Others" from the selected options
         setSelectedOptions((prevOptions) => {
@@ -146,12 +145,25 @@ const Survey = () => {
           };
         });
       }
+
+      if (selectedOptions[qIndex]?.includes(option)) {
+        setSelectedOptions((prevOptions) => {
+          const updatedOptions = [...(prevOptions[qIndex] || [])];
+          updatedOptions.splice(updatedOptions.indexOf(option), 1);
+
+          return {
+            ...prevOptions,
+            [qIndex]: updatedOptions,
+          };
+        });
+      }
       // Add the new option to the selected options
       setSelectedOptions((prevOptions) => {
         const updatedOptions = [...(prevOptions[qIndex] || [])];
         if (!updatedOptions.includes(option)) {
           updatedOptions.push(option);
         }
+        console.log(selectedOptions);
         return {
           ...prevOptions,
           [qIndex]: updatedOptions,
@@ -290,12 +302,12 @@ const Survey = () => {
         });
 
         res.responses = response;
-        // console.log(res);
-        // setTimeout(() => {
-        //   setCategoryLoading(false);
-        // }, 1500);
+        console.log(res);
+        setTimeout(() => {
+          setCategoryLoading(false);
+        }, 1500);
 
-        // return;
+        return;
 
         await submitResponse(res);
 
@@ -962,10 +974,10 @@ const Survey = () => {
                               className="custom-radio mr-2"
                               checked={
                                 selectedOptions[qIndex] !== undefined &&
-                                (selectedOptions[qIndex].toLowerCase() ===
-                                  option.toLowerCase() ||
-                                  (option.toLowerCase() ===
-                                    others_text.toLowerCase() &&
+                                (selectedOptions[qIndex]?.toLowerCase() ===
+                                  option?.toLowerCase() ||
+                                  (option?.toLowerCase() ===
+                                    others_text?.toLowerCase() &&
                                     selectedOptions[`${qIndex}_other`] !==
                                       undefined &&
                                     selectedOptions[
