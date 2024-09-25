@@ -136,7 +136,7 @@ const Survey = () => {
       }
     } else {
       // If a different option is selected, remove "Others" from the selected options
-      if (selectedOptions[qIndex].includes(others_text)) {
+      if (selectedOptions[qIndex]?.includes(others_text)) {
         setSelectedOptions((prevOptions) => {
           const updatedOptions = [...(prevOptions[qIndex] || [])];
           updatedOptions.splice(updatedOptions.indexOf(others_text), 1);
@@ -685,24 +685,19 @@ const Survey = () => {
                       selectedOptions[qIndex].toLowerCase() ===
                         nested.ifValueEquals?.toLowerCase()
                         ? option === nestedQuestion.responseOptions[0]
-                        : false)
+                        : "")
                     }
                     onChange={() => {
-                      if (
-                        option ===
-                        "Others…………………. Please specify (Text box - 50 Characters)"
-                      ) {
+                      if (option === others_text) {
                         if (
                           selectedOptions[nestedQuestion.slug].includes(option)
                         ) {
-                          // Remove "Others" from the selected options
                           handleMultipleChoiceChange(
                             nestedQuestion.slug,
                             option,
                             false
                           );
                         } else {
-                          // Add "Others" to the selected options
                           handleMultipleChoiceChange(
                             nestedQuestion.slug,
                             option,
