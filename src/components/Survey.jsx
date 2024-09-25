@@ -39,6 +39,8 @@ const Survey = () => {
     respondentId,
     language
   );
+  const others_text =
+    "Others…………………. Please specify (Text box - 50 Characters)";
 
   useEffect(() => {
     if (surveyError) {
@@ -145,7 +147,6 @@ const Survey = () => {
           };
         });
       }
-
       // Add the new option to the selected options
       setSelectedOptions((prevOptions) => {
         const updatedOptions = [...(prevOptions[qIndex] || [])];
@@ -154,7 +155,7 @@ const Survey = () => {
         } else {
           updatedOptions.splice(updatedOptions.indexOf(option), 1);
         }
-        console.log(selectedOptions);
+
         return {
           ...prevOptions,
           [qIndex]: updatedOptions,
@@ -235,10 +236,9 @@ const Survey = () => {
         currentSurvey.questions.forEach((q, qIndex) => {
           if (
             q.type === "single-choice" &&
-            selectedOptions[qIndex] ===
-              "Others…………………. Please specify (Text box - 50 Characters)"
+            selectedOptions[qIndex] === others_text?.toLowerCase()
           ) {
-            q.previousResponse = selectedOptions[`${qIndex}_other`];
+            // q.previousResponse = selectedOptions[`${qIndex}_other`];
 
             if (q?.meta?.conditions?.respondToIfEquals) {
               const nestedQuestion =
@@ -246,30 +246,52 @@ const Survey = () => {
 
               response.push({
                 question: q._id,
-                answer: selectedOptions[`${qIndex}_other`],
+                answer: Array.isArray(selectedOptions[`${qIndex}_other`])
+                  ? selectedOptions[`${qIndex}_other`].join(", ")
+                  : selectedOptions[`${qIndex}_other`],
               });
               response.push({
                 question: nestedQuestion._id,
-                answer: selectedOptions[`${nestedQuestion.slug}`],
+                answer: Array.isArray(selectedOptions[`${nestedQuestion.slug}`])
+                  ? selectedOptions[`${nestedQuestion.slug}`].join(", ")
+                  : selectedOptions[`${nestedQuestion.slug}`],
               });
             } else {
               response.push({
                 question: q._id,
-                answer: selectedOptions[`${qIndex}_other`],
+                answer: Array.isArray(selectedOptions[`${qIndex}_other`])
+                  ? selectedOptions[`${qIndex}_other`].join(", ")
+                  : selectedOptions[`${qIndex}_other`],
               });
             }
+          } else if (
+            q.type === "multiple-choice" &&
+            selectedOptions[qIndex].includes(others_text?.toLowerCase())
+          ) {
+            // q.previousResponse = selectedOptions[qIndex];
+
+            response.push({
+              question: q._id,
+              answer: Array.isArray(selectedOptions[`${qIndex}_other`])
+                ? selectedOptions[`${qIndex}_other`].join(", ")
+                : selectedOptions[`${qIndex}_other`],
+            });
           } else {
             if (q?.meta?.conditions?.respondToIfEquals) {
               const nestedQuestion =
                 q?.meta?.conditions?.respondToIfEquals?.question;
-              q.previousResponse = selectedOptions[qIndex];
+              // q.previousResponse = selectedOptions[qIndex];
               response.push({
                 question: q._id,
-                answer: selectedOptions[qIndex],
+                answer: Array.isArray(selectedOptions[qIndex])
+                  ? selectedOptions[qIndex].join(", ")
+                  : selectedOptions[qIndex],
               });
               response.push({
                 question: nestedQuestion._id,
-                answer: selectedOptions[`${nestedQuestion.slug}`],
+                answer: Array.isArray(selectedOptions[`${nestedQuestion.slug}`])
+                  ? selectedOptions[`${nestedQuestion.slug}`].join(", ")
+                  : selectedOptions[`${nestedQuestion.slug}`],
               });
 
               if (nestedQuestion?.meta?.conditions?.respondToIfEquals) {
@@ -279,26 +301,29 @@ const Survey = () => {
 
                 response.push({
                   question: innerQ._id,
-                  answer: selectedOptions[`${innerQ.slug}`],
+                  answer: Array.isArray(selectedOptions[`${innerQ.slug}`])
+                    ? selectedOptions[`${innerQ.slug}`].join(", ")
+                    : selectedOptions[`${innerQ.slug}`],
                 });
               }
             } else {
-              q.previousResponse = selectedOptions[qIndex];
+              // q.previousResponse = selectedOptions[qIndex];
               response.push({
                 question: q._id,
-                answer: selectedOptions[qIndex],
+                answer: Array.isArray(selectedOptions[qIndex])
+                  ? selectedOptions[qIndex].join(", ")
+                  : selectedOptions[qIndex],
               });
             }
           }
         });
 
         res.responses = response;
-        console.log(res);
-        setTimeout(() => {
-          setCategoryLoading(false);
-        }, 1500);
-
-        return;
+        // console.log(res);
+        // setTimeout(() => {
+        //   setCategoryLoading(false);
+        // }, 1500);
+        // return;
 
         await submitResponse(res);
 
@@ -844,8 +869,6 @@ const Survey = () => {
 
   const currentSurvey = surveyList[activeIndex] || {};
   const questions = currentSurvey.questions || [];
-  const others_text =
-    "Others…………………. Please specify (Text box - 50 Characters)";
 
   return (
     <>
@@ -1000,20 +1023,22 @@ const Survey = () => {
                           </div>
                         );
                       })}
-                      {selectedOptions[qIndex]?.toLowerCase() ===
-                        others_text.toLowerCase() && (
-                        <input
-                          type="text"
-                          className="w-full p-2 border"
-                          placeholder="Please specify"
-                          value={selectedOptions[`${qIndex}_other`]}
-                          onChange={(e) =>
-                            handleOtherOptionChange(qIndex, e.target.value)
-                          }
-                          maxLength={50}
-                          // disabled={!!q.previousResponse}
-                        />
-                      )}
+                      {selectedOptions[qIndex] &&
+                        selectedOptions[qIndex].includes(
+                          others_text?.toLowerCase()
+                        ) && (
+                          <input
+                            type="text"
+                            className="w-full p-2 border"
+                            placeholder="Please specify"
+                            value={selectedOptions[`${qIndex}_other`]}
+                            onChange={(e) =>
+                              handleOtherOptionChange(qIndex, e.target.value)
+                            }
+                            maxLength={50}
+                            // disabled={!!q.previousResponse}
+                          />
+                        )}
 
                       {selectedOptions[qIndex] &&
                         q?.meta?.conditions?.respondToIfEquals &&
