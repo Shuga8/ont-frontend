@@ -29,13 +29,12 @@ const Agents = () => {
   const [isErrorActive, setErrorActive] = useState(false);
   const [isSuccessActive, setSuccessActive] = useState(false);
   const [showPass, setShowPass] = useState(false);
-  const [userType, setUserType] = useState(null);
 
   let id = 1;
 
-  const showPasswordForm = (e) => {
-    if (userType === "admin") {
-      setError("cannot change password for another admin");
+  const showPasswordForm = (user) => {
+    if (user.type === "admin") {
+      setError("cannot change an admin's password");
       return;
     }
 
@@ -355,8 +354,7 @@ const Agents = () => {
                           className="text-blue-700 p-2 bg-slate-200 rounded-full text-base md:text-lg cursor-pointer hover:bg-slate-100"
                           title="edit user"
                           onClick={() => {
-                            setUserType(user.type);
-                            showPasswordForm();
+                            showPasswordForm(user);
                             setEmail(user.email);
                           }}
                         >
