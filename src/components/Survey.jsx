@@ -112,20 +112,44 @@ const Survey = () => {
   };
 
   const handleMultipleChoiceChange = (qIndex, option) => {
-    if (option === "Others…………………. Please specify (Text box - 50 Characters)") {
-      setSelectedOptions((prevOptions) => {
-        return {
-          ...prevOptions,
-          [qIndex]: [option],
-          [`${qIndex}_other`]: "",
-        };
-      });
+    if (option === others_text) {
+      // If "Others" is selected, check if it's already in the selected options
+      if (selectedOptions[qIndex].includes(option)) {
+        // Remove "Others" from the selected options
+        setSelectedOptions((prevOptions) => {
+          const updatedOptions = [...(prevOptions[qIndex] || [])];
+          updatedOptions.splice(updatedOptions.indexOf(option), 1);
+          return {
+            ...prevOptions,
+            [qIndex]: updatedOptions,
+          };
+        });
+      } else {
+        // Add "Others" to the selected options
+        setSelectedOptions((prevOptions) => {
+          return {
+            ...prevOptions,
+            [qIndex]: [option],
+            [`${qIndex}_other`]: "",
+          };
+        });
+      }
     } else {
+      // If a different option is selected, remove "Others" from the selected options
+      if (selectedOptions[qIndex].includes(others_text)) {
+        setSelectedOptions((prevOptions) => {
+          const updatedOptions = [...(prevOptions[qIndex] || [])];
+          updatedOptions.splice(updatedOptions.indexOf(others_text), 1);
+          return {
+            ...prevOptions,
+            [qIndex]: updatedOptions,
+          };
+        });
+      }
+      // Add the new option to the selected options
       setSelectedOptions((prevOptions) => {
         const updatedOptions = [...(prevOptions[qIndex] || [])];
-        if (updatedOptions.includes(option)) {
-          updatedOptions.splice(updatedOptions.indexOf(option), 1);
-        } else {
+        if (!updatedOptions.includes(option)) {
           updatedOptions.push(option);
         }
         return {
