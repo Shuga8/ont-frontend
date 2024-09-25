@@ -91,7 +91,7 @@ const Search = (page) => {
     formData.append("language", "english");
     formData.append("uploadType", uploadType);
 
-    setSuccess("please wait while it been uploaded");
+    // setSuccess("please wait while it been uploaded");
     const response = await fetch(
       `https://ont-survey-tracker-development.up.railway.app/v1/surveys/upload`,
       {
@@ -123,7 +123,7 @@ const Search = (page) => {
       }, 2800);
 
       setTimeout(() => {
-        window.location.reload();
+        window.location.href = "/admin/survey/pending";
       }, 3000);
     } else {
       setSuccess(data.message);
@@ -165,15 +165,17 @@ const Search = (page) => {
         <ErrorToast isActive={isErrorActive} message={error} />
         <SuccessToast isActive={isSuccessActive} message={success} />
 
-        <Button
-          variant="outlined"
-          color="primary"
-          className="flex flex-row gap-x-2 "
-          onClick={() => showNewSurveyForm("new")}
-        >
-          <span className="hidden md:block text-base">Add Survey</span>
-          <MdFormatListBulletedAdd className="text-blue-700 text-2xl" />
-        </Button>
+        {user.user.type !== "call-center" && (
+          <Button
+            variant="outlined"
+            color="primary"
+            className="flex flex-row gap-x-2 "
+            onClick={() => showNewSurveyForm("new")}
+          >
+            <span className="hidden md:block text-base">Add Survey</span>
+            <MdFormatListBulletedAdd className="text-blue-700 text-2xl" />
+          </Button>
+        )}
         {/* <Button
           variant="outlined"
           color="success"
