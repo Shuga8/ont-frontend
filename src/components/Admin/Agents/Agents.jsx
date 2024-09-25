@@ -339,7 +339,7 @@ const Agents = () => {
                       </div>
 
                       <div className="items-center justify-center p-2 xl:p-5 hidden md:flex">
-                        <p className="font-medium text-gray-600 text-sm capitalize">
+                        <p className="font-medium text-gray-800 text-sm capitalize">
                           {user.type.replace("-", " ")}
                         </p>
                       </div>
