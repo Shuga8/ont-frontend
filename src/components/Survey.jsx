@@ -926,7 +926,7 @@ const Survey = () => {
                       q.meta.formType === "date-time"
                         ? { max: new Date().toISOString().slice(0, 10) }
                         : {})}
-                      // disabled={!!q.previousResponse}
+                      disabled={!!q.previousResponse}
                     />
                   )}
 
@@ -970,7 +970,7 @@ const Survey = () => {
                                   );
                                 }
                               }}
-                              // disabled={!!q.previousResponse}
+                              disabled={!!q.previousResponse}
                             />
                             <label htmlFor={`q${qIndex}-o${oIndex}`}>
                               {option}
@@ -1036,7 +1036,7 @@ const Survey = () => {
                                 handleMultipleChoiceChange(qIndex, option);
                               }
                             }}
-                            // disabled={!!q.previousResponse}
+                            disabled={!!q.previousResponse}
                           />
                           <label htmlFor={`q${qIndex}-o${oIndex}`}>
                             {option}
