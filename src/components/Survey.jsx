@@ -146,22 +146,13 @@ const Survey = () => {
         });
       }
 
-      if (selectedOptions[qIndex]?.includes(option)) {
-        setSelectedOptions((prevOptions) => {
-          const updatedOptions = [...(prevOptions[qIndex] || [])];
-          updatedOptions.splice(updatedOptions.indexOf(option), 1);
-
-          return {
-            ...prevOptions,
-            [qIndex]: updatedOptions,
-          };
-        });
-      }
       // Add the new option to the selected options
       setSelectedOptions((prevOptions) => {
         const updatedOptions = [...(prevOptions[qIndex] || [])];
         if (!updatedOptions.includes(option)) {
           updatedOptions.push(option);
+        } else {
+          updatedOptions.splice(updatedOptions.indexOf(option), 1);
         }
         console.log(selectedOptions);
         return {
