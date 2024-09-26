@@ -54,6 +54,8 @@ const ForgotPassword = () => {
       email.trim() == ""
     ) {
       setError("Enter email!");
+      setIsLoading(false);
+
       return;
     }
 

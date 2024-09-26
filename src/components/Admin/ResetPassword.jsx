@@ -64,6 +64,7 @@ const ResetPassword = () => {
       email.trim() == ""
     ) {
       setError("Unauthorized access");
+      setIsLoading(false);
       setTimeout(() => {
         navigate("/admin/login");
       }, 1000);
@@ -77,6 +78,7 @@ const ResetPassword = () => {
       token.trim() == ""
     ) {
       setError("Enter OTP recieved in email!");
+      setIsLoading(false);
       return;
     }
 
@@ -87,6 +89,7 @@ const ResetPassword = () => {
       password.trim() == ""
     ) {
       setError("Enter password!");
+      setIsLoading(false);
       return;
     }
 
