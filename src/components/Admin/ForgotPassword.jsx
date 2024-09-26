@@ -42,6 +42,8 @@ const ForgotPassword = () => {
   }, [error, success]);
 
   const handleSubmit = async (e) => {
+    setError(null);
+    setSuccss(null);
     e.preventDefault();
     setIsLoading(true);
 
