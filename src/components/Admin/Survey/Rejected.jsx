@@ -237,11 +237,13 @@ const Rejected = () => {
                     </h5>
                   </div>
 
-                  <div className="p-2 xl:p-5">
-                    <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
-                      Actions
-                    </h5>
-                  </div>
+                  {user && user.user.type === "admin" && (
+                    <div className="p-2 xl:p-5">
+                      <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
+                        Actions
+                      </h5>
+                    </div>
+                  )}
                 </div>
 
                 <TableSkeleton count={6} />
@@ -349,11 +351,13 @@ const Rejected = () => {
                   </h5>
                 </div>
 
-                <div className="p-2 xl:p-5">
-                  <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
-                    Actions
-                  </h5>
-                </div>
+                {user && user.user.type === "admin" && (
+                  <div className="p-2 xl:p-5">
+                    <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
+                      Actions
+                    </h5>
+                  </div>
+                )}
               </div>
 
               {!errorPhone &&
@@ -396,20 +400,22 @@ const Rejected = () => {
                                 </p>
                               </div>
 
-                              <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
-                                <ul>
-                                  <li
-                                    className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
-                                    onClick={() => {
-                                      setReinstateActive(true);
-                                      setPhone(`${data.respondent.phone}`);
-                                    }}
-                                  >
-                                    <MdOutlineRestorePage />{" "}
-                                    <button>Restore</button>
-                                  </li>
-                                </ul>
-                              </div>
+                              {user && user.user.type === "admin" && (
+                                <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
+                                  <ul>
+                                    <li
+                                      className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
+                                      onClick={() => {
+                                        setReinstateActive(true);
+                                        setPhone(`${data.respondent.phone}`);
+                                      }}
+                                    >
+                                      <MdOutlineRestorePage />{" "}
+                                      <button>Restore</button>
+                                    </li>
+                                  </ul>
+                                </div>
+                              )}
                             </div>
                           );
                         })
@@ -467,17 +473,19 @@ const Rejected = () => {
                       </p>
                     </div>
 
-                    <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
-                      <ul>
-                        <li
-                          className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
-                          onClick={() => {
-                            setReinstateActive(true);
-                            setPhone(`${data.respondent.phone}`);
-                          }}
-                        ></li>
-                      </ul>
-                    </div>
+                    {user && user.user.type === "admin" && (
+                      <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
+                        <ul>
+                          <li
+                            className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
+                            onClick={() => {
+                              setReinstateActive(true);
+                              setPhone(`${data.respondent.phone}`);
+                            }}
+                          ></li>
+                        </ul>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
