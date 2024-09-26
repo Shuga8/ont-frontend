@@ -9,7 +9,7 @@ import { Survey, ErrorPage, Admin, Unauthorized } from "./components";
 import { AdminRoutes } from "./routes";
 import "./App.css";
 import { useAuthContext } from "./hooks/useAuthContext";
-import { Login } from "./components/Admin/index";
+import { ForgotPassword, Login, ResetPassword } from "./components/Admin/index";
 import { useEffect } from "react";
 import { useLogout } from "./hooks/useLogout";
 
@@ -34,7 +34,12 @@ function App() {
     handleAuthTimeout();
 
     const polling = () => {
-      if (!user && window.location.pathname != "/admin/login") {
+      if (
+        !user &&
+        window.location.pathname !== "/admin/login" &&
+        window.location.pathname !== "/admin/forgot-password" &&
+        !window.location.pathname.includes("/admin/reset-password")
+      ) {
         window.location.href = "/admin/login";
       }
     };
@@ -55,7 +60,31 @@ function App() {
             {/* Public Routes */}
             <Route
               path="/admin/login"
-              element={!user ? <Login /> : <Navigate to="/admin/" replace />}
+              element={
+                !user ? <Login /> : <Navigate to="/admin/dashboard" replace />
+              }
+            />
+
+            <Route
+              path="/admin/forgot-password"
+              element={
+                !user ? (
+                  <ForgotPassword />
+                ) : (
+                  <Navigate to="/admin/dashboard" replace />
+                )
+              }
+            />
+
+            <Route
+              path="/admin/reset-password"
+              element={
+                !user ? (
+                  <ResetPassword />
+                ) : (
+                  <Navigate to="/admin/dashboard" replace />
+                )
+              }
             />
             {/* Protected Routes */}
             <Route
