@@ -42,9 +42,9 @@ const ForgotPassword = () => {
   }, [error, success]);
 
   const handleSubmit = async (e) => {
-    setError(null);
-    setSuccss(null);
     e.preventDefault();
+    setError(null);
+    setSuccess(null);
     setIsLoading(true);
 
     const email = document.forms["OtpForm"]["email"].value;
