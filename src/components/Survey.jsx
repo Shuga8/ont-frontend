@@ -625,6 +625,9 @@ const Survey = () => {
                             0,
                             16
                           )
+                        : nested.ifValueEquals?.toLowerCase() ==
+                          selectedOptions[parentQ.slug]?.toLowerCase()
+                        ? nested?.defaultResponseIfValue
                         : selectedOptions[nestedQuestion.slug] || ""
                     }
                     onChange={(e) => {
