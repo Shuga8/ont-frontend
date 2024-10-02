@@ -1127,7 +1127,7 @@ const Survey = () => {
             </p>
           )}
 
-          <div className="actions-container flex justify-center py-6">
+          <div className="actions-container flex justify-center py-6 gap-3">
             <Button
               onClick={handleSaveAndContinue}
               variant="contained"
@@ -1135,6 +1135,16 @@ const Survey = () => {
               disabled={categoryLoading}
             >
               {categoryLoading ? "Saving..." : "Save and Continue"}
+            </Button>
+
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                navigate("/admin/dashboard");
+              }}
+            >
+              Back To Dashboard
             </Button>
           </div>
         </div>
