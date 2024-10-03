@@ -685,181 +685,200 @@ const Survey = () => {
 
     return (
       <div className="px-2 py-2">
-        <div className="my-2 text-gray-500 text-xs font-medium">
-          {nestedQuestion.question}{" "}
-          {nestedQuestion.isRequired == true ? (
-            <span className="text-red-500 text-base font-bold"> *</span>
-          ) : (
-            <span className="text-green-500 text-xs font-bold">
-              {" "}
-              (optional)
-            </span>
-          )}
-        </div>
+        {q.slug === "SQ300" &&
+        selectedOptions[qIndex]?.toLowerCase() === "no" ? (
+          ""
+        ) : (
+          <>
+            <div className="my-2 text-gray-500 text-xs font-medium">
+              {nestedQuestion.question}{" "}
+              {nestedQuestion.isRequired == true ? (
+                <span className="text-red-500 text-base font-bold"> *</span>
+              ) : (
+                <span className="text-green-500 text-xs font-bold">
+                  {" "}
+                  (optional)
+                </span>
+              )}
+            </div>
 
-        <div className="input-group px-2">
-          {nestedQuestion.type === "multiple-choice" && (
-            <div>
-              {nestedQuestion.responseOptions.map((option, oIndex) => (
-                <div key={oIndex} className="flex items-center mb-2">
-                  <input
-                    type="checkbox"
-                    id={`q${nestedQuestion.slug}-o${oIndex}`}
-                    value={option}
-                    className="custom-checkbox mr-2"
-                    checked={
-                      (selectedOptions[nestedQuestion.slug] &&
-                        selectedOptions[nestedQuestion.slug].includes(
-                          option
-                        )) ||
-                      (selectedOptions[qIndex] &&
-                      selectedOptions[qIndex].toLowerCase() ===
-                        nested.ifValueEquals?.toLowerCase()
-                        ? option === nestedQuestion.responseOptions[0]
-                        : "")
-                    }
-                    onChange={() => {
-                      if (option === others_text) {
-                        if (
-                          selectedOptions[nestedQuestion.slug].includes(option)
-                        ) {
-                          handleMultipleChoiceChange(
-                            nestedQuestion.slug,
-                            option,
-                            false
-                          );
-                        } else {
-                          handleMultipleChoiceChange(
-                            nestedQuestion.slug,
-                            option,
-                            true
-                          );
+            <div className="input-group px-2">
+              {nestedQuestion.type === "multiple-choice" && (
+                <div>
+                  {nestedQuestion.responseOptions.map((option, oIndex) => (
+                    <div key={oIndex} className="flex items-center mb-2">
+                      <input
+                        type="checkbox"
+                        id={`q${nestedQuestion.slug}-o${oIndex}`}
+                        value={option}
+                        className="custom-checkbox mr-2"
+                        checked={
+                          (selectedOptions[nestedQuestion.slug] &&
+                            selectedOptions[nestedQuestion.slug].includes(
+                              option
+                            )) ||
+                          (selectedOptions[qIndex] &&
+                          selectedOptions[qIndex].toLowerCase() ===
+                            nested.ifValueEquals?.toLowerCase()
+                            ? option === nestedQuestion.responseOptions[0]
+                            : "")
                         }
-                      } else {
-                        handleMultipleChoiceChange(nestedQuestion.slug, option);
-                      }
-                    }}
-                    // disabled={!!q.previousResponse}
-                  />
-                  <label htmlFor={`q${nestedQuestion.slug}-o${oIndex}`}>
-                    {option}
-                  </label>
+                        onChange={() => {
+                          if (option === others_text) {
+                            if (
+                              selectedOptions[nestedQuestion.slug].includes(
+                                option
+                              )
+                            ) {
+                              handleMultipleChoiceChange(
+                                nestedQuestion.slug,
+                                option,
+                                false
+                              );
+                            } else {
+                              handleMultipleChoiceChange(
+                                nestedQuestion.slug,
+                                option,
+                                true
+                              );
+                            }
+                          } else {
+                            handleMultipleChoiceChange(
+                              nestedQuestion.slug,
+                              option
+                            );
+                          }
+                        }}
+                        // disabled={!!q.previousResponse}
+                      />
+                      <label htmlFor={`q${nestedQuestion.slug}-o${oIndex}`}>
+                        {option}
+                      </label>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
+              )}
 
-          {nestedQuestion.type === "single-choice" && (
-            <div>
-              {nestedQuestion.responseOptions.map((option, oIndex) => {
-                // console.log(selectedOptions[nestedQuestion.slug]);
+              {nestedQuestion.type === "single-choice" && (
+                <div>
+                  {nestedQuestion.responseOptions.map((option, oIndex) => {
+                    // console.log(selectedOptions[nestedQuestion.slug]);
 
-                return (
-                  <div key={oIndex} className="flex items-center mb-2">
-                    <input
-                      type="radio"
-                      id={`q${nestedQuestion.slug}-o${oIndex}`}
-                      name={nestedQuestion.slug}
-                      value={option.toLowerCase()}
-                      className="custom-radio mr-2"
-                      checked={
-                        selectedOptions[nestedQuestion.slug] ===
-                        option.toLowerCase()
+                    return (
+                      <div key={oIndex} className="flex items-center mb-2">
+                        <input
+                          type="radio"
+                          id={`q${nestedQuestion.slug}-o${oIndex}`}
+                          name={nestedQuestion.slug}
+                          value={option.toLowerCase()}
+                          className="custom-radio mr-2"
+                          checked={
+                            selectedOptions[nestedQuestion.slug] ===
+                            option.toLowerCase()
+                          }
+                          onChange={(e) => {
+                            // console.log(e.target.value);
+                            if (
+                              e.target.value.toLowerCase() ===
+                              others_text.toLowerCase()
+                            ) {
+                              setSelectedOptions((prevOptions) => ({
+                                ...prevOptions,
+                                [nestedQuestion.slug]: e.target.value,
+                                [`${nestedQuestion.slug}_other`]: "",
+                              }));
+                            } else {
+                              handleSingleChoiceChange(
+                                nestedQuestion.slug,
+                                e.target.value
+                              );
+                            }
+                          }}
+                          // disabled={!!q.previousResponse}
+                        />
+                        <label htmlFor={`q${nestedQuestion.slug}-o${oIndex}`}>
+                          {option}
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {nestedQuestion.type === "open-ended" && (
+                <input
+                  type={
+                    nestedQuestion.meta && nestedQuestion.meta.formType
+                      ? nestedQuestion.meta.formType === "date"
+                        ? "date"
+                        : nestedQuestion.meta.formType === "date-time"
+                        ? "datetime-local"
+                        : nestedQuestion.meta.formType === "number"
+                        ? "number"
+                        : "text"
+                      : "text"
+                  }
+                  className="w-full p-2 border"
+                  placeholder="Your answer"
+                  {...(nestedQuestion.meta &&
+                  nestedQuestion.meta.formType === "number" &&
+                  nestedQuestion.meta.numberRange
+                    ? {
+                        min: nestedQuestion.meta.numberRange?.min,
+                        max: nestedQuestion.meta.numberRange?.max,
                       }
-                      onChange={(e) => {
-                        // console.log(e.target.value);
-                        if (
-                          e.target.value.toLowerCase() ===
-                          others_text.toLowerCase()
-                        ) {
-                          setSelectedOptions((prevOptions) => ({
-                            ...prevOptions,
-                            [nestedQuestion.slug]: e.target.value,
-                            [`${nestedQuestion.slug}_other`]: "",
-                          }));
-                        } else {
-                          handleSingleChoiceChange(
-                            nestedQuestion.slug,
-                            e.target.value
-                          );
+                    : {})}
+                  {...(nestedQuestion.meta && nestedQuestion.meta.charLength
+                    ? {
+                        maxLength: nestedQuestion.meta.charLength,
+                      }
+                    : {})}
+                  value={
+                    nestedQuestion.meta &&
+                    nestedQuestion.meta.formType === "date"
+                      ? (selectedOptions[nestedQuestion.slug] || "").slice(
+                          0,
+                          10
+                        )
+                      : nestedQuestion.meta &&
+                        nestedQuestion.meta?.formType === "date-time"
+                      ? (selectedOptions[nestedQuestion.slug] || "").slice(
+                          0,
+                          16
+                        )
+                      : selectedOptions[nestedQuestion.slug] || ""
+                  }
+                  onChange={(e) => {
+                    handleInputChange(qIndex, e.target.value);
+                  }}
+                  onKeyUp={(e) => {
+                    if (
+                      nestedQuestion?.meta &&
+                      nestedQuestion?.meta?.numberRange &&
+                      nestedQuestion?.meta?.numberRange?.min
+                    ) {
+                      let min = nestedQuestion?.meta?.numberRange?.min;
+                      let max = nestedQuestion?.meta?.numberRange?.max;
+                      if (nestedQuestion?.meta?.numberRange) {
+                        let value = parseInt(e.target.value);
+                        if (value < min || value > max) {
+                          e.target.value = value < min ? min : max;
                         }
-                      }}
-                      // disabled={!!q.previousResponse}
-                    />
-                    <label htmlFor={`q${nestedQuestion.slug}-o${oIndex}`}>
-                      {option}
-                    </label>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {nestedQuestion.type === "open-ended" && (
-            <input
-              type={
-                nestedQuestion.meta && nestedQuestion.meta.formType
-                  ? nestedQuestion.meta.formType === "date"
-                    ? "date"
-                    : nestedQuestion.meta.formType === "date-time"
-                    ? "datetime-local"
-                    : nestedQuestion.meta.formType === "number"
-                    ? "number"
-                    : "text"
-                  : "text"
-              }
-              className="w-full p-2 border"
-              placeholder="Your answer"
-              {...(nestedQuestion.meta &&
-              nestedQuestion.meta.formType === "number" &&
-              nestedQuestion.meta.numberRange
-                ? {
-                    min: nestedQuestion.meta.numberRange?.min,
-                    max: nestedQuestion.meta.numberRange?.max,
-                  }
-                : {})}
-              {...(nestedQuestion.meta && nestedQuestion.meta.charLength
-                ? {
-                    maxLength: nestedQuestion.meta.charLength,
-                  }
-                : {})}
-              value={
-                nestedQuestion.meta && nestedQuestion.meta.formType === "date"
-                  ? (selectedOptions[nestedQuestion.slug] || "").slice(0, 10)
-                  : nestedQuestion.meta &&
-                    nestedQuestion.meta?.formType === "date-time"
-                  ? (selectedOptions[nestedQuestion.slug] || "").slice(0, 16)
-                  : selectedOptions[nestedQuestion.slug] || ""
-              }
-              onChange={(e) => {
-                handleInputChange(qIndex, e.target.value);
-              }}
-              onKeyUp={(e) => {
-                if (
-                  nestedQuestion?.meta &&
-                  nestedQuestion?.meta?.numberRange &&
-                  nestedQuestion?.meta?.numberRange?.min
-                ) {
-                  let min = nestedQuestion?.meta?.numberRange?.min;
-                  let max = nestedQuestion?.meta?.numberRange?.max;
-                  if (nestedQuestion?.meta?.numberRange) {
-                    let value = parseInt(e.target.value);
-                    if (value < min || value > max) {
-                      e.target.value = value < min ? min : max;
+                      }
                     }
-                  }
-                }
-              }}
-              {...((q.meta && q.meta.formType === "date") ||
-              q.meta.formType === "date-time"
-                ? {
-                    max: new Date().toISOString().slice(0, 10),
-                  }
-                : {})}
-              // disabled={!!q.previousResponse}
-            />
-          )}
-        </div>
+                  }}
+                  {...((q.meta && q.meta.formType === "date") ||
+                  q.meta.formType === "date-time"
+                    ? {
+                        max: new Date().toISOString().slice(0, 10),
+                      }
+                    : {})}
+                  // disabled={!!q.previousResponse}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
     );
   };
@@ -941,6 +960,13 @@ const Survey = () => {
                             max: q.meta.numberRange.max,
                           }
                         : {})}
+                      {...(q.meta && q.meta.formType === "number"
+                        ? {
+                            pattern:
+                              `[${q.meta?.numberRange?.min}-${q.meta?.numberRange?.max}]{1}` ??
+                              "[0-9]",
+                          }
+                        : {})}
                       {...(q.meta && q.meta.charLength
                         ? { maxLength: q.meta.charLength }
                         : {})}
@@ -955,17 +981,16 @@ const Survey = () => {
                         handleInputChange(qIndex, e.target.value);
                       }}
                       onKeyUp={(e) => {
-                        if (
-                          q.meta &&
-                          q.meta.numberRange &&
-                          q.meta.numberRange.min
-                        ) {
+                        if (q.meta && q.meta.numberRange) {
                           let min = q.meta.numberRange.min;
                           let max = q.meta.numberRange.max;
-                          if (q.meta.numberRange) {
-                            let value = parseInt(e.target.value);
-                            if (value < min || value > max) {
-                              e.target.value = value < min ? min : max;
+                          let value = e.target.value;
+                          if (!/^[0-5]$/.test(value)) {
+                            e.target.value = "";
+                          } else {
+                            let numValue = parseInt(value);
+                            if (numValue < min || numValue > max) {
+                              e.target.value = numValue < min ? min : max;
                             }
                           }
                         }
