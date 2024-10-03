@@ -321,7 +321,7 @@ const Survey = () => {
         res.responses = response;
         // console.log(res);
         // setTimeout(() => {
-        // setCategoryLoading(false);
+        //   setCategoryLoading(false);
         // }, 1500);
         // return;
 
@@ -687,7 +687,32 @@ const Survey = () => {
       <div className="px-2 py-2">
         {q.slug === "SQ300" &&
         selectedOptions[qIndex]?.toLowerCase() === "no" ? (
-          ""
+          <div>
+            {nestedQuestion.type === "multiple-choice" && (
+              <div>
+                <div className="flex items-center mb-2">
+                  <input
+                    type="checkbox"
+                    id={`q${nestedQuestion.slug}-o1`}
+                    value={nested.defaultResponseIfValue}
+                    className="custom-checkbox mr-2"
+                    // checked={nested.defaultResponseIfValue}
+                    // disabled={!!nested.defaultResponseIfValue}
+                    onChange={() => {
+                      handleMultipleChoiceChange(
+                        nestedQuestion.slug,
+                        nested.defaultResponseIfValue
+                      );
+                    }}
+                  />
+
+                  <label htmlFor={`q${nestedQuestion.slug}-o1`}>
+                    {nested.defaultResponseIfValue}
+                  </label>
+                </div>
+              </div>
+            )}
+          </div>
         ) : (
           <>
             <div className="my-2 text-gray-500 text-xs font-medium">
