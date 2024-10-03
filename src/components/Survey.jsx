@@ -32,6 +32,7 @@ const Survey = () => {
   const [surveySuccess, setSurveySuccess] = useState(null);
   const [isErrorActive, setErrorActive] = useState(false);
   const [isSuccessActive, setSuccessActive] = useState(false);
+  const [openVisible, setOpenVisible] = useState(true);
 
   const respondentId = getRespondentIdFromUrl();
   const language = getLanguageFromUrl();
@@ -945,127 +946,204 @@ const Survey = () => {
             </h2>
 
             {questions.map((q, qIndex) => (
-              <div key={qIndex} className="question mb-4 shadow-xl">
-                <p className="mb-2">
-                  <span className="text-xl font-medium text-yellow-500">
-                    {`${qIndex + 1}.`}
-                  </span>{" "}
-                  {q.content.question}
-                  {q.isRequired == true ? (
-                    <span className="text-red-500 text-base font-bold"> *</span>
-                  ) : (
-                    <span className="text-green-500 text-xs font-bold">
-                      {" "}
-                      (optional)
-                    </span>
-                  )}
-                </p>
+              <>
+                <div key={qIndex} className="question mb-4 shadow-xl">
+                  <p className="mb-2">
+                    <span className="text-xl font-medium text-yellow-500">
+                      {`${qIndex + 1}.`}
+                    </span>{" "}
+                    {q.content.question}
+                    {q.isRequired == true ? (
+                      <span className="text-red-500 text-base font-bold">
+                        {" "}
+                        *
+                      </span>
+                    ) : (
+                      <span className="text-green-500 text-xs font-bold">
+                        {" "}
+                        (optional)
+                      </span>
+                    )}
+                  </p>
 
-                <div className="input-group px-4 py-6">
-                  {q.type === "open-ended" && (
-                    <input
-                      type={
-                        q.meta && q.meta.formType
-                          ? q.meta.formType === "date"
-                            ? "date"
-                            : q.meta.formType === "date-time"
-                            ? "datetime-local"
-                            : q.meta.formType === "number"
-                            ? "number"
+                  <div className="input-group px-4 py-6">
+                    {q.type === "open-ended" && (
+                      <input
+                        type={
+                          q.meta && q.meta.formType
+                            ? q.meta.formType === "date"
+                              ? "date"
+                              : q.meta.formType === "date-time"
+                              ? "datetime-local"
+                              : q.meta.formType === "number"
+                              ? "number"
+                              : "text"
                             : "text"
-                          : "text"
-                      }
-                      className="w-full p-2 border"
-                      placeholder="Your answer"
-                      {...(q.meta &&
-                      q.meta.formType === "number" &&
-                      q.meta.numberRange
-                        ? {
-                            min: q.meta.numberRange.min,
-                            max: q.meta.numberRange.max,
-                          }
-                        : {})}
-                      {...(q.meta && q.meta.formType === "number"
-                        ? {
-                            pattern:
-                              `[${q.meta?.numberRange?.min}-${q.meta?.numberRange?.max}]{1}` ??
-                              "[0-9]",
-                          }
-                        : {})}
-                      {...(q.meta && q.meta.charLength
-                        ? { maxLength: q.meta.charLength }
-                        : {})}
-                      value={
-                        q.meta && q.meta.formType === "date"
-                          ? (selectedOptions[qIndex] || "").slice(0, 10)
-                          : q.meta && q.meta.formType === "date-time"
-                          ? (selectedOptions[qIndex] || "").slice(0, 16)
-                          : selectedOptions[qIndex] || ""
-                      }
-                      onChange={(e) => {
-                        handleInputChange(qIndex, e.target.value);
-                      }}
-                      onKeyUp={(e) => {
-                        if (q.meta && q.meta.numberRange) {
-                          let min = q.meta.numberRange.min;
-                          let max = q.meta.numberRange.max;
-                          let value = e.target.value;
-                          if (!/^[0-5]$/.test(value)) {
-                            e.target.value = "";
-                          } else {
-                            let numValue = parseInt(value);
-                            if (numValue < min || numValue > max) {
-                              e.target.value = numValue < min ? min : max;
+                        }
+                        className="w-full p-2 border"
+                        placeholder="Your answer"
+                        {...(q.meta &&
+                        q.meta.formType === "number" &&
+                        q.meta.numberRange
+                          ? {
+                              min: q.meta.numberRange.min,
+                              max: q.meta.numberRange.max,
+                            }
+                          : {})}
+                        {...(q.meta && q.meta.formType === "number"
+                          ? {
+                              pattern:
+                                `[${q.meta?.numberRange?.min}-${q.meta?.numberRange?.max}]{1}` ??
+                                "[0-9]",
+                            }
+                          : {})}
+                        {...(q.meta && q.meta.charLength
+                          ? { maxLength: q.meta.charLength }
+                          : {})}
+                        value={
+                          q.meta && q.meta.formType === "date"
+                            ? (selectedOptions[qIndex] || "").slice(0, 10)
+                            : q.meta && q.meta.formType === "date-time"
+                            ? (selectedOptions[qIndex] || "").slice(0, 16)
+                            : selectedOptions[qIndex] || ""
+                        }
+                        onChange={(e) => {
+                          handleInputChange(qIndex, e.target.value);
+                        }}
+                        onKeyUp={(e) => {
+                          if (q.meta && q.meta.numberRange) {
+                            let min = q.meta.numberRange.min;
+                            let max = q.meta.numberRange.max;
+                            let value = e.target.value;
+                            if (!/^[0-5]$/.test(value)) {
+                              e.target.value = "";
+                            } else {
+                              let numValue = parseInt(value);
+                              if (numValue < min || numValue > max) {
+                                e.target.value = numValue < min ? min : max;
+                              }
                             }
                           }
-                        }
-                      }}
-                      {...((q.meta && q.meta.formType === "date") ||
-                      q.meta.formType === "date-time"
-                        ? { max: new Date().toISOString().slice(0, 10) }
-                        : {})}
-                      disabled={!!q.previousResponse}
-                    />
-                  )}
+                        }}
+                        {...((q.meta && q.meta.formType === "date") ||
+                        q.meta.formType === "date-time"
+                          ? { max: new Date().toISOString().slice(0, 10) }
+                          : {})}
+                        disabled={!!q.previousResponse}
+                      />
+                    )}
 
-                  {q.type === "single-choice" && (
-                    <div>
-                      {q.content.responseOptions.map((option, oIndex) => {
-                        return (
+                    {q.type === "single-choice" && (
+                      <div>
+                        {q.content.responseOptions.map((option, oIndex) => {
+                          return (
+                            <div
+                              key={oIndex}
+                              className="flex items-center mb-2"
+                            >
+                              <input
+                                type="radio"
+                                id={`q${qIndex}-o${oIndex}`}
+                                name={q._id}
+                                value={option.toLowerCase()}
+                                className="custom-radio mr-2"
+                                checked={
+                                  selectedOptions[qIndex] !== undefined &&
+                                  (selectedOptions[qIndex]?.toLowerCase() ===
+                                    option?.toLowerCase() ||
+                                    (option?.toLowerCase() ===
+                                      others_text?.toLowerCase() &&
+                                      selectedOptions[`${qIndex}_other`] !==
+                                        undefined &&
+                                      selectedOptions[
+                                        `${qIndex}_other`
+                                      ].toLowerCase()))
+                                }
+                                onChange={(e) => {
+                                  if (
+                                    e.target.value.toLowerCase() ===
+                                    others_text.toLowerCase()
+                                  ) {
+                                    setSelectedOptions((prevOptions) => ({
+                                      ...prevOptions,
+                                      [qIndex]: e.target.value,
+                                      [`${qIndex}_other`]: "",
+                                    }));
+                                  } else {
+                                    handleSingleChoiceChange(
+                                      qIndex,
+                                      e.target.value
+                                    );
+                                  }
+                                }}
+                                disabled={!!q.previousResponse}
+                              />
+                              <label htmlFor={`q${qIndex}-o${oIndex}`}>
+                                {option}
+                              </label>
+                            </div>
+                          );
+                        })}
+                        {selectedOptions[qIndex] &&
+                          selectedOptions[qIndex].includes(
+                            others_text?.toLowerCase()
+                          ) && (
+                            <input
+                              type="text"
+                              className="w-full p-2 border"
+                              placeholder="Please specify"
+                              value={selectedOptions[`${qIndex}_other`]}
+                              onChange={(e) =>
+                                handleOtherOptionChange(qIndex, e.target.value)
+                              }
+                              maxLength={50}
+                              // disabled={!!q.previousResponse}
+                            />
+                          )}
+
+                        {selectedOptions[qIndex] &&
+                          q?.meta?.conditions?.respondToIfEquals &&
+                          call_single_nested(q, qIndex)}
+                      </div>
+                    )}
+
+                    {q.type === "multiple-choice" && (
+                      <div>
+                        {q.content.responseOptions.map((option, oIndex) => (
                           <div key={oIndex} className="flex items-center mb-2">
                             <input
-                              type="radio"
+                              type="checkbox"
                               id={`q${qIndex}-o${oIndex}`}
-                              name={q._id}
-                              value={option.toLowerCase()}
-                              className="custom-radio mr-2"
+                              value={option}
+                              className="custom-checkbox mr-2"
                               checked={
-                                selectedOptions[qIndex] !== undefined &&
-                                (selectedOptions[qIndex]?.toLowerCase() ===
-                                  option?.toLowerCase() ||
-                                  (option?.toLowerCase() ===
-                                    others_text?.toLowerCase() &&
-                                    selectedOptions[`${qIndex}_other`] !==
-                                      undefined &&
-                                    selectedOptions[
-                                      `${qIndex}_other`
-                                    ].toLowerCase()))
+                                selectedOptions[qIndex] &&
+                                selectedOptions[qIndex].includes(option)
                               }
-                              onChange={(e) => {
+                              onChange={() => {
                                 if (
-                                  e.target.value.toLowerCase() ===
+                                  option.toLowerCase() ===
                                   others_text.toLowerCase()
                                 ) {
-                                  setSelectedOptions((prevOptions) => ({
-                                    ...prevOptions,
-                                    [qIndex]: e.target.value,
-                                    [`${qIndex}_other`]: "",
-                                  }));
+                                  if (
+                                    selectedOptions[qIndex].includes(option)
+                                  ) {
+                                    // Remove "Others" from the selected options
+                                    handleMultipleChoiceChange(
+                                      qIndex,
+                                      option,
+                                      false
+                                    );
+                                  } else {
+                                    // Add "Others" to the selected options
+                                    handleMultipleChoiceChange(
+                                      qIndex,
+                                      option,
+                                      true
+                                    );
+                                  }
                                 } else {
-                                  handleSingleChoiceChange(
-                                    qIndex,
-                                    e.target.value
-                                  );
+                                  handleMultipleChoiceChange(qIndex, option);
                                 }
                               }}
                               disabled={!!q.previousResponse}
@@ -1074,103 +1152,40 @@ const Survey = () => {
                               {option}
                             </label>
                           </div>
-                        );
-                      })}
-                      {selectedOptions[qIndex] &&
-                        selectedOptions[qIndex].includes(
-                          others_text?.toLowerCase()
-                        ) && (
-                          <input
-                            type="text"
-                            className="w-full p-2 border"
-                            placeholder="Please specify"
-                            value={selectedOptions[`${qIndex}_other`]}
-                            onChange={(e) =>
-                              handleOtherOptionChange(qIndex, e.target.value)
-                            }
-                            maxLength={50}
-                            // disabled={!!q.previousResponse}
-                          />
-                        )}
-
-                      {selectedOptions[qIndex] &&
-                        q?.meta?.conditions?.respondToIfEquals &&
-                        call_single_nested(q, qIndex)}
-                    </div>
-                  )}
-
-                  {q.type === "multiple-choice" && (
-                    <div>
-                      {q.content.responseOptions.map((option, oIndex) => (
-                        <div key={oIndex} className="flex items-center mb-2">
-                          <input
-                            type="checkbox"
-                            id={`q${qIndex}-o${oIndex}`}
-                            value={option}
-                            className="custom-checkbox mr-2"
-                            checked={
-                              selectedOptions[qIndex] &&
-                              selectedOptions[qIndex].includes(option)
-                            }
-                            onChange={() => {
-                              if (
-                                option.toLowerCase() ===
-                                others_text.toLowerCase()
-                              ) {
-                                if (selectedOptions[qIndex].includes(option)) {
-                                  // Remove "Others" from the selected options
-                                  handleMultipleChoiceChange(
-                                    qIndex,
-                                    option,
-                                    false
-                                  );
-                                } else {
-                                  // Add "Others" to the selected options
-                                  handleMultipleChoiceChange(
-                                    qIndex,
-                                    option,
-                                    true
-                                  );
-                                }
-                              } else {
-                                handleMultipleChoiceChange(qIndex, option);
+                        ))}
+                        {selectedOptions[qIndex] &&
+                          selectedOptions[qIndex].includes(
+                            "Others…………………. Please specify (Text box - 50 Characters)"
+                          ) && (
+                            <input
+                              type="text"
+                              className="w-full p-2 border"
+                              placeholder="Please specify"
+                              value={selectedOptions[`${qIndex}_other`]}
+                              onChange={(e) =>
+                                handleOtherOptionChange(qIndex, e.target.value)
                               }
-                            }}
-                            disabled={!!q.previousResponse}
-                          />
-                          <label htmlFor={`q${qIndex}-o${oIndex}`}>
-                            {option}
-                          </label>
-                        </div>
-                      ))}
-                      {selectedOptions[qIndex] &&
-                        selectedOptions[qIndex].includes(
-                          "Others…………………. Please specify (Text box - 50 Characters)"
-                        ) && (
-                          <input
-                            type="text"
-                            className="w-full p-2 border"
-                            placeholder="Please specify"
-                            value={selectedOptions[`${qIndex}_other`]}
-                            onChange={(e) =>
-                              handleOtherOptionChange(qIndex, e.target.value)
-                            }
-                            maxLength={50}
-                            // disabled={!!q.previousResponse}
-                          />
-                        )}
+                              maxLength={50}
+                              // disabled={!!q.previousResponse}
+                            />
+                          )}
 
-                      {selectedOptions[qIndex] &&
-                        selectedOptions[qIndex].length > 0 &&
-                        !selectedOptions[qIndex].includes(
-                          "Others…………………. Please specify (Text box - 50 Characters)"
-                        ) &&
-                        q?.meta?.conditions?.respondToIfEquals &&
-                        call_multiple_nested(q, qIndex)}
-                    </div>
-                  )}
+                        {selectedOptions[qIndex] &&
+                          selectedOptions[qIndex].length > 0 &&
+                          !selectedOptions[qIndex].includes(
+                            "Others…………………. Please specify (Text box - 50 Characters)"
+                          ) &&
+                          q?.meta?.conditions?.respondToIfEquals &&
+                          call_multiple_nested(q, qIndex)}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* {openVisible == true && (
+                    <div className="question mb-4 shadow-xl">Here here</div>
+                  )} */}
                 </div>
-              </div>
+              </>
             ))}
           </div>
 
