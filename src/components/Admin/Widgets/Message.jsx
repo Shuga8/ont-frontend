@@ -36,7 +36,19 @@ const Message = () => {
     yoruba: "A  fẹ  dupẹ lọwọ rẹ fun ilowosi rẹ si iwadii ati akoko rẹ",
   };
 
-  return { welcome, goodbye };
+  const consentQuestion = {
+    english:
+      " May I ask you a few short questions? The survey will take about 15 minutes and you may stop at any time?",
+    pidgin:
+      "I fit ask you small questions? The survey go take about 15 minutes and you fit stop any time",
+    hausa:
+      "Zan iya tambayar ka wasu tambayoyi kadan? Binciken zai dauki kusan minti 15 kuma zaka iya dakatar da shi a kowane lokaci",
+    igbo: "Enwere m ike ịjụ gị ajụjụ ole na ole dị mkpirikpi? Nnyocha ahụ ga-ewe ihe dị ka nkeji iri na ise ma ị nwere ike ịkwụsị n'oge ọ bụla",
+    yoruba:
+      "Ṣé mo lè bi ọ́ ní àwọn ìbéèrè kéékèèké kan? Ìwádìí náà yóò gba bíi ìṣẹ́jú 15 o sì lè dúró nígbàkúùgbà",
+  };
+
+  return { welcome, goodbye, consentQuestion };
 };
 
 export default Message;

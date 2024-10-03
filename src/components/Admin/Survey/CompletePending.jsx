@@ -9,7 +9,7 @@ import Message from "../Widgets/Message";
 
 const CompletePending = () => {
   const { user } = useAuthContext();
-  const { welcome } = Message();
+  const { welcome, consentQuestion } = Message();
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [info, setInfo] = useState(null);
@@ -24,6 +24,9 @@ const CompletePending = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("english");
   const [displayMessage, setDisplayMessage] = useState(
     welcome[selectedLanguage]
+  );
+  const [displayConsent, setDisplayConsent] = useState(
+    consentQuestion[selectedLanguage]
   );
   const [enterSurveyLoading, setEnterSurveyLoading] = useState(false);
   const [isSubmittingRejectLoading, setSubmittingRejectLoading] =
@@ -120,6 +123,7 @@ const CompletePending = () => {
   const handleChange = (event) => {
     setSelectedLanguage(event.target.value);
     setDisplayMessage(welcome[event.target.value]);
+    setDisplayConsent(consentQuestion[event.target.value]);
   };
 
   const handleRejectButtonClick = () => {
@@ -458,8 +462,7 @@ const CompletePending = () => {
                   {displayMessage}
                 </div>
                 <div className="static-message text-stone-600 mt-5 text-sm">
-                  May I ask you a few short questions? The survey will take
-                  about 15 minutes and you may stop at any time?
+                  {displayConsent}
                 </div>
               </div>
 
