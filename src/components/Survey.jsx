@@ -970,12 +970,12 @@ const Survey = () => {
                     {q.type === "open-ended" && (
                       <input
                         type={
-                          q.meta && q.meta.formType
-                            ? q.meta.formType === "date"
+                          q?.meta && q?.meta?.formType
+                            ? q?.meta?.formType === "date"
                               ? "date"
-                              : q.meta.formType === "date-time"
+                              : q?.meta?.formType === "date-time"
                               ? "datetime-local"
-                              : q.meta.formType === "number"
+                              : q?.meta?.formType === "number"
                               ? "number"
                               : "text"
                             : "text"
@@ -990,7 +990,7 @@ const Survey = () => {
                               max: q.meta.numberRange.max,
                             }
                           : {})}
-                        {...(q.meta && q.meta.formType === "number"
+                        {...(q.meta && q.meta?.formType === "number"
                           ? {
                               pattern:
                                 `[${q.meta?.numberRange?.min}-${q.meta?.numberRange?.max}]{1}` ??
@@ -1001,9 +1001,9 @@ const Survey = () => {
                           ? { maxLength: q.meta.charLength }
                           : {})}
                         value={
-                          q.meta && q.meta.formType === "date"
+                          q?.meta && q.meta?.formType === "date"
                             ? (selectedOptions[qIndex] || "").slice(0, 10)
-                            : q.meta && q.meta.formType === "date-time"
+                            : q?.meta && q?.meta?.formType === "date-time"
                             ? (selectedOptions[qIndex] || "").slice(0, 16)
                             : selectedOptions[qIndex] || ""
                         }
@@ -1025,8 +1025,8 @@ const Survey = () => {
                             }
                           }
                         }}
-                        {...((q.meta && q.meta.formType === "date") ||
-                        q.meta.formType === "date-time"
+                        {...((q?.meta && q?.meta?.formType === "date") ||
+                        q?.meta?.formType === "date-time"
                           ? { max: new Date().toISOString().slice(0, 10) }
                           : {})}
                         disabled={!!q.previousResponse}
