@@ -179,43 +179,45 @@ const Survey = () => {
       return questions.every((q, qIndex) => {
         if (q.isRequired) {
           const answer = selectedOptions[qIndex];
+          // console.log(q.type);
+
+          let isValid = false;
+
           if (q.type === "multiple-choice") {
-            return answer && answer.length > 0;
+            isValid = answer && answer.length > 0;
           } else if (q.type === "single-choice") {
-            return answer && answer !== "";
+            isValid = answer && answer !== "";
           } else if (q.type === "open-ended") {
-            return answer && answer !== "";
+            isValid = answer && answer !== "";
           }
 
           if (q?.meta?.conditions?.respondToIfEquals) {
-            const nested = q.meta.conditions.respondToIfEquals;
             const nestedQuestion =
               q.meta.conditions.respondToIfEquals?.question;
+            // console.log(q?.meta?.conditions?.respondToIfEquals?.question);
 
-            if (
-              nestedQuestion.isRequired &&
-              selectedOptions[qIndex] == nested?.ifValueEquals
-            ) {
-              const answer = selectedOptions[nestedQuestion.slug];
+            if (nestedQuestion.isRequired) {
+              const nestedAnswer = selectedOptions[nestedQuestion.slug];
               if (nestedQuestion.type === "multiple-choice") {
-                return answer && answer.length > 0;
+                isValid =
+                  nestedAnswer &&
+                  nestedAnswer.length > 0 &&
+                  nestedAnswer !== undefined;
               } else if (nestedQuestion.type === "single-choice") {
-                return answer && answer !== "";
+                isValid =
+                  nestedAnswer &&
+                  nestedAnswer !== "" &&
+                  nestedAnswer !== undefined;
               } else if (nestedQuestion.type === "open-ended") {
-                return answer && answer !== "";
-              }
-
-              if (nestedQuestion?.meta?.conditions?.respondToIfEquals) {
-                const inner =
-                  nestedQuestion?.meta?.conditions?.respondToIfEquals;
-                const innerQ = inner.question;
-                const answer = selectedOptions[innerQ.slug];
-                if (nestedQuestion.type === "open-ended") {
-                  return answer && answer !== "";
-                }
+                isValid =
+                  nestedAnswer &&
+                  nestedAnswer !== "" &&
+                  nestedAnswer !== undefined;
               }
             }
           }
+
+          return isValid;
         }
         return true;
       });
@@ -225,6 +227,8 @@ const Survey = () => {
 
   const handleSaveAndContinue = async () => {
     setCategoryLoading(true);
+    setErrors(false);
+    let hasError = false;
     if (validateSurvey()) {
       const currentSurvey = surveyList[activeIndex];
       if (currentSurvey) {
@@ -241,6 +245,13 @@ const Survey = () => {
           ) {
             // q.previousResponse = selectedOptions[`${qIndex}_other`];
 
+            if (
+              selectedOptions[`${qIndex}_other`]?.trim() == "" ||
+              selectedOptions[`${qIndex}_other`]?.trim() == undefined ||
+              selectedOptions[`${qIndex}_other`]?.trim() == null
+            ) {
+              hasError = true;
+            }
             if (q?.meta?.conditions?.respondToIfEquals) {
               const nestedQuestion =
                 q?.meta?.conditions?.respondToIfEquals?.question;
@@ -270,6 +281,14 @@ const Survey = () => {
             selectedOptions[qIndex].includes(others_text?.toLowerCase())
           ) {
             // q.previousResponse = selectedOptions[qIndex];
+
+            if (
+              selectedOptions[`${qIndex}_other`]?.trim() == "" ||
+              selectedOptions[`${qIndex}_other`]?.trim() == undefined ||
+              selectedOptions[`${qIndex}_other`]?.trim() == null
+            ) {
+              hasError = true;
+            }
 
             response.push({
               question: q._id,
@@ -318,6 +337,12 @@ const Survey = () => {
             }
           }
         });
+
+        if (hasError) {
+          setErrors(true);
+          setCategoryLoading(false);
+          return;
+        }
 
         res.responses = response;
         // console.log(res);
