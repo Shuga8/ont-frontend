@@ -4,7 +4,7 @@ export const useLogout = () => {
   const { user, dispatch } = useAuthContext();
 
   const logout = async () => {
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
     dispatch({ type: "LOGOUT" });
     localStorage.setItem("justLoggedIn", false);
     localStorage.removeItem("loginTime");

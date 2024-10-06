@@ -35,7 +35,7 @@ export const useLogin = () => {
       setSuccess("login successfull");
 
       setTimeout(() => {
-        localStorage.setItem("user", JSON.stringify(response.data));
+        sessionStorage.setItem("user", JSON.stringify(response.data));
         dispatch({ type: "LOGIN", payload: response.data });
         localStorage.setItem("justLoggedIn", true);
         localStorage.setItem("loginTime", new Date());
