@@ -18,7 +18,7 @@ function App() {
   const { logout } = useLogout();
 
   useEffect(() => {
-    const handleAuthTimeout = () => {
+    const handleAuthTimeout = async () => {
       const loginTime = localStorage.getItem("loginTime");
       if (loginTime) {
         const currentTime = new Date();
@@ -26,7 +26,7 @@ function App() {
         const timeDiff = currentTime - loginTimeDate;
         const oneDay = 24 * 60 * 60 * 1000;
         if (timeDiff > oneDay) {
-          logout();
+          await logout();
         }
       }
     };
