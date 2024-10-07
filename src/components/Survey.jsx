@@ -104,13 +104,14 @@ const Survey = () => {
   };
 
   const handleSingleChoiceChange = (qIndex, option) => {
+    option = option.toString();
     if (option === undefined) {
       console.error("Option value is undefined");
       return;
     }
     setSelectedOptions((prevOptions) => ({
       ...prevOptions,
-      [qIndex]: option.toLowerCase(),
+      [qIndex]: option.toLowerCase() ?? 0,
     }));
   };
 
@@ -714,18 +715,16 @@ const Survey = () => {
         {(q.slug === "SQ300" || q.slug == "SQ407") &&
         selectedOptions[qIndex]?.toLowerCase() === "no" ? (
           <div>
-            {nestedQuestion.type === "multiple-choice" && (
+            {q.slug === "SQ407" && (
               <div>
                 <div className="flex items-center mb-2">
                   <input
-                    type="checkbox"
+                    type="radio"
                     id={`q${nestedQuestion.slug}-o1`}
                     value={nested.defaultResponseIfValue}
-                    className="custom-checkbox mr-2"
-                    // checked={nested.defaultResponseIfValue}
-                    // disabled={!!nested.defaultResponseIfValue}
+                    className="custom-radio mr-2"
                     onChange={() => {
-                      handleMultipleChoiceChange(
+                      handleSingleChoiceChange(
                         nestedQuestion.slug,
                         nested.defaultResponseIfValue
                       );
@@ -739,19 +738,18 @@ const Survey = () => {
                 </div>
               </div>
             )}
-
-            {nestedQuestion.type === "single-choice" && (
+            {q.slug === "SQ300" && (
               <div>
                 <div className="flex items-center mb-2">
                   <input
-                    con="radio"
+                    type="checkbox"
                     id={`q${nestedQuestion.slug}-o1`}
                     value={nested.defaultResponseIfValue}
                     className="custom-checkbox mr-2"
                     // checked={nested.defaultResponseIfValue}
                     // disabled={!!nested.defaultResponseIfValue}
                     onChange={() => {
-                      handleSingleChoiceChange(
+                      handleMultipleChoiceChange(
                         nestedQuestion.slug,
                         nested.defaultResponseIfValue
                       );
