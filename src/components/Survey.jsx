@@ -711,7 +711,7 @@ const Survey = () => {
 
     return (
       <div className="px-2 py-2">
-        {q.slug === "SQ300" &&
+        {(q.slug === "SQ300" || q.slug == "SQ407") &&
         selectedOptions[qIndex]?.toLowerCase() === "no" ? (
           <div>
             {nestedQuestion.type === "multiple-choice" && (
@@ -733,7 +733,34 @@ const Survey = () => {
                   />
 
                   <label htmlFor={`q${nestedQuestion.slug}-o1`}>
-                    {nested.defaultResponseIfValue}
+                    {nested.defaultResponseIfValue}{" "}
+                    <span className="text-red-800">(*)</span>
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {nestedQuestion.type === "single-choice" && (
+              <div>
+                <div className="flex items-center mb-2">
+                  <input
+                    con="radio"
+                    id={`q${nestedQuestion.slug}-o1`}
+                    value={nested.defaultResponseIfValue}
+                    className="custom-checkbox mr-2"
+                    // checked={nested.defaultResponseIfValue}
+                    // disabled={!!nested.defaultResponseIfValue}
+                    onChange={() => {
+                      handleSingleChoiceChange(
+                        nestedQuestion.slug,
+                        nested.defaultResponseIfValue
+                      );
+                    }}
+                  />
+
+                  <label htmlFor={`q${nestedQuestion.slug}-o1`}>
+                    {nested.defaultResponseIfValue}{" "}
+                    <span className="text-red-800">(*)</span>
                   </label>
                 </div>
               </div>
