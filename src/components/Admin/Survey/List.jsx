@@ -68,7 +68,7 @@ const List = () => {
     navigate(`?${currentParams.toString()}`);
   };
 
-  if (respondents == null && respondentByPhone == null) {
+  if (loadingPhoneRespondents || loadingGetRespondents) {
     return (
       <>
         <SideBar />

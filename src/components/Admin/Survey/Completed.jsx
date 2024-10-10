@@ -140,7 +140,7 @@ const Completed = () => {
     navigate(`?${currentParams.toString()}`);
   };
 
-  if (respondents == null && respondentByPhone == null) {
+  if (loadingGetRespondents && loadingPhoneRespondents) {
     return (
       <>
         <SideBar />
@@ -164,8 +164,8 @@ const Completed = () => {
                 <div
                   className={`grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 ${
                     user.user.type !== "call-center"
-                      ? "sm:grid-cols-5"
-                      : "sm:grid-cols-4"
+                      ? "sm:grid-cols-6"
+                      : "sm:grid-cols-5"
                   }   bg-slate-200`}
                 >
                   <div className="p-2 xl:p-5">
@@ -189,6 +189,12 @@ const Completed = () => {
                   <div className="p-2 xl:p-5 hidden md:block">
                     <h5 className="text-sm text-center font-medium uppercase sm:text-base text-stone-900">
                       Language
+                    </h5>
+                  </div>
+
+                  <div className="p-2 xl:p-5 hidden md:block">
+                    <h5 className="text-sm text-center font-medium uppercase sm:text-base text-stone-900">
+                      Agent
                     </h5>
                   </div>
 
@@ -236,8 +242,8 @@ const Completed = () => {
               <div
                 className={`grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 ${
                   user.user.type !== "call-center"
-                    ? "sm:grid-cols-5"
-                    : "sm:grid-cols-4"
+                    ? "sm:grid-cols-6"
+                    : "sm:grid-cols-5"
                 }   bg-slate-200`}
               >
                 <div className="p-2 xl:p-5">
@@ -264,6 +270,12 @@ const Completed = () => {
                   </h5>
                 </div>
 
+                <div className="p-2 xl:p-5 hidden md:block">
+                  <h5 className="text-sm text-center font-medium uppercase sm:text-base text-stone-900">
+                    Agent
+                  </h5>
+                </div>
+
                 {user && user.user.type !== "call-center" && (
                   <div className="p-2 xl:p-5">
                     <h5 className="text-sm text-center  font-medium uppercase sm:text-base text-stone-900">
@@ -287,8 +299,8 @@ const Completed = () => {
                             <div
                               className={`grid grid-cols-3 border-b border-stroke dark:border-stone-600 ${
                                 user.user.type !== "call-center"
-                                  ? "sm:grid-cols-5"
-                                  : "sm:grid-cols-4"
+                                  ? "sm:grid-cols-6"
+                                  : "sm:grid-cols-5"
                               }   py-3 md:py-0`}
                               key={index}
                             >
@@ -310,9 +322,15 @@ const Completed = () => {
                                 </p>
                               </div>
 
-                              <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                              <div className="hidden md:flex justify-center  items-center p-2 xl:p-5">
                                 <p className="font-medium text-gray-800 ">
                                   {data.survey.language}
+                                </p>
+                              </div>
+
+                              <div className="hidden md:flex  items-center justify-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 text-xs">
+                                  {data.survey.lastUpdatedBy}
                                 </p>
                               </div>
 
@@ -366,8 +384,8 @@ const Completed = () => {
                   <div
                     className={`grid grid-cols-3 border-b border-stroke dark:border-stone-600 ${
                       user.user.type !== "call-center"
-                        ? "sm:grid-cols-5"
-                        : "sm:grid-cols-4"
+                        ? "sm:grid-cols-6"
+                        : "sm:grid-cols-5"
                     }    py-3 md:py-0`}
                   >
                     <div className="flex items-center p-2 xl:p-5">
@@ -389,6 +407,12 @@ const Completed = () => {
                     <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
                         {respondentByPhone.survey.language}
+                      </p>
+                    </div>
+
+                    <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.survey.lastUpdatedBy}
                       </p>
                     </div>
 

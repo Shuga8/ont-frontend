@@ -58,7 +58,7 @@ const Unfinished = () => {
     navigate(`?${currentParams.toString()}`);
   };
 
-  if (respondents == null && respondentByPhone == null) {
+  if (loadingPhoneRespondents || loadingGetRespondents) {
     return (
       <>
         <SideBar />
@@ -81,7 +81,7 @@ const Unfinished = () => {
             <Search page="in-progress" />
             <div className="rounded-sm border border-stroke bg-white px-5 pb-6 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7 xl:pb-6">
               <div className="flex flex-col">
-                <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5 bg-slate-200">
+                <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-6 bg-slate-200">
                   <div className="p-2 xl:p-5">
                     <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
                       ID
@@ -103,6 +103,12 @@ const Unfinished = () => {
                   <div className="p-2 xl:p-5 text-center hidden md:block">
                     <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
                       Gender
+                    </h5>
+                  </div>
+
+                  <div className="p-2 xl:p-5 text-center hidden md:block">
+                    <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
+                      Agent
                     </h5>
                   </div>
 
@@ -143,7 +149,7 @@ const Unfinished = () => {
           <Search page="in-progress" />
           <div className="rounded-sm border border-stroke bg-white px-5 pb-6 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7 xl:pb-6">
             <div className="flex flex-col">
-              <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5 bg-slate-200">
+              <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-6 bg-slate-200">
                 <div className="p-2 xl:p-5">
                   <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
                     ID
@@ -168,6 +174,12 @@ const Unfinished = () => {
                   </h5>
                 </div>
 
+                <div className="p-2 xl:p-5 text-center hidden md:block">
+                  <h5 className="text-sm font-medium uppercase sm:text-base text-stone-900">
+                    Agent
+                  </h5>
+                </div>
+
                 <div className="p-2 xl:p-5 text-center">
                   <h5 className="text-sm text-center md:text-left  font-medium uppercase sm:text-base text-stone-900">
                     Actions
@@ -188,7 +200,7 @@ const Unfinished = () => {
                           const status = data.survey.status;
                           return (
                             <div
-                              className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                              className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-6 py-3 md:py-0"
                               key={index}
                             >
                               <div className="flex items-center p-2 xl:p-5">
@@ -210,11 +222,16 @@ const Unfinished = () => {
                               </div>
 
                               <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
-                                <p className="font-medium text-gray-800 ">
+                                <p className="font-medium text-gray-800">
                                   {data.respondent.gender}
                                 </p>
                               </div>
 
+                              <div className="hidden md:flex  items-center justify-center p-2 xl:p-5">
+                                <p className="font-medium text-gray-800 text-xs">
+                                  {data.survey.lastUpdatedBy}
+                                </p>
+                              </div>
                               <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center md:justify-normal">
                                 <Link
                                   to={`/survey?language=${data.survey.language}&phone=${data.respondent.phone}&agent=${user.user._id}&respondent=${data.respondent._id}&researcherCode=${user.user.researcherCode}`}
@@ -280,6 +297,12 @@ const Unfinished = () => {
                     <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
                       <p className="font-medium text-gray-800 ">
                         {respondentByPhone.respondent.gender}
+                      </p>
+                    </div>
+
+                    <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                      <p className="font-medium text-gray-800 ">
+                        {respondentByPhone.survey.lastUpdatedBy}
                       </p>
                     </div>
 
