@@ -127,6 +127,9 @@ const CompletePending = () => {
   };
 
   const submitResponse = async (data) => {
+    if (user.user.type !== "admin") {
+      return;
+    }
     setIsloading(true);
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -407,6 +410,10 @@ const CompletePending = () => {
                       isDisabled = true;
                     }
 
+                    if (user.user.type !== "admin") {
+                      isDisabled = true;
+                    }
+
                     return (
                       <div className="preset-q-and-a px-2 py-2" key={index + 1}>
                         <div className="mb-2 py-3">
@@ -414,13 +421,17 @@ const CompletePending = () => {
                             {index + 1}.{" "}
                             <span className="flex flex-row gap-x-2">
                               <span>{data.questionDetails.question}</span>
-                              {isDisabled ? (
-                                <span className="text-xs text-red-600">
-                                  (fixed)
-                                </span>
-                              ) : (
-                                <span className="text-xs text-green-600">
-                                  (editable)
+                              {user.user.type == "admin" && (
+                                <span>
+                                  {isDisabled ? (
+                                    <span className="text-xs text-red-600">
+                                      (fixed)
+                                    </span>
+                                  ) : (
+                                    <span className="text-xs text-green-600">
+                                      (editable)
+                                    </span>
+                                  )}
                                 </span>
                               )}
                             </span>
@@ -439,9 +450,11 @@ const CompletePending = () => {
                     );
                   })}
 
-                <Button variant="contained" color="primary" type="submit">
-                  Update
-                </Button>
+                {user.user.type == "admin" && (
+                  <Button variant="contained" color="primary" type="submit">
+                    Update
+                  </Button>
+                )}
               </form>
               <div className="screen-1-action-buttons flex flex-row gap-x-4 justify-end">
                 <Button

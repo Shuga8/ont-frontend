@@ -95,7 +95,7 @@ function AdminRoutes() {
             user.user.type !== "admin" ? (
               <CompletePending />
             ) : (
-              <Navigate to="/401" replace />
+              <CompletePending />
             )
           ) : (
             <Navigate to="/admin/login" replace />
