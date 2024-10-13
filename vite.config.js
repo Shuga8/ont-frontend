@@ -6,6 +6,7 @@ export default defineConfig({
     watch: {
       ignored: ["**/node_modules/**", "**/.git/**"],
     },
+    port: 3000,
   },
   plugins: [react()],
 });

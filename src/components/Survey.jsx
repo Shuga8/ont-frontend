@@ -180,12 +180,21 @@ const Survey = () => {
       return questions.every((q, qIndex) => {
         if (q.isRequired) {
           const answer = selectedOptions[qIndex];
-          // console.log(q.type);
 
           let isValid = false;
 
           if (q.type === "multiple-choice") {
-            isValid = answer && answer.length > 0;
+            if (
+              q.slug === "SQ404" &&
+              selectedOptions[qIndex].includes(
+                q.meta.conditions.respondToIfEquals.ifValueEquals
+              ) &&
+              selectedOptions[qIndex].length > 1
+            ) {
+              isValid = false;
+            } else {
+              isValid = answer && answer.length > 0;
+            }
           } else if (q.type === "single-choice") {
             isValid = answer && answer !== "";
           } else if (q.type === "open-ended") {
@@ -198,22 +207,49 @@ const Survey = () => {
             // console.log(q?.meta?.conditions?.respondToIfEquals?.question);
 
             if (nestedQuestion.isRequired) {
-              const nestedAnswer = selectedOptions[nestedQuestion.slug];
-              if (nestedQuestion.type === "multiple-choice") {
-                isValid =
-                  nestedAnswer &&
-                  nestedAnswer.length > 0 &&
-                  nestedAnswer !== undefined;
-              } else if (nestedQuestion.type === "single-choice") {
-                isValid =
-                  nestedAnswer &&
-                  nestedAnswer !== "" &&
-                  nestedAnswer !== undefined;
-              } else if (nestedQuestion.type === "open-ended") {
-                isValid =
-                  nestedAnswer &&
-                  nestedAnswer !== "" &&
-                  nestedAnswer !== undefined;
+              if (q.slug == "SQ404") {
+                if (
+                  selectedOptions[qIndex].includes(
+                    q.meta.conditions.respondToIfEquals.ifValueEquals
+                  )
+                ) {
+                  const nestedAnswer = selectedOptions[nestedQuestion.slug];
+                  if (nestedQuestion.type === "multiple-choice") {
+                    isValid =
+                      nestedAnswer &&
+                      nestedAnswer.length > 0 &&
+                      nestedAnswer !== undefined;
+                  } else if (nestedQuestion.type === "single-choice") {
+                    isValid =
+                      nestedAnswer &&
+                      nestedAnswer !== "" &&
+                      nestedAnswer !== undefined;
+                  } else if (nestedQuestion.type === "open-ended") {
+                    isValid =
+                      nestedAnswer &&
+                      nestedAnswer !== "" &&
+                      nestedAnswer !== undefined;
+                  }
+                }
+              } else {
+                // console.log(nestedQuestion);
+                const nestedAnswer = selectedOptions[nestedQuestion.slug];
+                if (nestedQuestion.type === "multiple-choice") {
+                  isValid =
+                    nestedAnswer &&
+                    nestedAnswer.length > 0 &&
+                    nestedAnswer !== undefined;
+                } else if (nestedQuestion.type === "single-choice") {
+                  isValid =
+                    nestedAnswer &&
+                    nestedAnswer !== "" &&
+                    nestedAnswer !== undefined;
+                } else if (nestedQuestion.type === "open-ended") {
+                  isValid =
+                    nestedAnswer &&
+                    nestedAnswer !== "" &&
+                    nestedAnswer !== undefined;
+                }
               }
             }
           }
@@ -299,33 +335,82 @@ const Survey = () => {
             });
           } else {
             if (q?.meta?.conditions?.respondToIfEquals) {
-              const nestedQuestion =
-                q?.meta?.conditions?.respondToIfEquals?.question;
-              // q.previousResponse = selectedOptions[qIndex];
-              response.push({
-                question: q._id,
-                answer: Array.isArray(selectedOptions[qIndex])
-                  ? selectedOptions[qIndex].join(", ")
-                  : selectedOptions[qIndex],
-              });
-              response.push({
-                question: nestedQuestion._id,
-                answer: Array.isArray(selectedOptions[`${nestedQuestion.slug}`])
-                  ? selectedOptions[`${nestedQuestion.slug}`].join(", ")
-                  : selectedOptions[`${nestedQuestion.slug}`],
-              });
+              if (q.slug == "SQ404") {
+                if (
+                  selectedOptions[qIndex].includes(
+                    q.meta.conditions.respondToIfEquals.ifValueEquals
+                  ) &&
+                  selectedOptions[qIndex].length === 1
+                ) {
+                  const nestedQuestion =
+                    q?.meta?.conditions?.respondToIfEquals?.question;
+                  // q.previousResponse = selectedOptions[qIndex];
+                  response.push({
+                    question: q._id,
+                    answer: Array.isArray(selectedOptions[qIndex])
+                      ? selectedOptions[qIndex].join(", ")
+                      : selectedOptions[qIndex],
+                  });
+                  response.push({
+                    question: nestedQuestion._id,
+                    answer: Array.isArray(
+                      selectedOptions[`${nestedQuestion.slug}`]
+                    )
+                      ? selectedOptions[`${nestedQuestion.slug}`].join(", ")
+                      : selectedOptions[`${nestedQuestion.slug}`],
+                  });
 
-              if (nestedQuestion?.meta?.conditions?.respondToIfEquals) {
-                const inner =
-                  nestedQuestion?.meta?.conditions?.respondToIfEquals;
-                const innerQ = inner.question;
+                  if (nestedQuestion?.meta?.conditions?.respondToIfEquals) {
+                    const inner =
+                      nestedQuestion?.meta?.conditions?.respondToIfEquals;
+                    const innerQ = inner.question;
 
+                    response.push({
+                      question: innerQ._id,
+                      answer: Array.isArray(selectedOptions[`${innerQ.slug}`])
+                        ? selectedOptions[`${innerQ.slug}`].join(", ")
+                        : selectedOptions[`${innerQ.slug}`],
+                    });
+                  }
+                } else {
+                  response.push({
+                    question: q._id,
+                    answer: Array.isArray(selectedOptions[qIndex])
+                      ? selectedOptions[qIndex].join(", ")
+                      : selectedOptions[qIndex],
+                  });
+                }
+              } else {
+                const nestedQuestion =
+                  q?.meta?.conditions?.respondToIfEquals?.question;
+                // q.previousResponse = selectedOptions[qIndex];
                 response.push({
-                  question: innerQ._id,
-                  answer: Array.isArray(selectedOptions[`${innerQ.slug}`])
-                    ? selectedOptions[`${innerQ.slug}`].join(", ")
-                    : selectedOptions[`${innerQ.slug}`],
+                  question: q._id,
+                  answer: Array.isArray(selectedOptions[qIndex])
+                    ? selectedOptions[qIndex].join(", ")
+                    : selectedOptions[qIndex],
                 });
+                response.push({
+                  question: nestedQuestion._id,
+                  answer: Array.isArray(
+                    selectedOptions[`${nestedQuestion.slug}`]
+                  )
+                    ? selectedOptions[`${nestedQuestion.slug}`].join(", ")
+                    : selectedOptions[`${nestedQuestion.slug}`],
+                });
+
+                if (nestedQuestion?.meta?.conditions?.respondToIfEquals) {
+                  const inner =
+                    nestedQuestion?.meta?.conditions?.respondToIfEquals;
+                  const innerQ = inner.question;
+
+                  response.push({
+                    question: innerQ._id,
+                    answer: Array.isArray(selectedOptions[`${innerQ.slug}`])
+                      ? selectedOptions[`${innerQ.slug}`].join(", ")
+                      : selectedOptions[`${innerQ.slug}`],
+                  });
+                }
               }
             } else {
               // q.previousResponse = selectedOptions[qIndex];
@@ -341,11 +426,13 @@ const Survey = () => {
 
         if (hasError) {
           setErrors(true);
+
           setCategoryLoading(false);
           return;
         }
 
         res.responses = response;
+        // console.log(selectedOptions);
         // console.log(res);
         // setTimeout(() => {
         //   setCategoryLoading(false);
