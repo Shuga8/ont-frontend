@@ -155,6 +155,9 @@ const CompletePending = () => {
       }
     } else {
       setSuccess("Update successfull");
+      setTimeout(() => {
+        window.location.href = `/admin/survey/unfinished?search=${getPhone()}`;
+      }, 2000);
     }
 
     setIsloading(false);
@@ -187,10 +190,6 @@ const CompletePending = () => {
     res.responses = responses;
 
     await submitResponse(res);
-
-    setTimeout(() => {
-      window.location.href = `/admin/survey/unfinished?search=${getPhone()}`;
-    }, 2000);
   };
 
   const handleRejectButtonClick = () => {
@@ -438,7 +437,7 @@ const CompletePending = () => {
                           </p>
                           <input
                             type="text"
-                            name={data.questionDetails._id}
+                            name={data.questionId}
                             className="px-4 bg-transparent py-1 italic text-gray-500 text-sm w-full focus:outline-none"
                             defaultValue={data.answer}
                             disabled={isDisabled}
