@@ -155,6 +155,7 @@ const Rejected = () => {
         setRespondents(null);
         const { pagination, filteredRespondents } = await getPhoneRespondent();
         setError(errorPhone);
+        setPagination(pagination);
         setRespondentByPhone(filteredRespondents);
       }
     };
@@ -448,57 +449,66 @@ const Rejected = () => {
                 </>
               )}
 
-              {respondentByPhone && (
-                <>
-                  <div className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0">
-                    <div className="flex items-center p-2 xl:p-5">
-                      <p className="font-medium text-gray-800 ">1.</p>
-                    </div>
+              {respondentByPhone &&
+                respondentByPhone.map((res, resIndex) => {
+                  let count = resIndex + 1;
+                  return (
+                    <>
+                      <div
+                        className="grid grid-cols-3 border-b border-stroke dark:border-stone-600 sm:grid-cols-5 py-3 md:py-0"
+                        key={resIndex}
+                      >
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">{count}</p>
+                        </div>
 
-                    <div className="hidden md:flex items-center p-2 xl:p-5">
-                      <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.respondent.firstname}
-                      </p>
-                    </div>
+                        <div className="hidden md:flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {res.respondent.firstname}
+                          </p>
+                        </div>
 
-                    <div className="flex items-center p-2 xl:p-5">
-                      <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.respondent.phone}
-                      </p>
-                    </div>
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {res.respondent.phone}
+                          </p>
+                        </div>
 
-                    <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
-                      <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.respondent.gender}
-                      </p>
-                    </div>
+                        <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {res.respondent.gender}
+                          </p>
+                        </div>
 
-                    {user && user.user.type === "admin" && (
-                      <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
-                        <ul>
-                          <li
-                            className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
-                            onClick={() => {
-                              setReinstateActive(true);
-                              setPhone(`${data.respondent.phone}`);
-                            }}
-                          ></li>
-                        </ul>
+                        {user && user.user.type === "admin" && (
+                          <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5  justify-center  relative">
+                            <ul>
+                              <li
+                                className="border-b-2 border-slate-100 p-2 hover:bg-slate-50 rounded-sm text-xs md:text-base flex flex-row gap-x-1 place-items-center text-green-600 restore-btn"
+                                onClick={() => {
+                                  setReinstateActive(true);
+                                  setPhone(`${res.respondent.phone}`);
+                                }}
+                              ></li>
+                            </ul>
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </>
+                  );
+                })}
 
-                  <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
-                    <div className="font-medium text-xs text-stone-800">
-                      Showing search result for respondent:{" "}
-                    </div>
-                    <div className="font-bold">
-                      <span className="text-primary-600 text-base">
-                        {getSearchValue()}
-                      </span>
-                    </div>
+              {respondentByPhone && (
+                <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
+                  <div className="font-medium text-xs text-stone-800">
+                    Showing search result for :{" "}
                   </div>
-                </>
+                  <div className="font-bold">
+                    <span className="text-primary-600 text-base">
+                      {getSearchValue()}
+                    </span>
+                  </div>
+                </div>
               )}
             </div>
 

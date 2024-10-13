@@ -31,6 +31,7 @@ const CompletePending = () => {
   const [enterSurveyLoading, setEnterSurveyLoading] = useState(false);
   const [isSubmittingRejectLoading, setSubmittingRejectLoading] =
     useState(false);
+  const [isLoading, setIsloading] = useState(false);
   const navigate = useNavigate();
 
   const giveConsent = () => {
@@ -77,8 +78,7 @@ const CompletePending = () => {
     );
 
     const data = await response.json();
-    console.log(data);
-    return data.data;
+    return data.data.respondents[0];
   };
 
   useEffect(() => {
@@ -124,6 +124,70 @@ const CompletePending = () => {
     setSelectedLanguage(event.target.value);
     setDisplayMessage(welcome[event.target.value]);
     setDisplayConsent(consentQuestion[event.target.value]);
+  };
+
+  const submitResponse = async (data) => {
+    setIsloading(true);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("authorization", `Bearer ${user.token}`);
+
+    const reqBody = JSON.stringify(data);
+    const response = await fetch(
+      "https://ont-survey-tracker-development.up.railway.app/v1/surveys",
+      {
+        method: "POST",
+        headers: myHeaders,
+        body: reqBody,
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      if (result.error.message) {
+        setError(result.error.message);
+      } else {
+        setError(result.message);
+      }
+    } else {
+      setSuccess("Update successfull");
+    }
+
+    setIsloading(false);
+  };
+
+  const submitUpdate = async (e) => {
+    e.preventDefault();
+    const formEl = document.forms["first10Form"].elements;
+    let len = formEl.length - 1; //because last element is a button
+
+    const res = {
+      respondent: respondent.respondent._id,
+      language: selectedLanguage,
+      category: respondent.survey.entries.category._id,
+    };
+
+    const responses = [];
+    for (let i = 0; i < len; i++) {
+      const element = formEl[i];
+
+      if (element.name) {
+        let response = {
+          question: element.name,
+          answer: element.value,
+        };
+        responses.push(response);
+      }
+    }
+
+    res.responses = responses;
+
+    await submitResponse(res);
+
+    setTimeout(() => {
+      window.location.href = `/admin/survey/unfinished?search=${getPhone()}`;
+    }, 2000);
   };
 
   const handleRejectButtonClick = () => {
@@ -268,7 +332,7 @@ const CompletePending = () => {
 
       <div className="elements-container mt-14">
         <Loader />
-        <Preloader isVisible={isSubmittingRejectLoading} />
+        <Preloader isVisible={isSubmittingRejectLoading || isLoading} />
         <InfoToast message={info} isActive={isInfoActive} />
         <ErrorToast message={error} isActive={isErrorActive} />
         <SuccessToast message={success} isActive={isSuccessActive} />
@@ -334,24 +398,51 @@ const CompletePending = () => {
                 Previous Q&A
               </h2>
 
-              {entry &&
-                entry.map((data, index) => {
-                  return (
-                    <div className="preset-q-and-a px-2 py-2" key={index + 1}>
-                      <div className="mb-2 py-3">
-                        <p className="text-stone-800">
-                          {index + 1}. {data.questionDetails.question}
-                        </p>
-                        <div className="px-4 py-1 italic text-gray-500 text-sm">
-                          {data.answer}
+              <form name="first10Form" onSubmit={submitUpdate}>
+                {entry &&
+                  entry.map((data, index) => {
+                    let isDisabled = false;
+                    const disabledArray = [0, 1, 2, 3, 10, 12];
+                    if (disabledArray.includes(index)) {
+                      isDisabled = true;
+                    }
+
+                    return (
+                      <div className="preset-q-and-a px-2 py-2" key={index + 1}>
+                        <div className="mb-2 py-3">
+                          <p className="text-stone-800 flex flex-row">
+                            {index + 1}.{" "}
+                            <span className="flex flex-row gap-x-2">
+                              <span>{data.questionDetails.question}</span>
+                              {isDisabled ? (
+                                <span className="text-xs text-red-600">
+                                  (fixed)
+                                </span>
+                              ) : (
+                                <span className="text-xs text-green-600">
+                                  (editable)
+                                </span>
+                              )}
+                            </span>
+                          </p>
+                          <input
+                            type="text"
+                            name={data.questionDetails._id}
+                            className="px-4 bg-transparent py-1 italic text-gray-500 text-sm w-full focus:outline-none"
+                            defaultValue={data.answer}
+                            disabled={isDisabled}
+                          />
                         </div>
+
+                        <hr className="text-cyan-600" />
                       </div>
+                    );
+                  })}
 
-                      <hr className="text-cyan-600" />
-                    </div>
-                  );
-                })}
-
+                <Button variant="contained" color="primary" type="submit">
+                  Update
+                </Button>
+              </form>
               <div className="screen-1-action-buttons flex flex-row gap-x-4 justify-end">
                 <Button
                   variant="contained"
@@ -420,7 +511,7 @@ const CompletePending = () => {
               )}
             </div>
 
-            <div className="screen-2 h-full">
+            <div className="screen-2 h-full ">
               <div className="mb-6">
                 <h2 className="text-black font-semibold text-lg">
                   Respondent Phone Number:

@@ -45,7 +45,7 @@ const List = () => {
         const { pagination, filteredRespondents } = await getPhoneRespondent();
         setError(errorPhone);
         setRespondentByPhone(filteredRespondents);
-        setPagination(null);
+        setPagination(pagination);
       }
     };
     fetchRespondents();
@@ -278,10 +278,11 @@ const List = () => {
 
               {respondentByPhone
                 ? (() => {
+                    const res = respondentByPhone[0];
                     const status =
-                      respondentByPhone.survey.status == "in-progress"
+                      res.survey.status == "in-progress"
                         ? "unfinished"
-                        : respondentByPhone.survey.status;
+                        : res.survey.status;
                     const statusClasses = {
                       pending: "text-yellow-600",
                       completed: "text-green-600",
@@ -298,13 +299,13 @@ const List = () => {
 
                           <div className="hidden md:flex items-center p-2 xl:p-5">
                             <p className="font-medium text-gray-800">
-                              {respondentByPhone.respondent.firstname}
+                              {res.respondent.firstname}
                             </p>
                           </div>
 
                           <div className="flex items-center p-2 xl:p-5 text-sm">
                             <p className="font-medium text-blue-700">
-                              {respondentByPhone.respondent.phone}
+                              {res.respondent.phone}
                             </p>
                           </div>
 
@@ -318,7 +319,7 @@ const List = () => {
 
                           <div className="flex-row gap-x-2 items-center justify-center p-1 xl:p-5 flex">
                             <Link
-                              to={`/admin/survey/${status}?search=${respondentByPhone.respondent.phone}`}
+                              to={`/admin/survey/${status}?search=${res.respondent.phone}`}
                               className="text-blue-500 p-2 bg-slate-200 rounded-full text-base md:text-lg"
                               title="go to survey"
                             >
@@ -334,7 +335,7 @@ const List = () => {
                         </div>
                         <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
                           <div className="font-medium text-xs text-stone-800">
-                            Showing search result for respondent:{" "}
+                            Showing search result for :{" "}
                           </div>
                           <div className="font-bold">
                             <span className="text-primary-600 text-base">

@@ -34,22 +34,33 @@ export const useGetRespondentByPhone = (phone, page = "all") => {
       const data = await response.json();
 
       if (page === "all") {
-        filteredRespondents = data.data || [];
+        filteredRespondents = data.data.respondents || [];
       } else {
-        if (data.data && data.data.survey && data.data.survey.status === page) {
-          filteredRespondents = data.data;
+        if (data.data && data.data.respondents) {
+          filteredRespondents = data.data.respondents;
+          filteredRespondents = filteredRespondents.filter((respondent) => {
+            return respondent.survey.status == page;
+          });
         } else {
           filteredRespondents = null;
         }
       }
 
+      const currentPage = data.data.page;
+      const totalPages = data.data.totalPages;
+
       pagination = {
-        page: 1,
-        totalPages: 1,
-        totalResults: 1,
+        page: currentPage,
+        totalPages,
+        totalResults: filteredRespondents.length,
+        nextPage: currentPage < totalPages ? `?page=${currentPage + 1}` : null,
+        prevPage: currentPage > 1 ? `?page=${currentPage - 1}` : null,
+        next: currentPage + 1,
+        prev: currentPage - 1,
       };
 
       setLoadingPhoneRespondents(false);
+
       return { pagination, filteredRespondents };
     } catch (error) {
       setErrorPhone(error.message || "Unexpected error");

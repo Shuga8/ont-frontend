@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   server: {
     watch: {
-      ignored: ['**/node_modules/**', '**/.git/**'],
+      ignored: ["**/node_modules/**", "**/.git/**"],
     },
   },
   plugins: [react()],

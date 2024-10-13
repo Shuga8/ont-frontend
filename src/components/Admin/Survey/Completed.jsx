@@ -101,7 +101,7 @@ const Completed = () => {
         const { pagination, filteredRespondents } = await getPhoneRespondent();
         setError(errorPhone);
         setRespondentByPhone(filteredRespondents);
-        setPagination(null);
+        setPagination(pagination);
       }
     };
     fetchRespondents();
@@ -379,70 +379,76 @@ const Completed = () => {
                 </>
               )}
 
-              {respondentByPhone && (
-                <>
-                  <div
-                    className={`grid grid-cols-3 border-b border-stroke dark:border-stone-600 ${
-                      user.user.type !== "call-center"
-                        ? "sm:grid-cols-6"
-                        : "sm:grid-cols-5"
-                    }    py-3 md:py-0`}
-                  >
-                    <div className="flex items-center p-2 xl:p-5">
-                      <p className="font-medium text-gray-800 ">1</p>
-                    </div>
+              {respondentByPhone &&
+                respondentByPhone.map((res, resIndex) => {
+                  let count = resIndex + 1;
+                  return (
+                    <>
+                      <div
+                        className={`grid grid-cols-3 border-b border-stroke dark:border-stone-600 ${
+                          user.user.type !== "call-center"
+                            ? "sm:grid-cols-6"
+                            : "sm:grid-cols-5"
+                        }    py-3 md:py-0`}
+                        key={resIndex}
+                      >
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">{count}</p>
+                        </div>
 
-                    <div className="hidden md:flex items-center p-2 xl:p-5">
-                      <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.respondent.firstname}
-                      </p>
-                    </div>
+                        <div className="hidden md:flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {res.respondent.firstname}
+                          </p>
+                        </div>
 
-                    <div className="flex items-center p-2 xl:p-5">
-                      <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.respondent.phone}
-                      </p>
-                    </div>
+                        <div className="flex items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {res.respondent.phone}
+                          </p>
+                        </div>
 
-                    <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
-                      <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.survey.language}
-                      </p>
-                    </div>
+                        <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {res.survey.language}
+                          </p>
+                        </div>
 
-                    <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
-                      <p className="font-medium text-gray-800 ">
-                        {respondentByPhone.survey.lastUpdatedBy}
-                      </p>
-                    </div>
+                        <div className="hidden md:flex justify-center items-center p-2 xl:p-5">
+                          <p className="font-medium text-gray-800 ">
+                            {res.survey.lastUpdatedBy}
+                          </p>
+                        </div>
 
-                    {user && user.user.type !== "call-center" && (
-                      <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
-                        <span
-                          className="font-medium text-blue-600 text-base cursor-pointer"
-                          title="Download Survey"
-                          onClick={() =>
-                            handleDownload(
-                              `${respondentByPhone.respondent.phone}`
-                            )
-                          }
-                        >
-                          <HiDownload />
-                        </span>
+                        {user && user.user.type !== "call-center" && (
+                          <div className="flex items-center py-2 px-4 flex-row gap-x-3 xl:p-5 justify-center">
+                            <span
+                              className="font-medium text-blue-600 text-base cursor-pointer"
+                              title="Download Survey"
+                              onClick={() =>
+                                handleDownload(`${res.respondent.phone}`)
+                              }
+                            >
+                              <HiDownload />
+                            </span>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </>
+                  );
+                })}
+
+              {respondentByPhone && (
+                <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
+                  <div className="font-medium text-xs text-stone-800">
+                    Showing search result for :{" "}
                   </div>
-                  <div className="flex flex-row gap-x-3 gap-y-2 py-3 place-items-center">
-                    <div className="font-medium text-xs text-stone-800">
-                      Showing search result for respondent:{" "}
-                    </div>
-                    <div className="font-bold">
-                      <span className="text-primary-600 text-base">
-                        {getSearchValue()}
-                      </span>
-                    </div>
+                  <div className="font-bold">
+                    <span className="text-primary-600 text-base">
+                      {getSearchValue()}
+                    </span>
                   </div>
-                </>
+                </div>
               )}
             </div>
 

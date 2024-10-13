@@ -28,6 +28,7 @@ const Search = (page) => {
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState("english");
   const [uploadType, setUploadType] = useState("new");
+  const [copyAble, setCopyAble] = useState(false);
 
   const showNewSurveyForm = (type) => {
     setFromType(type);
@@ -73,6 +74,7 @@ const Search = (page) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+    setCopyAble(false);
 
     if (!file) {
       setError("Please select a file to upload.");
@@ -104,6 +106,7 @@ const Search = (page) => {
     const data = await response.json();
 
     if (!response.ok) {
+      setCopyAble(true);
       if (data.error?.message) {
         setLoading(false);
         setError(data.error.message);
@@ -116,6 +119,7 @@ const Search = (page) => {
         .flat()
         .map((res) => res.error)
         .join(", ");
+      setCopyAble(true);
       setError(errors);
 
       setTimeout(() => {
@@ -148,6 +152,13 @@ const Search = (page) => {
       return () => clearTimeout(timer);
     }
 
+    if (copyAble) {
+      const timer = setTimeout(() => {
+        setCopyAble(false);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+
     if (success) {
       setSuccessActive(true);
       const timer = setTimeout(() => {
@@ -162,7 +173,11 @@ const Search = (page) => {
     <>
       <Preloader isVisible={loading} />
       <div className="flex justify-end p-3 flex-row gap-x-2">
-        <ErrorToast isActive={isErrorActive} message={error} />
+        <ErrorToast
+          isActive={isErrorActive}
+          message={error}
+          IsCopyAble={copyAble}
+        />
         <SuccessToast isActive={isSuccessActive} message={success} />
 
         {user.user.type !== "call-center" && (
