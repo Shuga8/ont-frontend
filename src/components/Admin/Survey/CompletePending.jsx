@@ -127,7 +127,7 @@ const CompletePending = () => {
   };
 
   const submitResponse = async (data) => {
-    if (user.user.type !== "admin") {
+    if (user.user.type !== "call-center") {
       return;
     }
     setIsloading(true);
@@ -404,12 +404,12 @@ const CompletePending = () => {
                 {entry &&
                   entry.map((data, index) => {
                     let isDisabled = false;
-                    const disabledArray = [0, 1, 2, 3, 10, 12];
+                    const disabledArray = [0, 1, 2, 3, 10, 12, -2];
                     if (disabledArray.includes(index)) {
                       isDisabled = true;
                     }
 
-                    if (user.user.type !== "admin") {
+                    if (user.user.type !== "call-center") {
                       isDisabled = true;
                     }
 
@@ -420,7 +420,7 @@ const CompletePending = () => {
                             {index + 1}.{" "}
                             <span className="flex flex-row gap-x-2">
                               <span>{data.questionDetails.question}</span>
-                              {user.user.type == "admin" && (
+                              {user.user.type == "call-center" && (
                                 <span>
                                   {isDisabled ? (
                                     <span className="text-xs text-red-600">
@@ -449,7 +449,7 @@ const CompletePending = () => {
                     );
                   })}
 
-                {user.user.type == "admin" && (
+                {user.user.type == "call-center" && (
                   <Button variant="contained" color="primary" type="submit">
                     Update
                   </Button>
