@@ -315,7 +315,9 @@ const Survey = () => {
             }
           } else if (
             q.type === "multiple-choice" &&
-            selectedOptions[qIndex].includes(others_text?.toLowerCase())
+            selectedOptions[qIndex]
+              .map((option) => option.toLowerCase())
+              .includes(others_text?.toLowerCase())
           ) {
             // q.previousResponse = selectedOptions[qIndex];
 
