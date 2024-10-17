@@ -15,6 +15,7 @@ const CompletePending = () => {
   const [info, setInfo] = useState(null);
   const [isErrorActive, setErrorActive] = useState(false);
   const [isSuccessActive, setSuccessActive] = useState(false);
+  const [selectedOptions, setSelectedOptions] = useState({});
   const [isInfoActive, setInfoActive] = useState(false);
   const [languages, setLanguages] = useState(null);
   const [respondent, setRespondent] = useState(null);
@@ -94,6 +95,21 @@ const CompletePending = () => {
   }, []);
 
   useEffect(() => {
+    if (respondent) {
+      const entry = respondent.survey.entries.responses;
+      if (entry) {
+        const newSelectedOptions = {};
+        entry.forEach((data) => {
+          const q = data.questionDetails;
+          const ans = data.answer?.toString();
+          newSelectedOptions[q._id] = ans?.toLowerCase();
+        });
+        setSelectedOptions(newSelectedOptions);
+      }
+    }
+  }, [respondent]);
+
+  useEffect(() => {
     if (error) {
       setErrorActive(true);
       const timer = setTimeout(() => {
@@ -119,6 +135,25 @@ const CompletePending = () => {
       return () => clearTimeout(timer);
     }
   }, [error, success, info]);
+
+  const handleInputChange = (id, value) => {
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [id]: value,
+    }));
+  };
+
+  const handleSingleChoiceChange = (id, option) => {
+    option = option.toString();
+    if (option === undefined) {
+      console.error("Option value is undefined");
+      return;
+    }
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [id]: option.toLowerCase() ?? 0,
+    }));
+  };
 
   const handleChange = (event) => {
     setSelectedLanguage(event.target.value);
@@ -166,7 +201,6 @@ const CompletePending = () => {
   const submitUpdate = async (e) => {
     e.preventDefault();
     const formEl = document.forms["first10Form"].elements;
-    let len = formEl.length - 1; //because last element is a button
 
     const res = {
       respondent: respondent.respondent._id,
@@ -175,17 +209,18 @@ const CompletePending = () => {
     };
 
     const responses = [];
-    for (let i = 0; i < len; i++) {
-      const element = formEl[i];
+    const entry = respondent.survey.entries.responses;
 
-      if (element.name) {
-        let response = {
-          question: element.name,
-          answer: element.value,
-        };
-        responses.push(response);
-      }
-    }
+    entry.forEach((data, Index) => {
+      const q = data.questionDetails;
+
+      let ret = {
+        question: data.questionId,
+        answer: selectedOptions[q._id],
+      };
+
+      responses.push(ret);
+    });
 
     res.responses = responses;
 
@@ -404,7 +439,7 @@ const CompletePending = () => {
                 {entry &&
                   entry.map((data, index) => {
                     let isDisabled = false;
-                    const disabledArray = [0, 1, 2, 3, 10, 12, -2];
+                    const disabledArray = [0, 1, 2, 3, 10, 23];
                     if (disabledArray.includes(index)) {
                       isDisabled = true;
                     }
@@ -413,8 +448,13 @@ const CompletePending = () => {
                       isDisabled = true;
                     }
 
+                    const q = data.questionDetails;
+
                     return (
-                      <div className="preset-q-and-a px-2 py-2" key={index + 1}>
+                      <div
+                        className="preset-q-and-a px-2 py-2"
+                        key={`${q._id}-${index + 1}`}
+                      >
                         <div className="mb-2 py-3">
                           <p className="text-stone-800 flex flex-row">
                             {index + 1}.{" "}
@@ -435,13 +475,61 @@ const CompletePending = () => {
                               )}
                             </span>
                           </p>
-                          <input
-                            type="text"
-                            name={data.questionId}
-                            className="px-4 bg-transparent py-1 italic text-gray-500 text-sm w-full focus:outline-none"
-                            defaultValue={data.answer}
-                            disabled={isDisabled}
-                          />
+
+                          {q.responseOptions.length > 0 ? (
+                            <div
+                              className="input-group px-4 py-6"
+                              key={`${q._id}-${index + 1}`}
+                            >
+                              {q.responseOptions.map((option, oIndex) => {
+                                return (
+                                  <>
+                                    <div
+                                      key={`${q._id}-${option}`}
+                                      className="py-1"
+                                    >
+                                      <input
+                                        type="radio"
+                                        id={`q${q._id}-o${oIndex}`}
+                                        name={q._id}
+                                        value={option.toLowerCase()}
+                                        className="custom-radio mr-2"
+                                        checked={
+                                          selectedOptions[q._id] !==
+                                            undefined &&
+                                          selectedOptions[q._id] ===
+                                            option.toLowerCase()
+                                        }
+                                        onChange={(e) => {
+                                          handleSingleChoiceChange(
+                                            q._id,
+                                            e.target.value
+                                          );
+                                        }}
+                                        disabled={isDisabled}
+                                      />
+                                      <label htmlFor={`q${q._id}-o${oIndex}`}>
+                                        {option}
+                                      </label>
+                                    </div>
+                                  </>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <>
+                              <input
+                                type="text"
+                                name={data.questionId}
+                                className="px-4 bg-transparent py-1 italic text-gray-500 text-sm w-full focus:outline-none"
+                                defaultValue={data.answer}
+                                onChange={(e) => {
+                                  handleInputChange(q._id, e.target.value);
+                                }}
+                                disabled={isDisabled}
+                              />
+                            </>
+                          )}
                         </div>
 
                         <hr className="text-cyan-600" />
