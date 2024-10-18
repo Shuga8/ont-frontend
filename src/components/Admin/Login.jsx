@@ -59,10 +59,18 @@ const Login = () => {
             <div className="flex w-full h-screen flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
               <Link
                 to="#"
-                className="flex items-center mb-6 text-2xl font-semibold text-gray-900 "
+                className="flex flex-col gap-y-3 items-center mb-6 text-2xl font-semibold text-gray-900 "
               >
-                <img className="w-20 h-20 mr-2" src={logo} alt="logo" />
-                ONT SURVEY
+                <div className="flex flex-row gap-x-3 justify-center">
+                  <img className="w-20 h-20 mr-2" src={logo} alt="logo" />
+                  <img
+                    className="w-20 h-20 mr-2"
+                    src={oxford_logo}
+                    alt="logo"
+                  />
+                </div>
+
+                <p>ONT SURVEY</p>
               </Link>
               <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0  mb-3">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
