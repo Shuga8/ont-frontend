@@ -59,12 +59,12 @@ const Login = () => {
             <div className="flex w-full h-screen flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
               <Link
                 to="#"
-                className="flex flex-col gap-y-3 items-center mb-6 text-2xl font-semibold text-gray-900 "
+                className="flex flex-col gap-y-3 items-center place-items-center mb-6 text-2xl font-semibold text-gray-900 "
               >
                 <div className="flex flex-row gap-x-3 justify-center">
-                  <img className="w-20 h-20 mr-2" src={logo} alt="logo" />
+                  <img className="w-28 h-28 mr-2" src={logo} alt="logo" />
                   <img
-                    className="w-20 h-20 mr-2"
+                    className="w-28 h-28 mr-2"
                     src={oxford_logo}
                     alt="logo"
                   />
