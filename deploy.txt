@@ -1,0 +1,19 @@
+1. Check the config/config.js to change the url of the api endpoint. remember to remove trailing  forward slash at the end "/";
+
+2. Node Version = 22.6.0
+3. NPM Version = 10.8.2.
+
+This should be packed with the node modules so to deploy run
+npm run build
+
+A "dist" folder will be created after the build is done.
+
+Upload the contents on the dist folder to the directory where you want to serve your reactapp
+Example 
+
+your public_html folder will contain consts of the dists which wil be like This
+
+\public_html
+    \ assets
+    \ index.html
+    \ vite.svg
