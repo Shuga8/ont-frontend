@@ -1,5 +1,8 @@
+import { config } from "../../config/config";
+
 export const useSearchFilter = async (type, page = null) => {
-  const baseUrl = `https://ont-survey-tracker-development.up.railway.app/v1/respondents`;
+  const { url } = config();
+  const baseUrl = `${url}/v1/respondents`;
 
   if (type === "all") {
     return `${baseUrl}${page ? `?page=${page}` : ""}`;

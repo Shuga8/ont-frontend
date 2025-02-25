@@ -11,6 +11,7 @@ import SuccessToast from "../../Alerts/SuccessToast";
 import Preloader from "../Widgets/Preloader";
 import { IoMdCloseCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { config } from "../../../../config/config";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -93,15 +94,14 @@ const Search = (page) => {
     formData.append("language", "english");
     formData.append("uploadType", uploadType);
 
+    const { url: uri } = config();
+
     // setSuccess("please wait while it been uploaded");
-    const response = await fetch(
-      `https://ont-survey-tracker-development.up.railway.app/v1/surveys/upload`,
-      {
-        method: "POST",
-        headers: myHeaders,
-        body: formData,
-      }
-    );
+    const response = await fetch(`${uri}/v1/surveys/upload`, {
+      method: "POST",
+      headers: myHeaders,
+      body: formData,
+    });
 
     const data = await response.json();
 

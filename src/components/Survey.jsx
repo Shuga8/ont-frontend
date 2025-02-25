@@ -8,6 +8,7 @@ import Preloader from "./Admin/Widgets/Preloader";
 import { useNavigate } from "react-router-dom";
 import Message from "./Admin/Widgets/Message";
 import { TiInputCheckedOutline } from "react-icons/ti";
+import { config } from "../../config/config";
 
 const Survey = () => {
   const { user } = useAuthContext();
@@ -476,15 +477,14 @@ const Survey = () => {
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
+    const { url } = config();
+
     const reqBody = JSON.stringify(data);
-    const response = await fetch(
-      "https://ont-survey-tracker-development.up.railway.app/v1/surveys",
-      {
-        method: "POST",
-        headers: myHeaders,
-        body: reqBody,
-      }
-    );
+    const response = await fetch(`${url}/v1/surveys`, {
+      method: "POST",
+      headers: myHeaders,
+      body: reqBody,
+    });
 
     const result = await response.json();
 

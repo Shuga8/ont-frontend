@@ -8,6 +8,7 @@ import oxford_logo from "../../assets/oxford.png";
 import { FaRegEye, FaEyeSlash } from "react-icons/fa";
 import ErrorToast from "../Alerts/ErrorToast";
 import SuccessToast from "../Alerts/SuccessToast";
+import { config } from "../../../config/config";
 
 const ForgotPassword = () => {
   const [isErrorActive, setErrorActive] = useState(false);
@@ -68,14 +69,13 @@ const ForgotPassword = () => {
       email,
     });
 
-    const response = await fetch(
-      "https://ont-survey-tracker-development.up.railway.app/v1/auth/reset-password/initiate",
-      {
-        method: "POST",
-        headers: myHeaders,
-        body: reqBody,
-      }
-    );
+    const { url } = config();
+
+    const response = await fetch(`${url}/v1/auth/reset-password/initiate`, {
+      method: "POST",
+      headers: myHeaders,
+      body: reqBody,
+    });
 
     const data = await response.json();
 

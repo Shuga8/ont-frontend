@@ -3,21 +3,21 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import Skeleton from "../../Skeleton/Skeleton";
+import { config } from "../../../../config/config";
 
 const LineGraph = () => {
   const { user } = useAuthContext();
 
+  const { url } = config();
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["lineGraph"],
     queryFn: () =>
-      fetch(
-        "https://ont-survey-tracker-development.up.railway.app/v1/stats/charts",
-        {
-          headers: {
-            authorization: `Bearer ${user.token}`,
-          },
-        }
-      ).then((res) => {
+      fetch(`${url}/v1/stats/charts`, {
+        headers: {
+          authorization: `Bearer ${user.token}`,
+        },
+      }).then((res) => {
         return res.json();
       }),
   });

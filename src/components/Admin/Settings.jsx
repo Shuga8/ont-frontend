@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import { RiSave3Line } from "react-icons/ri";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { CgSpinner } from "react-icons/cg";
+import { config } from "../../../config/config";
 
 const Settings = () => {
   const { user } = useAuthContext();
@@ -17,6 +18,8 @@ const Settings = () => {
   const [isInfoActive, setInfoActive] = useState(false);
   const [isPassLoading, setPassLoading] = useState(false);
   const [isDetailsLoading, setDetailsLoading] = useState(false);
+
+  const { url } = config();
 
   const fname = user.user.firstname;
   const lname = user.user.lastname;
@@ -40,14 +43,11 @@ const Settings = () => {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("authorization", `Bearer ${user.token}`);
 
-      const response = await fetch(
-        "https://ont-survey-tracker-development.up.railway.app/v1/admins/update",
-        {
-          method: "PATCH",
-          headers: myHeaders,
-          body: reqBody,
-        }
-      );
+      const response = await fetch(`${url}/v1/admins/update`, {
+        method: "PATCH",
+        headers: myHeaders,
+        body: reqBody,
+      });
 
       const data = await response.json();
 
@@ -99,14 +99,11 @@ const Settings = () => {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("authorization", `Bearer ${user.token}`);
 
-      const response = await fetch(
-        "https://ont-survey-tracker-development.up.railway.app/v1/auth/update-password",
-        {
-          method: "POST",
-          headers: myHeaders,
-          body: reqBody,
-        }
-      );
+      const response = await fetch(`${url}/v1/auth/update-password`, {
+        method: "POST",
+        headers: myHeaders,
+        body: reqBody,
+      });
 
       const data = await response.json();
 

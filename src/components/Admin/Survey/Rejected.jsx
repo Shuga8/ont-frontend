@@ -11,6 +11,7 @@ import useGetRespondentByPhone from "../Api/PhoneRespondent";
 import { Button } from "@mui/material";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import Preloader from "../Widgets/Preloader";
+import { config } from "../../../../config/config";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -39,6 +40,7 @@ const Rejected = () => {
   const navigate = useNavigate();
   const [pagination, setPagination] = useState(null);
   const [page, setPage] = useState(getPageValue());
+  const { url: uri } = config();
 
   const handleRestoreSubmit = async (e) => {
     if (e.target.checkValidity()) {
@@ -70,14 +72,11 @@ const Rejected = () => {
         reason,
       });
 
-      const response = await fetch(
-        "https://ont-survey-tracker-development.up.railway.app/v1/surveys/status",
-        {
-          method: "PATCH",
-          headers: myHeaders,
-          body: reqBody,
-        }
-      );
+      const response = await fetch(`${uri}/v1/surveys/status`, {
+        method: "PATCH",
+        headers: myHeaders,
+        body: reqBody,
+      });
 
       const data = await response.json();
 

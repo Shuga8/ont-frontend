@@ -6,6 +6,7 @@ import { useAuthContext } from "../../../hooks/useAuthContext";
 import { TbLoader3 } from "react-icons/tb";
 import Preloader from "../Widgets/Preloader";
 import Message from "../Widgets/Message";
+import { config } from "../../../../config/config";
 
 const CompletePending = () => {
   const { user } = useAuthContext();
@@ -35,6 +36,8 @@ const CompletePending = () => {
   const [isLoading, setIsloading] = useState(false);
   const navigate = useNavigate();
 
+  const { url: uri } = config();
+
   const giveConsent = () => {
     const consentScreen = document.querySelector(".consent-screen");
     const first_screen = document.querySelector(".screen-1");
@@ -47,12 +50,9 @@ const CompletePending = () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const response = await fetch(
-      "https://ont-survey-tracker-development.up.railway.app/v1/questions/supported-languages",
-      {
-        headers: myHeaders,
-      }
-    );
+    const response = await fetch(`${uri}/v1/questions/supported-languages`, {
+      headers: myHeaders,
+    });
 
     const data = await response.json();
 
@@ -70,13 +70,10 @@ const CompletePending = () => {
     const myHeaders = new Headers();
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
-    const response = await fetch(
-      `https://ont-survey-tracker-development.up.railway.app/v1/respondents/id/${phone}`,
-      {
-        method: "GET",
-        headers: myHeaders,
-      }
-    );
+    const response = await fetch(`${uri}/v1/respondents/id/${phone}`, {
+      method: "GET",
+      headers: myHeaders,
+    });
 
     const data = await response.json();
     return data.data.respondents[0];
@@ -171,14 +168,11 @@ const CompletePending = () => {
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
     const reqBody = JSON.stringify(data);
-    const response = await fetch(
-      "https://ont-survey-tracker-development.up.railway.app/v1/surveys",
-      {
-        method: "POST",
-        headers: myHeaders,
-        body: reqBody,
-      }
-    );
+    const response = await fetch(`${uri}/v1/surveys`, {
+      method: "POST",
+      headers: myHeaders,
+      body: reqBody,
+    });
 
     const result = await response.json();
 
@@ -297,14 +291,11 @@ const CompletePending = () => {
     myHeaders.append("authorization", `Bearer ${user.token}`);
     myHeaders.append("Content-Type", "application/json");
 
-    const response = await fetch(
-      "https://ont-survey-tracker-development.up.railway.app/v1/surveys/status",
-      {
-        method: "PATCH",
-        headers: myHeaders,
-        body: reqBody,
-      }
-    );
+    const response = await fetch(`${uri}/v1/surveys/status`, {
+      method: "PATCH",
+      headers: myHeaders,
+      body: reqBody,
+    });
 
     const data = await response.json();
 

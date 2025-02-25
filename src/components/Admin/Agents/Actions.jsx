@@ -9,6 +9,7 @@ import ErrorToast from "../../Alerts/ErrorToast";
 import SuccessToast from "../../Alerts/SuccessToast";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import Preloader from "../Widgets/Preloader";
+import { config } from "../../../../config/config";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -53,14 +54,13 @@ const Actions = () => {
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("authorization", `Bearer ${user.token}`);
 
-    const response = await fetch(
-      "https://ont-survey-tracker-development.up.railway.app/v1/admins/create",
-      {
-        method: "POST",
-        headers: myHeaders,
-        body: data,
-      }
-    );
+    const { url: uri } = config();
+
+    const response = await fetch(`${uri}/v1/admins/create`, {
+      method: "POST",
+      headers: myHeaders,
+      body: data,
+    });
 
     const result = await response.json();
     if (!response.ok) {

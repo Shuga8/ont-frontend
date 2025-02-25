@@ -9,6 +9,7 @@ import TableSkeleton from "../../Skeleton/TableSkeleton";
 import useGetRespondentByPhone from "../Api/PhoneRespondent";
 import Preloader from "../Widgets/Preloader";
 import { useAuthContext } from "../../../hooks/useAuthContext";
+import { config } from "../../../../config/config";
 
 const getSearchValue = () => {
   const params = new URLSearchParams(window.location.search);
@@ -37,6 +38,7 @@ const Completed = () => {
   const [pagination, setPagination] = useState(null);
   const [page, setPage] = useState(getPageValue());
   const navigate = useNavigate();
+  const { url } = config();
 
   const handleDownload = async (phone) => {
     if (phone == null || phone === "") {
@@ -50,7 +52,7 @@ const Completed = () => {
 
     try {
       const response = await fetch(
-        `https://ont-survey-tracker-development.up.railway.app/v1/surveys/download?phone=["${phone}"]`,
+        `${url}/v1/surveys/download?phone=["${phone}"]`,
         {
           headers: myHeader,
         }

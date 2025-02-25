@@ -12,6 +12,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import Donut from "./Admin/Charts/Donut";
 import Skeleton from "./Skeleton/Skeleton";
 import BarGraph from "./Admin/Charts/Bar";
+import { config } from "../../config/config";
 
 const Admin = () => {
   const { user } = useAuthContext();
@@ -22,14 +23,12 @@ const Admin = () => {
     const getDashboardStats = async () => {
       const myHeaders = new Headers();
       myHeaders.append("authorization", `Bearer ${user.token}`);
+      const { url } = config();
 
-      const response = await fetch(
-        `https://ont-survey-tracker-development.up.railway.app/v1/stats/widgets`,
-        {
-          method: "GET",
-          headers: myHeaders,
-        }
-      );
+      const response = await fetch(`${url}/v1/stats/widgets`, {
+        method: "GET",
+        headers: myHeaders,
+      });
 
       const data = await response.json();
 

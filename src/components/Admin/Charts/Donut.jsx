@@ -3,21 +3,20 @@ import Chart from "react-apexcharts";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import Skeleton from "../../Skeleton/Skeleton";
+import { config } from "../../../../config/config";
 
 const Donut = () => {
   const { user } = useAuthContext();
+  const { url } = config();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["Donut"],
     queryFn: () =>
-      fetch(
-        "https://ont-survey-tracker-development.up.railway.app/v1/stats/charts",
-        {
-          headers: {
-            authorization: `Bearer ${user.token}`,
-          },
-        }
-      ).then((res) => res.json()),
+      fetch(`${url}/v1/stats/charts`, {
+        headers: {
+          authorization: `Bearer ${user.token}`,
+        },
+      }).then((res) => res.json()),
   });
 
   if (isLoading) {

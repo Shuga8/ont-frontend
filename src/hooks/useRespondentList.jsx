@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "./useAuthContext";
+import { config } from "../../config/config";
 
 export const useRespondentList = (id, language) => {
   const [loadingQuestions, setLoadingQuestion] = useState(false);
   const [surveyList, setSurveyList] = useState([]);
   const [respondent, setRespondent] = useState(null);
   const { user } = useAuthContext();
+  const { url: uri } = config();
 
   useEffect(() => {
     const getQuestions = async () => {
@@ -14,7 +16,7 @@ export const useRespondentList = (id, language) => {
       myHeaders.append("authorization", `Bearer ${user.token}`);
 
       const response = await fetch(
-        `https://ont-survey-tracker-development.up.railway.app/v1/questions/categories/${id}?language=${language}`,
+        `${uri}/v1/questions/categories/${id}?language=${language}`,
         {
           method: "GET",
           headers: myHeaders,

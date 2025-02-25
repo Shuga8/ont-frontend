@@ -8,6 +8,7 @@ import SuccessToast from "../Alerts/SuccessToast";
 import InfoToast from "../Alerts/InfoToast";
 import Preloader from "./Widgets/Preloader";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { config } from "../../../config/config";
 
 const Download = () => {
   const { user } = useAuthContext();
@@ -101,7 +102,9 @@ const Download = () => {
 
     let message = "";
 
-    let url = `https://ont-survey-tracker-development.up.railway.app/v1/surveys/download`;
+    const { url: uri } = config();
+
+    let url = `${uri}/v1/surveys/download`;
 
     if (status === "all" && (region === "all" || region === "none")) {
       message = `Downloading All Surveys`;

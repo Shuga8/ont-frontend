@@ -15,6 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import user_icon from "../../assets/user_icon.png";
 import { useLogout } from "../../hooks/useLogout";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { config } from "../../../config/config";
 
 const SideBar = () => {
   const { logout } = useLogout();
@@ -22,8 +23,10 @@ const SideBar = () => {
   const [asideActive, setAsideActive] = useState(false);
   const { user } = useAuthContext();
 
+  const { url: uri } = config();
+
   const [stats, setStats] = useState(null);
-  const url = `https://ont-survey-tracker-development.up.railway.app/v1/stats/widgets`;
+  const url = `${uri}/v1/stats/widgets`;
 
   useEffect(() => {
     const getDashboardStats = async (url) => {

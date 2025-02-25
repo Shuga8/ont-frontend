@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
+import { config } from "../../config/config";
 
 export const useLogin = () => {
   const [error, setError] = useState(null);
@@ -18,14 +19,13 @@ export const useLogin = () => {
 
     const data = JSON.stringify({ email, password });
 
-    const loginUser = await fetch(
-      "https://ont-survey-tracker-development.up.railway.app/v1/auth/login",
-      {
-        method: "POST",
-        headers: myHeaders,
-        body: data,
-      }
-    );
+    const { url: uri } = config();
+
+    const loginUser = await fetch(`${uri}/v1/auth/login`, {
+      method: "POST",
+      headers: myHeaders,
+      body: data,
+    });
 
     const response = await loginUser.json();
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { config } from "../../config/config";
 
 export const useRespondentList = (id, code) => {
   const [loadingQuestions, setLoadingQuestion] = useState(false);
@@ -9,14 +10,12 @@ export const useRespondentList = (id, code) => {
     setLoadingQuestion(true);
     const myHeaders = new Headers();
     myHeaders.append("authorization", `Bearer ${user.token}`);
+    const { url } = config();
 
-    const response = await fetch(
-      `https://ont-survey-tracker-development.up.railway.app/v1/questions/categories/${id}`,
-      {
-        method: "GET",
-        headers: myHeaders,
-      }
-    );
+    const response = await fetch(`${url}/v1/questions/categories/${id}`, {
+      method: "GET",
+      headers: myHeaders,
+    });
 
     const data = await response.json();
 
