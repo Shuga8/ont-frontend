@@ -30,11 +30,9 @@ const SideBar = () => {
 
   useEffect(() => {
     const getDashboardStats = async (url) => {
-      const cache = await caches.open("my-cache");
-      const cachedResponse = await cache.match(url);
-
-      if (cachedResponse) {
-        const data = await cachedResponse.json();
+      const cachedData = sessionStorage.getItem(url);
+      if (cachedData) {
+        const data = JSON.parse(cachedData);
         setStats(data.data.stats);
       }
 
@@ -48,8 +46,8 @@ const SideBar = () => {
         });
 
         if (response.ok) {
-          cache.put(url, response.clone());
           const freshData = await response.json();
+          sessionStorage.setItem(url, JSON.stringify(freshData));
           setStats(freshData.data.stats);
         } else {
           throw new Error("Network error");

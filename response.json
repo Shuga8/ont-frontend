@@ -1,0 +1,1791 @@
+{
+    "statusCode": 200,
+    "message": "Your request was successful",
+    "data": {
+        "categories": [
+            {
+                "_id": "67cccf341165a7e33830ca58",
+                "title": "Onboarding CSV",
+                "description": "",
+                "language": "pidgin",
+                "createdAt": "2025-03-08T23:13:56.361Z",
+                "updatedAt": "2025-03-08T23:13:56.361Z",
+                "questions": [
+                    {
+                        "_id": "67cccf321165a7e33830c6fb",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ001",
+                        "order": 1,
+                        "meta": {
+                            "formType": "date"
+                        },
+                        "content": {
+                            "question": "Date",
+                            "responseOptions": []
+                        },
+                        "previousResponse": "10-12-2024"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c705",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ002",
+                        "order": 2,
+                        "meta": {
+                            "formType": "date-time"
+                        },
+                        "content": {
+                            "question": "Time",
+                            "responseOptions": []
+                        },
+                        "previousResponse": "1:NaN AM"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c70f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ003",
+                        "order": 3,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "LocalGovernment",
+                            "sameAs": "SQ102"
+                        },
+                        "content": {
+                            "question": "LGA",
+                            "responseOptions": [
+                                "alimosho",
+                                "ikorodu"
+                            ]
+                        },
+                        "previousResponse": "alimosho"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c717",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ004",
+                        "order": 4,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "LocalStation"
+                        },
+                        "content": {
+                            "question": "Local Station",
+                            "responseOptions": [
+                                "ALIMOSHO-EGBEDA",
+                                "ALIMOSHO-IDIMU",
+                                "ALIMOSHO-IKOTUN",
+                                "ALIMOSHO-ISHERI OLOFIN",
+                                "ALIMOSHO-IPAJA",
+                                "IKORODU-IKORODU",
+                                "IKORODU-IJEDE",
+                                "IKORODU-IMOTA",
+                                "IKORODU-IGBOGBO",
+                                "IKORODU-ODOGUNYAN"
+                            ]
+                        },
+                        "previousResponse": "ikorodu-imota"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c71f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ005",
+                        "order": 5,
+                        "meta": {
+                            "charLength": 60
+                        },
+                        "content": {
+                            "question": "Name of the Survey respondent",
+                            "responseOptions": []
+                        },
+                        "previousResponse": "Funmi Layo"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c727",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ006",
+                        "order": 6,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "SupportedLanguages"
+                        },
+                        "content": {
+                            "question": "Preferred Language of conversation",
+                            "responseOptions": [
+                                "yoruba",
+                                "hausa",
+                                "igbo",
+                                "pidgin",
+                                "english"
+                            ]
+                        },
+                        "previousResponse": "english"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c72f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ007",
+                        "order": 7,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "SupportedLanguages"
+                        },
+                        "content": {
+                            "question": "Native Language of Respondent",
+                            "responseOptions": [
+                                "yoruba",
+                                "hausa",
+                                "igbo",
+                                "pidgin",
+                                "english"
+                            ]
+                        },
+                        "previousResponse": "yoruba"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c737",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ008",
+                        "order": 8,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "Gender",
+                            "sameAs": "SQ107"
+                        },
+                        "content": {
+                            "question": "Gender",
+                            "responseOptions": [
+                                "male",
+                                "female",
+                                "others"
+                            ]
+                        },
+                        "previousResponse": "female"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c73f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ009",
+                        "order": 9,
+                        "meta": {
+                            "sameAs": "SQ106",
+                            "formType": "number"
+                        },
+                        "content": {
+                            "question": "Age",
+                            "responseOptions": []
+                        },
+                        "previousResponse": 22
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c747",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ010",
+                        "order": 10,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "RelationshipToChild",
+                            "sameAs": "SQ104"
+                        },
+                        "content": {
+                            "question": "Relationship to Child",
+                            "responseOptions": [
+                                "mother",
+                                "father",
+                                "grand parents",
+                                "guardian",
+                                "sibling",
+                                "others"
+                            ]
+                        },
+                        "previousResponse": "aunty"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c74f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ011",
+                        "order": 11,
+                        "meta": {
+                            "charLength": 60
+                        },
+                        "content": {
+                            "question": "Primary Contact No",
+                            "responseOptions": []
+                        },
+                        "previousResponse": "7011854118"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c757",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ012",
+                        "order": 12,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "SupportedInternetServiceProvider"
+                        },
+                        "content": {
+                            "question": "Primary Contact Network",
+                            "responseOptions": [
+                                "globacom",
+                                "mtn",
+                                "airtel",
+                                "9mobile"
+                            ]
+                        },
+                        "previousResponse": "mtn"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c75f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ013",
+                        "order": 13,
+                        "meta": {
+                            "charLength": 60
+                        },
+                        "content": {
+                            "question": "Secondary Contact No",
+                            "responseOptions": []
+                        },
+                        "previousResponse": "8022140900"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c767",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ014",
+                        "order": 14,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "SupportedInternetServiceProvider"
+                        },
+                        "content": {
+                            "question": "Secondary Contact Network",
+                            "responseOptions": [
+                                "globacom",
+                                "mtn",
+                                "airtel",
+                                "9mobile"
+                            ]
+                        },
+                        "previousResponse": "mtn"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c76f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ015",
+                        "order": 15,
+                        "meta": {
+                            "sameAs": "SQ105",
+                            "formType": "number"
+                        },
+                        "content": {
+                            "question": "No. of Children (child) under 2 years",
+                            "responseOptions": []
+                        },
+                        "previousResponse": 3
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c777",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ016",
+                        "order": 16,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "Gender",
+                            "sameAs": "SQ205"
+                        },
+                        "content": {
+                            "question": "First Infant Gender",
+                            "responseOptions": [
+                                "male",
+                                "female",
+                                "others"
+                            ]
+                        },
+                        "previousResponse": "male"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c77f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ017",
+                        "order": 17,
+                        "meta": {
+                            "formType": "number"
+                        },
+                        "content": {
+                            "question": "Age ( in Month)",
+                            "responseOptions": []
+                        },
+                        "previousResponse": 5
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c787",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ018",
+                        "order": 18,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "Gender"
+                        },
+                        "content": {
+                            "question": "Second Infant Gender",
+                            "responseOptions": [
+                                "male",
+                                "female",
+                                "others"
+                            ]
+                        },
+                        "previousResponse": "female"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c78f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ019",
+                        "order": 19,
+                        "meta": {
+                            "formType": "number"
+                        },
+                        "content": {
+                            "question": "Age ( in Month)",
+                            "responseOptions": []
+                        },
+                        "previousResponse": 12
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c797",
+                        "type": "open-ended",
+                        "isRequired": false,
+                        "nested": false,
+                        "slug": "SQ020",
+                        "order": 20,
+                        "meta": {
+                            "sameAs": "SQ103",
+                            "formType": "number"
+                        },
+                        "content": {
+                            "question": "What is the Number of total household members?",
+                            "responseOptions": []
+                        },
+                        "previousResponse": 5
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c79f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ021",
+                        "order": 21,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "EducationLevel",
+                            "sameAs": "SQ108"
+                        },
+                        "content": {
+                            "question": "What is your education level?",
+                            "responseOptions": [
+                                "primary-school-certificate",
+                                "secondary-school-certificate",
+                                "ond",
+                                "hnd",
+                                "graduate",
+                                "masters",
+                                "phd",
+                                "did-not-attend-school",
+                                "other"
+                            ]
+                        },
+                        "previousResponse": "graduate"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7a7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ022",
+                        "order": 22,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "EmploymentStatus",
+                            "sameAs": "SQ109"
+                        },
+                        "content": {
+                            "question": "What is your employment status?",
+                            "responseOptions": [
+                                "employed",
+                                "self-employed",
+                                "not-employed"
+                            ]
+                        },
+                        "previousResponse": "self-employed"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7af",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ023",
+                        "order": 23,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "EmploymentStatus"
+                        },
+                        "content": {
+                            "question": "CONSENT (Yes / No)",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": "yes"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7b7",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ024",
+                        "order": 24,
+                        "content": {
+                            "question": "Survey Id",
+                            "responseOptions": []
+                        },
+                        "previousResponse": "911"
+                    }
+                ]
+            },
+            {
+                "_id": "67cccf341165a7e33830ca9a",
+                "title": "Descriptive, demographic information of respondent",
+                "description": "",
+                "language": "pidgin",
+                "createdAt": "2025-03-08T23:13:56.397Z",
+                "updatedAt": "2025-03-08T23:13:56.397Z",
+                "questions": [
+                    {
+                        "_id": "67cccf331165a7e33830c7bf",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ100",
+                        "order": 25,
+                        "content": {
+                            "question": "I fit ask you small questions? The survey go take about 15 minutes and you fit stop any time",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": "Yes"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7c7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ101",
+                        "order": 26,
+                        "content": {
+                            "question": "You be parent or caregiver for any pikin wey dey less than 2 years",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": "Yes"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7cf",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ102",
+                        "order": 27,
+                        "meta": {
+                            "formType": "enum",
+                            "enum": "LocalGovernment"
+                        },
+                        "content": {
+                            "question": "You dey live for ALIMOSHO and how long (for years or months) you don dey live for this place",
+                            "responseOptions": [
+                                "alimosho",
+                                "ikorodu"
+                            ]
+                        },
+                        "previousResponse": "alimosho"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7d7",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ103",
+                        "order": 28,
+                        "meta": {
+                            "formType": "number"
+                        },
+                        "content": {
+                            "question": "Number of total people wey dey for the house",
+                            "responseOptions": []
+                        },
+                        "previousResponse": 5
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7df",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ104",
+                        "order": 29,
+                        "content": {
+                            "question": "Wetin be your relationship with the pikin",
+                            "responseOptions": [
+                                "mother",
+                                "father",
+                                "grand parents",
+                                "guardian",
+                                "sibling",
+                                "others"
+                            ]
+                        },
+                        "previousResponse": "aunty"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7e7",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ105",
+                        "order": 30,
+                        "meta": {
+                            "formType": "number"
+                        },
+                        "content": {
+                            "question": "How many pikin under 2 years you dey take care of",
+                            "responseOptions": []
+                        },
+                        "previousResponse": 3
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7ef",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ106",
+                        "order": 31,
+                        "meta": {
+                            "formType": "number"
+                        },
+                        "content": {
+                            "question": "How old you be?",
+                            "responseOptions": []
+                        },
+                        "previousResponse": 22
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7f7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ107",
+                        "order": 32,
+                        "content": {
+                            "question": "Which gender you be",
+                            "responseOptions": [
+                                "male",
+                                "female",
+                                "others"
+                            ]
+                        },
+                        "previousResponse": "female"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c7ff",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ108",
+                        "order": 33,
+                        "content": {
+                            "question": "Which level of education you don reach",
+                            "responseOptions": [
+                                "primary-school-certificate",
+                                "secondary-school-certificate",
+                                "ond",
+                                "hnd",
+                                "graduate",
+                                "masters",
+                                "phd",
+                                "did-not-attend-school",
+                                "other"
+                            ]
+                        },
+                        "previousResponse": "graduate"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c807",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ109",
+                        "order": 34,
+                        "content": {
+                            "question": "How your work status be",
+                            "responseOptions": [
+                                "employed",
+                                "self-employed",
+                                "not-employed"
+                            ]
+                        },
+                        "previousResponse": "self-employed"
+                    }
+                ]
+            },
+            {
+                "_id": "67cccf341165a7e33830cad6",
+                "title": "Access to healthcare and recent mobility",
+                "description": "",
+                "language": "pidgin",
+                "createdAt": "2025-03-08T23:13:56.430Z",
+                "updatedAt": "2025-03-08T23:13:56.430Z",
+                "questions": [
+                    {
+                        "_id": "67cccf331165a7e33830c80f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ200",
+                        "order": 35,
+                        "meta": {
+                            "charLength": 180
+                        },
+                        "content": {
+                            "question": "Wetin be the name of the place wey you prefer for basic medical care",
+                            "responseOptions": []
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c817",
+                        "type": "open-ended",
+                        "isRequired": false,
+                        "nested": false,
+                        "slug": "SQ201",
+                        "order": 36,
+                        "meta": {
+                            "charLength": 180
+                        },
+                        "content": {
+                            "question": "Wetin be the name of the place wey you go prefer to seek care if emergency happen",
+                            "responseOptions": []
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c81f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ202",
+                        "order": 37,
+                        "meta": {
+                            "charLength": 60
+                        },
+                        "content": {
+                            "question": "If na woman, where you born your youngest pikin",
+                            "responseOptions": [
+                                "Primary Healthcare centre",
+                                "General Hospital/Tertiary health facility/Private Health facility",
+                                "Traditional Birth Attendant/Mission homes",
+                                "At Home",
+                                "Others…………………. Please specify (Text box - 50 Characters)"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c827",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ203",
+                        "order": 38,
+                        "content": {
+                            "question": "If na man, where your partner born your youngest pikin",
+                            "responseOptions": [
+                                "Primary Healthcare centre",
+                                "General Hospital/Tertiary health facility/Private Health facility",
+                                "Traditional Birth Attendant/Mission homes",
+                                "At Home",
+                                "Others…………………. Please specify (Text box - 50 Characters)"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c82f",
+                        "type": "multiple-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ204",
+                        "order": 39,
+                        "content": {
+                            "question": "If you wan seek health care but e no fit, wetin be the reason? You fit select more than one reason",
+                            "responseOptions": [
+                                "Hospital fees/expenses",
+                                "Security challenges",
+                                "Cost to travel",
+                                "Time to travel",
+                                "Clinic opening hours",
+                                "Clinic too crowded",
+                                "Clinic not functioning",
+                                "Healthworker attitude",
+                                "No supplies",
+                                "Others…………………. Please specify (Text box - 50 Characters)"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c837",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ205",
+                        "order": 40,
+                        "meta": {
+                            "charLength": 60
+                        },
+                        "content": {
+                            "question": "Wetin be the pikin gender",
+                            "responseOptions": []
+                        },
+                        "previousResponse": "male"
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c83f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ206",
+                        "order": 41,
+                        "meta": {
+                            "formType": "date"
+                        },
+                        "content": {
+                            "question": "Which day, month, and year the pikin born",
+                            "responseOptions": []
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c847",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ207",
+                        "order": 42,
+                        "content": {
+                            "question": "The pikin born pre-term",
+                            "responseOptions": [
+                                "Yes",
+                                "No",
+                                "I do not know"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c84f",
+                        "type": "open-ended",
+                        "isRequired": false,
+                        "nested": false,
+                        "slug": "SQ208",
+                        "order": 43,
+                        "meta": {
+                            "formType": "number",
+                            "numberRange": {
+                                "min": 1,
+                                "max": 5,
+                                "step": 1
+                            }
+                        },
+                        "content": {
+                            "question": "Wetin be the birthweight of the pikin",
+                            "responseOptions": []
+                        },
+                        "previousResponse": ""
+                    }
+                ]
+            },
+            {
+                "_id": "67cccf341165a7e33830cb06",
+                "title": "Nutritional status of child and breastfeeding knowledge",
+                "description": "",
+                "language": "pidgin",
+                "createdAt": "2025-03-08T23:13:56.458Z",
+                "updatedAt": "2025-03-08T23:13:56.458Z",
+                "questions": [
+                    {
+                        "_id": "67cccf331165a7e33830c857",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ300",
+                        "order": 44,
+                        "meta": {
+                            "conditions": {
+                                "showNestedQuestionsIfEquals": {
+                                    "ifValueEquals": "Yes",
+                                    "excludedOptions": [
+                                        "NO (No nutrition Status)"
+                                    ],
+                                    "slug": "SQ301",
+                                    "question": {
+                                        "_id": "67cccf331165a7e33830c85f",
+                                        "question": "If na true, wetin be the nutritional status",
+                                        "language": "pidgin",
+                                        "responseOptions": [
+                                            "Healthy ",
+                                            "Stunting/short for age",
+                                            "Wasting/thin/low weight",
+                                            "Overweight/fat",
+                                            "Underweight/combined short and thin"
+                                        ],
+                                        "slug": "SQ301",
+                                        "type": "multiple-choice",
+                                        "isRequired": true,
+                                        "meta": {
+                                            "requiredIfTrue": "SQ300"
+                                        }
+                                    }
+                                },
+                                "respondToIfEquals": {
+                                    "ifValueEquals": "No",
+                                    "slug": "SQ301",
+                                    "defaultResponseIfValue": "NO (No nutrition Status)",
+                                    "question": {
+                                        "_id": "67cccf331165a7e33830c85f",
+                                        "question": "If na true, wetin be the nutritional status",
+                                        "language": "pidgin",
+                                        "responseOptions": [
+                                            "Healthy ",
+                                            "Stunting/short for age",
+                                            "Wasting/thin/low weight",
+                                            "Overweight/fat",
+                                            "Underweight/combined short and thin"
+                                        ],
+                                        "slug": "SQ301",
+                                        "type": "multiple-choice",
+                                        "isRequired": true,
+                                        "meta": {
+                                            "requiredIfTrue": "SQ300"
+                                        }
+                                    },
+                                    "dataType": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "question": "The pikin don do nutrition screening before? For example, dem don weigh and measure am for health facility or by community health worker",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c867",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ302",
+                        "order": 46,
+                        "content": {
+                            "question": "The pikin don receive vitamin A supplement for the past 6 months",
+                            "responseOptions": [
+                                "Yes",
+                                "No",
+                                "Do not know"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c86f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ303",
+                        "order": 47,
+                        "content": {
+                            "question": "For your current or most recent pregnancy wey carry to term, you don take iron, folic acid, or both supplements",
+                            "responseOptions": [
+                                "Yes",
+                                "No",
+                                "Do not know"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c877",
+                        "type": "single-choice",
+                        "isRequired": false,
+                        "nested": false,
+                        "slug": "SQ304",
+                        "order": 48,
+                        "content": {
+                            "question": "You or your partner don ever receive breastfeeding counselling before",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c87f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ305",
+                        "order": 49,
+                        "content": {
+                            "question": "Your pikin don ever dey breastfed before",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c887",
+                        "type": "single-choice",
+                        "isRequired": false,
+                        "nested": false,
+                        "slug": "SQ306",
+                        "order": 50,
+                        "meta": {
+                            "charLength": 50
+                        },
+                        "content": {
+                            "question": "How long you think say breast milk alone, without water, go dey enough for di baby?",
+                            "responseOptions": [
+                                "Less than one week",
+                                "One week to two weeks",
+                                "One to three months",
+                                "Four to six months",
+                                "Six months",
+                                "Others…………………. Please specify (Text box - 50 Characters)"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c88f",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ307",
+                        "order": 51,
+                        "meta": {
+                            "charLength": 180
+                        },
+                        "content": {
+                            "question": "Wetin be the challenges, if any, wey you get to breastfeed your baby?",
+                            "responseOptions": []
+                        },
+                        "previousResponse": ""
+                    }
+                ]
+            },
+            {
+                "_id": "67cccf341165a7e33830cb78",
+                "title": "Immunization Status",
+                "description": "",
+                "language": "pidgin",
+                "createdAt": "2025-03-08T23:13:56.517Z",
+                "updatedAt": "2025-03-08T23:13:56.517Z",
+                "questions": [
+                    {
+                        "_id": "67cccf331165a7e33830c897",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ401",
+                        "order": 52,
+                        "content": {
+                            "question": "The pikin get birth certificate",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c89f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ402",
+                        "order": 53,
+                        "content": {
+                            "question": "You get National Child Immunisation Record, immunisation records from private health provider, or any other document wey child vaccinations dey written down",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf331165a7e33830c8a7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ403",
+                        "order": 54,
+                        "content": {
+                            "question": "25. The card dey available to support the answers to the questions? If yes, abeg bring out the card",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c8af",
+                        "type": "multiple-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ404",
+                        "order": 55,
+                        "meta": {
+                            "conditions": {
+                                "respondToIfEquals": {
+                                    "ifValueEquals": "No Card",
+                                    "slug": "SQ405",
+                                    "question": {
+                                        "_id": "67cccf341165a7e33830c8b7",
+                                        "question": "The pikin don ever receive Pentavalent vaccination – that be injection for thigh to prevent am from getting tetanus, whooping cough, diphtheria, Hepatitis B disease, and Haemophilus influenzae type b",
+                                        "language": "pidgin",
+                                        "responseOptions": [
+                                            "Yes",
+                                            "No"
+                                        ],
+                                        "slug": "SQ405",
+                                        "type": "single-choice",
+                                        "isRequired": true
+                                    },
+                                    "defaultResponseIfValue": ""
+                                }
+                            }
+                        },
+                        "content": {
+                            "question": "Short questionnaire for caregivers with card (if there is no card, go to question 32)",
+                            "responseOptions": [
+                                "No Card",
+                                "PENTA1",
+                                "PENTA3",
+                                "Measles 1",
+                                "Measles 2"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c8bf",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ406",
+                        "order": 57,
+                        "meta": {
+                            "formType": "number",
+                            "numberRange": {
+                                "min": 0,
+                                "max": 5,
+                                "step": 1
+                            }
+                        },
+                        "content": {
+                            "question": "How many times the pikin don receive Pentavalent vaccine",
+                            "responseOptions": []
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c8c7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ407",
+                        "order": 58,
+                        "meta": {
+                            "conditions": {
+                                "showNestedQuestionsIfEquals": {
+                                    "ifValueEquals": "Yes",
+                                    "excludedOptions": [
+                                        "No"
+                                    ],
+                                    "slug": "SQ408",
+                                    "question": {
+                                        "_id": "67cccf341165a7e33830c8cf",
+                                        "question": "How many times the pikin don receive Measles vaccine",
+                                        "language": "pidgin",
+                                        "responseOptions": [
+                                            "One",
+                                            "Two",
+                                            "More than two"
+                                        ],
+                                        "slug": "SQ408",
+                                        "type": "single-choice",
+                                        "isRequired": true
+                                    }
+                                },
+                                "respondToIfEquals": {
+                                    "ifValueEquals": "No",
+                                    "defaultResponseIfValue": "0",
+                                    "slug": "SQ408",
+                                    "question": {
+                                        "_id": "67cccf341165a7e33830c8cf",
+                                        "question": "How many times the pikin don receive Measles vaccine",
+                                        "language": "pidgin",
+                                        "responseOptions": [
+                                            "One",
+                                            "Two",
+                                            "More than two"
+                                        ],
+                                        "slug": "SQ408",
+                                        "type": "single-choice",
+                                        "isRequired": true
+                                    },
+                                    "dataType": "number"
+                                }
+                            }
+                        },
+                        "content": {
+                            "question": "The pikin don ever receive Measles vaccine – that one na shot for arm when e don reach 9 months or older – to prevent am from getting measles, mumps, and rubella",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c8d7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ409",
+                        "order": 60,
+                        "content": {
+                            "question": "How important you think say vaccines dey for your pikin health",
+                            "responseOptions": [
+                                "Not at all important",
+                                "A little important",
+                                "Moderately important",
+                                "Very Important"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c8df",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ410",
+                        "order": 61,
+                        "content": {
+                            "question": "How you see am, vaccine safe for your pikin",
+                            "responseOptions": [
+                                "Not at all safe",
+                                "A little safe",
+                                "Moderately safe or",
+                                "Very safe?"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c8e7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ411",
+                        "order": 62,
+                        "content": {
+                            "question": "How much you trust the health workers wey dey give pikin vaccines",
+                            "responseOptions": [
+                                "Not at all",
+                                "A little",
+                                "Moderately or ",
+                                "Very much"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c8ef",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ412",
+                        "order": 63,
+                        "content": {
+                            "question": "You think say most of your close family and friends want make you vaccinate your pikin",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c8f7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ413",
+                        "order": 64,
+                        "content": {
+                            "question": "You sabi where to go to vaccinate your pikin",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c8ff",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ414",
+                        "order": 65,
+                        "content": {
+                            "question": "How easy e be to get vaccination services for your pikin",
+                            "responseOptions": [
+                                "Not at all easy",
+                                "A little easy",
+                                "Moderately easy or",
+                                "Very easy"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c907",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ415",
+                        "order": 66,
+                        "content": {
+                            "question": "Wet in dey make am hard to get vaccination services for your pikin",
+                            "responseOptions": [
+                                "Nothing, it's hard",
+                                "Getting to the clinic is hard",
+                                "The clinic opening times are inconvenient",
+                                "The clinic sometimes turns people away without vaccinating",
+                                "The waiting time in the clinic takes too long, or Is there something else?"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c90f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ416",
+                        "order": 67,
+                        "content": {
+                            "question": "From wetin you know, you don ever take COVID-19 vaccine before",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c917",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ417",
+                        "order": 68,
+                        "content": {
+                            "question": "How you see am, COVID-19 vaccine safe for you",
+                            "responseOptions": [
+                                "Not at all safe",
+                                "A little safe",
+                                "Moderately safe",
+                                "Very safe"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c91f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ418",
+                        "order": 69,
+                        "content": {
+                            "question": "How your mind don change about childhood vaccines since COVID-19 vaccine don dey available? ",
+                            "responseOptions": [
+                                "More positive",
+                                "More negative",
+                                "The same"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c927",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ419",
+                        "order": 70,
+                        "meta": {
+                            "charLength": 180
+                        },
+                        "content": {
+                            "question": "Any wahala wey you get about childhood immunizations",
+                            "responseOptions": []
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c92f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ420",
+                        "order": 71,
+                        "content": {
+                            "question": "46.  E go dey easier to vaccinate my pikin if dem fit offer these services ",
+                            "responseOptions": [
+                                "Weekend vaccination (which day/s would be most helpful)",
+                                "Morning vaccination (how early should the centre stay open to be most helpful?)",
+                                "Evening vaccination (how late should the centre stay open to be most helpful?)",
+                                "Support to transport to the clinic"
+                            ]
+                        },
+                        "previousResponse": ""
+                    }
+                ]
+            },
+            {
+                "_id": "67cccf341165a7e33830cb96",
+                "title": "Water and Sanitation",
+                "description": "",
+                "language": "pidgin",
+                "createdAt": "2025-03-08T23:13:56.536Z",
+                "updatedAt": "2025-03-08T23:13:56.536Z",
+                "questions": [
+                    {
+                        "_id": "67cccf341165a7e33830c937",
+                        "type": "multiple-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ500",
+                        "order": 72,
+                        "meta": {
+                            "charLength": 50
+                        },
+                        "content": {
+                            "question": "Wetin be the main source of drinking water wey your family dey use",
+                            "responseOptions": [
+                                "Piped",
+                                "Well water",
+                                "Bottled water",
+                                "Pure water",
+                                "Others…………………. Please specify (Text box - 50 Characters)"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c93f",
+                        "type": "multiple-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ501",
+                        "order": 73,
+                        "meta": {
+                            "charLength": 50
+                        },
+                        "content": {
+                            "question": "Wetin kind toilet facility your family dey use normally",
+                            "responseOptions": [
+                                "Flush/Pour",
+                                "Pit Latrine",
+                                "No Facility/Bush/Field",
+                                "Others…………………. Please specify (Text box - 50 Characters)"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c947",
+                        "type": "multiple-choice",
+                        "isRequired": false,
+                        "nested": false,
+                        "slug": "SQ502",
+                        "order": 74,
+                        "content": {
+                            "question": "Where di facility de",
+                            "responseOptions": [
+                                "In own dwelling",
+                                "In own yard / plot",
+                                "Elsewhere"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c94f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ503",
+                        "order": 75,
+                        "content": {
+                            "question": "Your family dey share this toilet facility with other families normally",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    }
+                ]
+            },
+            {
+                "_id": "67cccf341165a7e33830cbb4",
+                "title": "Child Health and Illness",
+                "description": "",
+                "language": "pidgin",
+                "createdAt": "2025-03-08T23:13:56.555Z",
+                "updatedAt": "2025-03-08T23:13:56.555Z",
+                "questions": [
+                    {
+                        "_id": "67cccf341165a7e33830c957",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ600",
+                        "order": 76,
+                        "content": {
+                            "question": "For di last two weeks, child don get diarrhoea",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c95f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ601",
+                        "order": 77,
+                        "content": {
+                            "question": "For any time for di last two weeks, child don dey sick with fever",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c967",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ602",
+                        "order": 78,
+                        "content": {
+                            "question": "For any time for di last two weeks, child don get sickness with cough",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c96f",
+                        "type": "single-choice",
+                        "isRequired": false,
+                        "nested": false,
+                        "slug": "SQ603",
+                        "order": 79,
+                        "content": {
+                            "question": "Was the fast or difficult breathing due to a problem in the chest or a blocked or runny nose? (MICS CA18)",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    }
+                ]
+            },
+            {
+                "_id": "67cccf341165a7e33830cbe4",
+                "title": "Phone access and research preferences",
+                "description": "",
+                "language": "pidgin",
+                "createdAt": "2025-03-08T23:13:56.583Z",
+                "updatedAt": "2025-03-08T23:13:56.583Z",
+                "questions": [
+                    {
+                        "_id": "67cccf341165a7e33830c977",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ700",
+                        "order": 80,
+                        "content": {
+                            "question": "Na you be di owner of di phone",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c97f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ701",
+                        "order": 81,
+                        "content": {
+                            "question": "Which kind phone he be",
+                            "responseOptions": [
+                                "Android",
+                                "Iphone",
+                                "Normal handheld (with no option for usage of data)"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c987",
+                        "type": "multiple-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ702",
+                        "order": 82,
+                        "content": {
+                            "question": "How you dey charge di phone",
+                            "responseOptions": [
+                                "Electricity",
+                                "Solar",
+                                "Battery",
+                                "Outside the home"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c98f",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ703",
+                        "order": 83,
+                        "content": {
+                            "question": "Wetin time you prefer make dem contact you for surveys",
+                            "responseOptions": [
+                                "Morning",
+                                "Afternoon",
+                                "Evening"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c997",
+                        "type": "single-choice",
+                        "isRequired": false,
+                        "nested": false,
+                        "slug": "SQ704",
+                        "order": 84,
+                        "content": {
+                            "question": "You don ever do face-to-face survey before",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c99f",
+                        "type": "single-choice",
+                        "isRequired": false,
+                        "nested": false,
+                        "slug": "SQ705",
+                        "order": 85,
+                        "content": {
+                            "question": "46.  How you dey feel about di privacy of your data for phone surveys",
+                            "responseOptions": [
+                                "Yes",
+                                "No"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c9a7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ706",
+                        "order": 86,
+                        "content": {
+                            "question": "46.  Wetin be di way wey you like take survey ",
+                            "responseOptions": [
+                                "Phone",
+                                "IVR",
+                                "Face to Face"
+                            ]
+                        },
+                        "previousResponse": ""
+                    }
+                ]
+            },
+            {
+                "_id": "67cccf341165a7e33830cbfc",
+                "title": "Closure",
+                "description": "",
+                "language": "pidgin",
+                "createdAt": "2025-03-08T23:13:56.600Z",
+                "updatedAt": "2025-03-08T23:13:56.600Z",
+                "questions": [
+                    {
+                        "_id": "67cccf341165a7e33830c9af",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ800",
+                        "order": 87,
+                        "meta": {
+                            "charLength": 60
+                        },
+                        "content": {
+                            "question": "You get any other thing wey you go like share with the researchers wey dey important? E fit cover any of the topics wey we don discuss for this survey",
+                            "responseOptions": []
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c9b7",
+                        "type": "single-choice",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ801",
+                        "order": 88,
+                        "content": {
+                            "question": "CATI Survey Type",
+                            "responseOptions": [
+                                "Over the phone",
+                                "Face to face"
+                            ]
+                        },
+                        "previousResponse": ""
+                    },
+                    {
+                        "_id": "67cccf341165a7e33830c9bf",
+                        "type": "open-ended",
+                        "isRequired": true,
+                        "nested": false,
+                        "slug": "SQ802",
+                        "order": 89,
+                        "content": {
+                            "question": "ResearcherCode",
+                            "responseOptions": []
+                        },
+                        "previousResponse": "ONT_004"
+                    }
+                ]
+            }
+        ],
+        "respondent": {
+            "_id": "67e52d346a6023bb04f032b7",
+            "phone": "7011854118",
+            "__v": 0,
+            "age": "22",
+            "createdAt": "2025-03-27T10:49:24.579Z",
+            "firstname": "Funmi Funmi",
+            "gender": "female",
+            "location": "ALIMOSHO",
+            "secondaryPhone": "8022140900",
+            "type": "respondent",
+            "updatedAt": "2025-03-27T16:42:58.892Z"
+        },
+        "surveyDetails": {
+            "completedSurveyCategories": [
+                "67cccf341165a7e33830ca58"
+            ],
+            "nextSurveyCategory": "67cccf341165a7e33830ca9a",
+            "lastSubmittedSurveyCategory": "67cccf341165a7e33830ca58",
+            "createdBy": "67e4f9c6940bc58adf354ec3",
+            "status": "in-progress"
+        }
+    }
+}

@@ -1,5 +1,5 @@
 export const config = () => {
-  const url = "https://ont-survey-tracker-development.up.railway.app";
+  const url = "http://41.203.91.122:4500";
 
   return {
     url,
