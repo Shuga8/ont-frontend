@@ -183,10 +183,13 @@ const CompletePending = () => {
         setError(result.message);
       }
     } else {
+      const res = await getRespondentByPhone(getPhone());
+      setRespondent(res);
       setSuccess("Update successfull");
-      setTimeout(() => {
-        window.location.href = `/admin/survey/unfinished?search=${getPhone()}`;
-      }, 2000);
+      /*setTimeout(() => {
+        // window.location.href = `/admin/survey/unfinished?search=${getPhone()}`;
+        // window.location.reload();
+      }, 2000);*/
     }
 
     setIsloading(false);
